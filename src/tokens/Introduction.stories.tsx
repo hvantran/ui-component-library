@@ -4,7 +4,7 @@ import React from 'react';
 const Introduction: React.FC = () => (
   <div className="p-8 max-w-2xl font-sans">
     <h1 className="text-3xl font-bold text-primary-600 mb-4">@hvantran/ui-component-library</h1>
-    <p className="text-secondary-600 mb-6">
+    <p className="text-secondary-600 mb-6 dark:text-secondary-400">
       Unified Atomic Design System & Component Library for Project Management Microservices.
     </p>
     <div className="grid grid-cols-2 gap-4">
