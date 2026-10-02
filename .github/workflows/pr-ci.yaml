@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Run type checks
+        run: yarn type-check
+
       - name: Run unit tests
         run: yarn test
 
