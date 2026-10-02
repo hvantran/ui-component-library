@@ -41,7 +41,7 @@ module.exports = {
           },
           subtle: {
             light: '#f8fafc',
-            dark: '#1e293b/50',
+            dark: 'rgb(30 41 59 / 0.5)',
           },
         },
         success: {
