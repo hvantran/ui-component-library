@@ -47,6 +47,9 @@ jobs:
           npm version $BUILD_VERSION --no-git-tag-version
           echo "PUBLISH_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
 
+      - name: Run type checks
+        run: yarn type-check
+
       - name: Run unit tests
         run: yarn test
 
