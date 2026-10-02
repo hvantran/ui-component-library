@@ -2,6 +2,7 @@
   "name": "@hvantran/ui-component-library",
   "version": "0.1.0",
   "description": "Atomic Design UI component library for Project Management microservices",
+  "packageManager": "yarn@4.18.0",
   "author": "Hoa Tran",
   "license": "MIT",
   "main": "./dist/index.js",
