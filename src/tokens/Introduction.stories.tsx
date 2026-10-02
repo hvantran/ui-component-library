@@ -10,7 +10,7 @@ const Introduction: React.FC = () => (
     <div className="grid grid-cols-2 gap-4">
       <div className="p-4 rounded-card border border-secondary-200 bg-surface-card-light dark:bg-surface-card-dark">
         <h2 className="font-semibold text-lg mb-2">Atomic Levels</h2>
-        <ul className="list-disc list-inside text-sm text-secondary-500 space-y-1">
+        <ul className="list-disc list-inside text-sm text-secondary-500 dark:text-secondary-400 space-y-1">
           <li>Tokens (Colors, Typography, Spacing)</li>
           <li>Atoms (Button, Input, Badge, Card...)</li>
           <li>Molecules (FormField, Breadcrumbs...)</li>
