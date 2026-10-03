@@ -88,7 +88,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           iconPlacement === 'left' && icon
         )}
-        {children && <span>{children}</span>}
+        {children !== null && children !== undefined && <span>{children}</span>}
         {!loading && iconPlacement === 'right' && icon}
       </button>
     );
