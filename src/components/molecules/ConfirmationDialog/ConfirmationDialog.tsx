@@ -92,7 +92,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   return (
     <Modal
       isOpen={visible}
-      onClose={handleCancel ?? (() => {})}
+      onClose={onClose ?? handleCancel ?? (() => {})}
       title={title}
       maxWidth={maxWidth}
       footer={footer}
