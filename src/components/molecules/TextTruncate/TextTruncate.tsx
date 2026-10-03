@@ -18,7 +18,8 @@ export interface TextTruncateProps {
 }
 
 function truncateString(str: string, max: number): string {
-  return str.length > max ? `${str.slice(0, max)}...` : str;
+  const characters = Array.from(str);
+  return characters.length > max ? `${characters.slice(0, max).join('')}...` : str;
 }
 
 /**
