@@ -3,3 +3,6 @@ export * from './DynamicForm';
 export * from './WizardStepper';
 export * from './FloatingActions';
 export * from './PageHeader';
+export * from './AppTopBar';
+export * from './AppSidebar';
+export * from './AppFooter';
