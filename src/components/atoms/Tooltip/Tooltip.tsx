@@ -49,7 +49,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const tooltipText = content ?? title;
   const tooltipId = useId();
 
-  if (!tooltipText || disabled) {
+  if (
+    disabled ||
+    tooltipText == null ||
+    tooltipText === '' ||
+    typeof tooltipText === 'boolean'
+  ) {
     return <>{children}</>;
   }
 
