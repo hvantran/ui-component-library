@@ -11,6 +11,9 @@ export { cn } from './utils/cn';
 // Types & Metadata Foundation
 export * from './types';
 
+// Theme Engine
+export * from './theme';
+
 // Atomic Design Components
 export * from './components/atoms';
 export * from './components/molecules';
