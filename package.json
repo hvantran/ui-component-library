@@ -31,7 +31,7 @@
     "build": "vite build",
     "test": "vitest run",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o storybook-static",
+    "build-storybook": "storybook build -o storybook-static --disable-telemetry",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
