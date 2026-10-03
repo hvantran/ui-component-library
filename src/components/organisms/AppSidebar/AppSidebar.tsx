@@ -78,7 +78,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 );
 
                 const itemClass = cn(
-                  'group flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-btn transition-colors outline-none select-none',
+'group flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-btn transition-colors outline-none select-none focus:ring-2 focus:ring-primary-500/40 focus:ring-offset-1',
                   isActive
                     ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 font-semibold'
                     : 'text-secondary-600 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800/60 hover:text-secondary-900 dark:hover:text-white',
