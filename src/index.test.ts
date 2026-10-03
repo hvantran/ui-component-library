@@ -11,8 +11,13 @@ import {
   ProgressBar,
   Modal,
   CodeEditor,
+  Chip,
+  Tooltip,
+  Skeleton,
   FormField,
   Breadcrumbs,
+  ConfirmationDialog,
+  TextTruncate,
 } from './index';
 
 describe('ui-component-library entry', () => {
@@ -33,10 +38,16 @@ describe('ui-component-library entry', () => {
     expect(ProgressBar).toBeDefined();
     expect(Modal).toBeDefined();
     expect(CodeEditor).toBeDefined();
+    expect(Chip).toBeDefined();
+    expect(Tooltip).toBeDefined();
+    expect(Skeleton).toBeDefined();
   });
 
   it('exports molecule components', () => {
     expect(FormField).toBeDefined();
     expect(Breadcrumbs).toBeDefined();
+    expect(ConfirmationDialog).toBeDefined();
+    expect(TextTruncate).toBeDefined();
   });
 });
+

@@ -6,3 +6,7 @@ export * from './Select';
 export * from './ProgressBar';
 export * from './Modal';
 export * from './CodeEditor';
+export * from './Chip';
+export * from './Tooltip';
+export * from './Skeleton';
+
