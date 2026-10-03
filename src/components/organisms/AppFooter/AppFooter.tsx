@@ -13,8 +13,8 @@ export interface AppFooterProps {
 export const AppFooter: React.FC<AppFooterProps> = ({
   appName = 'Project Management Platform',
   version,
-  statusText = 'All systems operational',
   isOnline = true,
+  statusText = isOnline ? 'All systems operational' : 'System offline',
   links = [],
   className,
 }) => {
