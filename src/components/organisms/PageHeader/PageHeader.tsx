@@ -34,8 +34,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
                 variant={act.isSecondary ? 'secondary' : 'primary'}
                 disabled={act.disabled}
                 onClick={act.onClick}
+                icon={act.actionIcon}
               >
-                {act.actionIcon && <span className="w-4 h-4 mr-1.5">{act.actionIcon}</span>}
                 {act.actionLabel}
               </Button>
             ))}

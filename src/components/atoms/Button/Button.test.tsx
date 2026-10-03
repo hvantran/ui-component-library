@@ -44,4 +44,14 @@ describe('Button atom', () => {
     const html = renderToString(<Button fullWidth>Full Width</Button>);
     expect(html).toContain('w-full');
   });
+
+  it('renders icon inline with whitespace-nowrap and gap', () => {
+    const html = renderToString(
+      <Button icon={<span data-testid="plus-icon">+</span>}>New Endpoint</Button>
+    );
+    expect(html).toContain('whitespace-nowrap');
+    expect(html).toContain('inline-flex');
+    expect(html).toContain('data-testid="plus-icon"');
+    expect(html).toContain('New Endpoint');
+  });
 });

@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import pkg from '../package.json';
 import {
+  AppFooter,
+  AppSidebar,
+  AppTopBar,
   Badge,
   Breadcrumbs,
   Button,
@@ -8,12 +11,14 @@ import {
   Chip,
   CodeEditor,
   ConfirmationDialog,
+  DashboardTemplate,
   DataTable,
   Divider,
   DynamicForm,
   EmptyState,
   EntityDetailTemplate,
   EntitySummaryTemplate,
+  ErrorPageTemplate,
   FloatingActions,
   FormField,
   Input,
@@ -81,12 +86,17 @@ describe('ui-component-library entry', () => {
     expect(WizardStepper).toBeDefined();
     expect(FloatingActions).toBeDefined();
     expect(PageHeader).toBeDefined();
+    expect(AppTopBar).toBeDefined();
+    expect(AppSidebar).toBeDefined();
+    expect(AppFooter).toBeDefined();
   });
 
   it('exports template components and types', () => {
     expect(EntitySummaryTemplate).toBeDefined();
     expect(EntityDetailTemplate).toBeDefined();
     expect(WizardCreationTemplate).toBeDefined();
+    expect(DashboardTemplate).toBeDefined();
+    expect(ErrorPageTemplate).toBeDefined();
     expect(PropType.InputText).toBe(0);
   });
 });

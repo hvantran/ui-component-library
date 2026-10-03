@@ -78,6 +78,23 @@ export const Disabled: Story = {
   },
 };
 
+export const WithIcon: Story = {
+  args: {
+    variant: 'primary',
+    icon: <span>+</span>,
+    children: 'New Endpoint',
+  },
+};
+
+export const WithIconRight: Story = {
+  args: {
+    variant: 'secondary',
+    icon: <span>→</span>,
+    iconPlacement: 'right',
+    children: 'Next Step',
+  },
+};
+
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-4">

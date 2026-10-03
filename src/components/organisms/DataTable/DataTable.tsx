@@ -211,7 +211,7 @@ export function DataTable<T extends Record<string, any> = any>({
                                           act.onClick(row)(e);
                                         }}
                                         className={cn(
-                                          'p-1.5 rounded-btn border border-secondary-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-secondary-700 dark:text-secondary-200 hover:bg-secondary-50 dark:hover:bg-secondary-700 transition-colors',
+                                          'p-1.5 rounded-btn border border-secondary-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 text-secondary-700 dark:text-secondary-200 hover:bg-secondary-50 dark:hover:bg-secondary-700 transition-colors inline-flex items-center justify-center',
                                           disabled && 'opacity-40 cursor-not-allowed'
                                         )}
                                       >
