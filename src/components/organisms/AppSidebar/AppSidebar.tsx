@@ -70,9 +70,9 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                         {item.icon}
                       </span>
                     )}
-                    {!isCollapsed && (
-                      <span className="flex-1 truncate text-left">{item.label}</span>
-                    )}
+<span className={cn('flex-1 truncate text-left', isCollapsed && 'sr-only')}>
+  {item.label}
+</span>
                     {!isCollapsed && item.badge && <span>{item.badge}</span>}
                   </>
                 );
