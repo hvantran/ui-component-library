@@ -48,9 +48,9 @@ export const ErrorPageTemplate: React.FC<ErrorPageTemplateProps> = ({
         </p>
 
         {details && (
-          <div className="mt-4 p-3 rounded-btn bg-secondary-100 dark:bg-secondary-800 text-left overflow-x-auto text-xs font-mono text-secondary-700 dark:text-secondary-300">
-            {details}
-          </div>
+<div className="mt-4 p-3 rounded-btn bg-secondary-100 dark:bg-secondary-800 text-left overflow-x-auto whitespace-pre-wrap text-xs font-mono text-secondary-700 dark:text-secondary-300">
+  {details}
+</div>
         )}
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
