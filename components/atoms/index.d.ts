@@ -9,3 +9,7 @@ export * from './CodeEditor';
 export * from './Chip';
 export * from './Tooltip';
 export * from './Skeleton';
+export * from './Spinner';
+export * from './Textarea';
+export * from './Switch';
+export * from './Divider';
