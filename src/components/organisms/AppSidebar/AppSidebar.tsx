@@ -87,7 +87,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
 
                 return (
                   <li key={item.id}>
-                    {item.href ? (
+{item.href && !item.disabled ? (
                       <a
                         href={item.href}
                         aria-current={isActive ? 'page' : undefined}
