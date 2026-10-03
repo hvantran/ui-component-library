@@ -70,7 +70,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         disabled={isDisabled}
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-md font-medium transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+          'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
           variantClasses[variant],
           sizeClasses[size],
           fullWidth && 'w-full',
@@ -86,10 +86,29 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             aria-hidden="true"
           />
         ) : (
-          iconPlacement === 'left' && icon
+          iconPlacement === 'left' &&
+          icon && (
+            <span
+              className="inline-flex shrink-0 items-center justify-center"
+              aria-hidden="true"
+            >
+              {icon}
+            </span>
+          )
         )}
-        {children !== null && children !== undefined && <span>{children}</span>}
-        {!loading && iconPlacement === 'right' && icon}
+        {children !== null && children !== undefined && (
+          <span className="inline-flex items-center gap-2">{children}</span>
+        )}
+        {!loading &&
+          iconPlacement === 'right' &&
+          icon && (
+            <span
+              className="inline-flex shrink-0 items-center justify-center"
+              aria-hidden="true"
+            >
+              {icon}
+            </span>
+          )}
       </button>
     );
   },

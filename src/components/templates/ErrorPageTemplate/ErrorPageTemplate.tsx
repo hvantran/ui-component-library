@@ -55,15 +55,21 @@ export const ErrorPageTemplate: React.FC<ErrorPageTemplateProps> = ({
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           {onRetry && (
-            <Button variant="secondary" onClick={onRetry}>
-              <RefreshCw className="w-4 h-4 mr-1.5" />
+            <Button
+              variant="secondary"
+              onClick={onRetry}
+              icon={<RefreshCw className="w-4 h-4" />}
+            >
               Try Again
             </Button>
           )}
 
           {onHome && (
-            <Button variant="primary" onClick={onHome}>
-              <Home className="w-4 h-4 mr-1.5" />
+            <Button
+              variant="primary"
+              onClick={onHome}
+              icon={<Home className="w-4 h-4" />}
+            >
               Return Home
             </Button>
           )}
