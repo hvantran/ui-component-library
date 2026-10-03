@@ -21,7 +21,7 @@ const variantClasses: Record<CardVariant, string> = {
   outlined:
     'border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800',
   elevated:
-    'bg-white shadow-md hover:shadow-lg dark:bg-gray-800 border-transparent dark:border-transparent',
+    'border border-transparent bg-white shadow-md hover:shadow-lg dark:bg-gray-800 dark:border-transparent',
 };
 
 const paddingClasses: Record<CardPadding, string> = {
