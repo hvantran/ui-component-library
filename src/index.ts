@@ -8,8 +8,11 @@ export const VERSION: string =
 // Utilities
 export { cn } from './utils/cn';
 
-// Atomic Components
-export * from './components/atoms';
+// Types & Metadata Foundation
+export * from './types';
 
-// Molecule Components
+// Atomic Design Components
+export * from './components/atoms';
 export * from './components/molecules';
+export * from './components/organisms';
+export * from './components/templates';

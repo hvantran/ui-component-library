@@ -1,23 +1,40 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import pkg from '../package.json';
 import {
-  VERSION,
-  cn,
+  Badge,
+  Breadcrumbs,
   Button,
   Card,
-  Input,
-  Badge,
-  Select,
-  ProgressBar,
-  Modal,
-  CodeEditor,
   Chip,
-  Tooltip,
-  Skeleton,
-  FormField,
-  Breadcrumbs,
+  CodeEditor,
   ConfirmationDialog,
+  DataTable,
+  Divider,
+  DynamicForm,
+  EmptyState,
+  EntityDetailTemplate,
+  EntitySummaryTemplate,
+  FloatingActions,
+  FormField,
+  Input,
+  Modal,
+  PageHeader,
+  Pagination,
+  ProgressBar,
+  PropType,
+  SearchBar,
+  Select,
+  Skeleton,
+  Spinner,
+  Switch,
+  Tabs,
+  Textarea,
   TextTruncate,
+  Tooltip,
+  VERSION,
+  WizardCreationTemplate,
+  WizardStepper,
+  cn,
 } from './index';
 
 describe('ui-component-library entry', () => {
@@ -41,6 +58,10 @@ describe('ui-component-library entry', () => {
     expect(Chip).toBeDefined();
     expect(Tooltip).toBeDefined();
     expect(Skeleton).toBeDefined();
+    expect(Spinner).toBeDefined();
+    expect(Textarea).toBeDefined();
+    expect(Switch).toBeDefined();
+    expect(Divider).toBeDefined();
   });
 
   it('exports molecule components', () => {
@@ -48,6 +69,24 @@ describe('ui-component-library entry', () => {
     expect(Breadcrumbs).toBeDefined();
     expect(ConfirmationDialog).toBeDefined();
     expect(TextTruncate).toBeDefined();
+    expect(SearchBar).toBeDefined();
+    expect(Pagination).toBeDefined();
+    expect(EmptyState).toBeDefined();
+    expect(Tabs).toBeDefined();
+  });
+
+  it('exports organism components', () => {
+    expect(DataTable).toBeDefined();
+    expect(DynamicForm).toBeDefined();
+    expect(WizardStepper).toBeDefined();
+    expect(FloatingActions).toBeDefined();
+    expect(PageHeader).toBeDefined();
+  });
+
+  it('exports template components and types', () => {
+    expect(EntitySummaryTemplate).toBeDefined();
+    expect(EntityDetailTemplate).toBeDefined();
+    expect(WizardCreationTemplate).toBeDefined();
+    expect(PropType.InputText).toBe(0);
   });
 });
-
