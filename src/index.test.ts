@@ -5,12 +5,16 @@ import {
   AppSidebar,
   AppTopBar,
   Badge,
+  BoardColumn,
+  BoardView,
   Breadcrumbs,
   Button,
   Card,
   Chip,
   CodeEditor,
+  Combobox,
   ConfirmationDialog,
+  DarkModeToggle,
   DashboardTemplate,
   DataTable,
   Divider,
@@ -22,6 +26,7 @@ import {
   FloatingActions,
   FormField,
   Input,
+  JobStatusBadge,
   Modal,
   PageHeader,
   Pagination,
@@ -31,15 +36,19 @@ import {
   Select,
   Skeleton,
   Spinner,
+  StatCard,
   Switch,
   Tabs,
   Textarea,
   TextTruncate,
+  ThemeProvider,
   Tooltip,
   VERSION,
+  ViewModeToggle,
   WizardCreationTemplate,
   WizardStepper,
   cn,
+  useTheme,
 } from './index';
 
 describe('ui-component-library entry', () => {
@@ -78,6 +87,11 @@ describe('ui-component-library entry', () => {
     expect(Pagination).toBeDefined();
     expect(EmptyState).toBeDefined();
     expect(Tabs).toBeDefined();
+    expect(JobStatusBadge).toBeDefined();
+    expect(DarkModeToggle).toBeDefined();
+    expect(ViewModeToggle).toBeDefined();
+    expect(StatCard).toBeDefined();
+    expect(Combobox).toBeDefined();
   });
 
   it('exports organism components', () => {
@@ -89,6 +103,8 @@ describe('ui-component-library entry', () => {
     expect(AppTopBar).toBeDefined();
     expect(AppSidebar).toBeDefined();
     expect(AppFooter).toBeDefined();
+    expect(BoardColumn).toBeDefined();
+    expect(BoardView).toBeDefined();
   });
 
   it('exports template components and types', () => {
@@ -98,5 +114,10 @@ describe('ui-component-library entry', () => {
     expect(DashboardTemplate).toBeDefined();
     expect(ErrorPageTemplate).toBeDefined();
     expect(PropType.InputText).toBe(0);
+  });
+
+  it('exports theme engine', () => {
+    expect(ThemeProvider).toBeDefined();
+    expect(useTheme).toBeDefined();
   });
 });

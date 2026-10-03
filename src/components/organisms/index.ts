@@ -6,3 +6,5 @@ export * from './PageHeader';
 export * from './AppTopBar';
 export * from './AppSidebar';
 export * from './AppFooter';
+export * from './BoardColumn';
+export * from './BoardView';
