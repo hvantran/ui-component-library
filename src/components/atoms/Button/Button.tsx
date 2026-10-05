@@ -1,9 +1,18 @@
 import React from 'react';
 import { cn } from '../../../utils/cn';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'outlined';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'ghost'
+  | 'outlined'
+  | 'neutral'
+  | 'accent'
+  | 'warning';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonIconPlacement = 'left' | 'right';
+export type ButtonTextJustify = 'left' | 'center' | 'right';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual variant */
@@ -20,6 +29,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   icon?: React.ReactNode;
   /** Position of the icon relative to children text */
   iconPlacement?: ButtonIconPlacement;
+  /** Content alignment within the button */
+  textJustify?: ButtonTextJustify;
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -31,6 +42,18 @@ const variantClasses: Record<ButtonVariant, string> = {
     'bg-transparent hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-800 dark:text-gray-200',
   outlined:
     'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800',
+  neutral:
+    'border border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200',
+  accent:
+    'border border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:border-blue-700',
+  warning:
+    'border border-amber-300 bg-amber-50 text-amber-700 hover:border-amber-400 hover:bg-amber-100 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200',
+};
+
+const textJustifyClasses: Record<ButtonTextJustify, string> = {
+  left: 'justify-start',
+  center: 'justify-center',
+  right: 'justify-end',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -55,6 +78,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth = false,
       icon,
       iconPlacement = 'left',
+      textJustify = 'center',
       type = 'button',
       className,
       children,
@@ -70,7 +94,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         disabled={isDisabled}
         className={cn(
-          'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+          'inline-flex items-center gap-2 whitespace-nowrap rounded-md font-medium transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+          textJustifyClasses[textJustify],
           variantClasses[variant],
           sizeClasses[size],
           fullWidth && 'w-full',

@@ -12,7 +12,16 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'danger', 'ghost', 'outlined'],
+      options: [
+        'primary',
+        'secondary',
+        'danger',
+        'ghost',
+        'outlined',
+        'neutral',
+        'accent',
+        'warning',
+      ],
     },
     size: {
       control: 'select',
@@ -59,6 +68,27 @@ export const Ghost: Story = {
   args: {
     variant: 'ghost',
     children: 'Ghost Action',
+  },
+};
+
+export const Neutral: Story = {
+  args: {
+    variant: 'neutral',
+    children: 'Neutral Action',
+  },
+};
+
+export const Accent: Story = {
+  args: {
+    variant: 'accent',
+    children: 'Accent Action',
+  },
+};
+
+export const Warning: Story = {
+  args: {
+    variant: 'warning',
+    children: 'Warning Action',
   },
 };
 
