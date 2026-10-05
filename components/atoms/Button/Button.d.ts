@@ -1,7 +1,8 @@
 import { default as React } from '../../../../node_modules/react';
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'outlined';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'outlined' | 'neutral' | 'accent' | 'warning';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonIconPlacement = 'left' | 'right';
+export type ButtonTextJustify = 'left' | 'center' | 'right';
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Visual variant */
     variant?: ButtonVariant;
@@ -17,6 +18,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     icon?: React.ReactNode;
     /** Position of the icon relative to children text */
     iconPlacement?: ButtonIconPlacement;
+    /** Content alignment within the button */
+    textJustify?: ButtonTextJustify;
 }
 /**
  * Atom — Button

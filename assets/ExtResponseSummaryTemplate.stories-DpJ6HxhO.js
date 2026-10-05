@@ -1,0 +1,47 @@
+import{j as p}from"./jsx-runtime-DFAAy_2V.js";import{E as m}from"./EntitySummaryTemplate-DkNtTRJ8.js";import"./index-Bc2G9s8g.js";import"./cn-DOIGBiOF.js";import"./Tabs-BbqbLFpu.js";import"./DataTable-udgpyq1D.js";import"./Skeleton-BFTnpoLa.js";import"./Tooltip-DRcnShFR.js";import"./EmptyState-D1RQUAPS.js";import"./createLucideIcon-B_AfoRjS.js";import"./Pagination--hraVaWA.js";import"./chevron-right-CbamweGA.js";import"./SearchBar-CT5KQg-V.js";import"./x-DiakLl4d.js";import"./FloatingActions-CQe26Bj4.js";import"./plus-a76MUymE.js";import"./PageHeader-DLSUzz-b.js";import"./Button-CHA6iI3F.js";import"./Breadcrumbs-DO4WTt5L.js";const s=({pageTitle:a="Collected Responses",...r})=>p.jsx(m,{pageTitle:a,...r});s.displayName="ExtResponseSummaryTemplate";s.__docgenInfo={description:"",methods:[],displayName:"ExtResponseSummaryTemplate",props:{pageTitle:{required:!1,tsType:{name:"string"},description:"",defaultValue:{value:"'Collected Responses'",computed:!1}}},composes:["Omit"]};const v={title:"Templates/ExtResponseSummaryTemplate",component:s,tags:["autodocs"],parameters:{layout:"fullscreen"}},e={render:()=>p.jsx(s,{breadcrumbs:[{label:"Home",href:"#"},{label:"Collected Responses"}],tableProps:{name:"Responses",columns:[{id:"responseId",label:"Response ID",isSortable:!0},{id:"endpoint",label:"Endpoint"},{id:"statusCode",label:"Status Code"},{id:"timestamp",label:"Timestamp"}],keyColumn:"responseId",pagingResult:{totalElements:2,content:[{responseId:"resp-001",endpoint:"https://api.example.com/v1",statusCode:200,timestamp:"2026-10-05 10:00:00"},{responseId:"resp-002",endpoint:"https://api.example.com/v2",statusCode:500,timestamp:"2026-10-05 10:05:00"}]},pagingOptions:{pageIndex:0,pageSize:10,orderBy:"responseId",searchText:"",rowsPerPageOptions:[10,20,50],onPageChange:()=>{}}}})};var t,n,o;e.parameters={...e.parameters,docs:{...(t=e.parameters)==null?void 0:t.docs,source:{originalSource:`{
+  render: () => <ExtResponseSummaryTemplate breadcrumbs={[{
+    label: 'Home',
+    href: '#'
+  }, {
+    label: 'Collected Responses'
+  }]} tableProps={{
+    name: 'Responses',
+    columns: [{
+      id: 'responseId',
+      label: 'Response ID',
+      isSortable: true
+    }, {
+      id: 'endpoint',
+      label: 'Endpoint'
+    }, {
+      id: 'statusCode',
+      label: 'Status Code'
+    }, {
+      id: 'timestamp',
+      label: 'Timestamp'
+    }],
+    keyColumn: 'responseId',
+    pagingResult: {
+      totalElements: 2,
+      content: [{
+        responseId: 'resp-001',
+        endpoint: 'https://api.example.com/v1',
+        statusCode: 200,
+        timestamp: '2026-10-05 10:00:00'
+      }, {
+        responseId: 'resp-002',
+        endpoint: 'https://api.example.com/v2',
+        statusCode: 500,
+        timestamp: '2026-10-05 10:05:00'
+      }]
+    },
+    pagingOptions: {
+      pageIndex: 0,
+      pageSize: 10,
+      orderBy: 'responseId',
+      searchText: '',
+      rowsPerPageOptions: [10, 20, 50],
+      onPageChange: () => {}
+    }
+  }} />
+}`,...(o=(n=e.parameters)==null?void 0:n.docs)==null?void 0:o.source}}};const j=["Default"];export{e as Default,j as __namedExportsOrder,v as default};

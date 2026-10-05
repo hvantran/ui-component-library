@@ -13,3 +13,4 @@ export * from './Spinner';
 export * from './Textarea';
 export * from './Switch';
 export * from './Divider';
+export * from './StatusChip';
