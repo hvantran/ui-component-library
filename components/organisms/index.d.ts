@@ -8,3 +8,4 @@ export * from './AppSidebar';
 export * from './AppFooter';
 export * from './BoardColumn';
 export * from './BoardView';
+export * from './AppSwitcher';
