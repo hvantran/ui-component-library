@@ -3,6 +3,7 @@ import pkg from '../package.json';
 import {
   AppFooter,
   AppSidebar,
+  AppSwitcher,
   AppTopBar,
   Badge,
   BoardColumn,
@@ -100,6 +101,7 @@ describe('ui-component-library entry', () => {
     expect(WizardStepper).toBeDefined();
     expect(FloatingActions).toBeDefined();
     expect(PageHeader).toBeDefined();
+    expect(AppSwitcher).toBeDefined();
     expect(AppTopBar).toBeDefined();
     expect(AppSidebar).toBeDefined();
     expect(AppFooter).toBeDefined();
