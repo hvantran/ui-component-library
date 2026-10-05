@@ -24,15 +24,21 @@ export const Default: Story = {
           { id: 'status', label: 'Status' },
         ],
         keyColumn: 'endpointUrl',
-        data: [
-          { endpointUrl: 'https://api.example.com/v1/data', method: 'GET', status: 'ACTIVE' },
-          { endpointUrl: 'https://api.example.com/v1/events', method: 'POST', status: 'PAUSED' },
-        ],
-        totalElements: 2,
-        pageIndex: 0,
-        pageSize: 10,
-        orderBy: 'endpointUrl',
-        onPageChange: () => {},
+        pagingResult: {
+          totalElements: 2,
+          content: [
+            { endpointUrl: 'https://api.example.com/v1/data', method: 'GET', status: 'ACTIVE' },
+            { endpointUrl: 'https://api.example.com/v1/events', method: 'POST', status: 'PAUSED' },
+          ],
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'endpointUrl',
+          searchText: '',
+          rowsPerPageOptions: [10, 20, 50],
+          onPageChange: () => {},
+        },
       }}
     />
   ),

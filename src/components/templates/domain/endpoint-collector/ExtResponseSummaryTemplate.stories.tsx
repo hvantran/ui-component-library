@@ -25,15 +25,21 @@ export const Default: Story = {
           { id: 'timestamp', label: 'Timestamp' },
         ],
         keyColumn: 'responseId',
-        data: [
-          { responseId: 'resp-001', endpoint: 'https://api.example.com/v1', statusCode: 200, timestamp: '2026-10-05 10:00:00' },
-          { responseId: 'resp-002', endpoint: 'https://api.example.com/v2', statusCode: 500, timestamp: '2026-10-05 10:05:00' },
-        ],
-        totalElements: 2,
-        pageIndex: 0,
-        pageSize: 10,
-        orderBy: 'responseId',
-        onPageChange: () => {},
+        pagingResult: {
+          totalElements: 2,
+          content: [
+            { responseId: 'resp-001', endpoint: 'https://api.example.com/v1', statusCode: 200, timestamp: '2026-10-05 10:00:00' },
+            { responseId: 'resp-002', endpoint: 'https://api.example.com/v2', statusCode: 500, timestamp: '2026-10-05 10:05:00' },
+          ],
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'responseId',
+          searchText: '',
+          rowsPerPageOptions: [10, 20, 50],
+          onPageChange: () => {},
+        },
       }}
     />
   ),

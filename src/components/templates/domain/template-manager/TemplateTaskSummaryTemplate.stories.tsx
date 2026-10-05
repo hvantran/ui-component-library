@@ -23,12 +23,18 @@ export const Default: Story = {
           { id: 'status', label: 'Status' },
         ],
         keyColumn: 'taskName',
-        data: [{ taskName: 'Price Extraction Task', status: 'SUCCESS' }],
-        totalElements: 1,
-        pageIndex: 0,
-        pageSize: 10,
-        orderBy: 'taskName',
-        onPageChange: () => {},
+        pagingResult: {
+          totalElements: 1,
+          content: [{ taskName: 'Price Extraction Task', status: 'SUCCESS' }],
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'taskName',
+          searchText: '',
+          rowsPerPageOptions: [10, 20, 50],
+          onPageChange: () => {},
+        },
       }}
     />
   ),

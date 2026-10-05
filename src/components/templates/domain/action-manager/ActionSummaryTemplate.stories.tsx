@@ -42,12 +42,18 @@ export const BoardMode: Story = {
           { id: 'status', label: 'Status' },
         ],
         keyColumn: 'id',
-        data: Object.values(sampleCards),
-        totalElements: 3,
-        pageIndex: 0,
-        pageSize: 10,
-        orderBy: 'id',
-        onPageChange: () => {},
+        pagingResult: {
+          totalElements: 3,
+          content: Object.values(sampleCards),
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'id',
+          searchText: '',
+          rowsPerPageOptions: [10, 20, 50],
+          onPageChange: () => {},
+        },
       }}
     />
   ),
@@ -70,12 +76,18 @@ export const ListMode: Story = {
           { id: 'status', label: 'Status' },
         ],
         keyColumn: 'id',
-        data: Object.values(sampleCards),
-        totalElements: 3,
-        pageIndex: 0,
-        pageSize: 10,
-        orderBy: 'id',
-        onPageChange: () => {},
+        pagingResult: {
+          totalElements: 3,
+          content: Object.values(sampleCards),
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'id',
+          searchText: '',
+          rowsPerPageOptions: [10, 20, 50],
+          onPageChange: () => {},
+        },
       }}
     />
   ),

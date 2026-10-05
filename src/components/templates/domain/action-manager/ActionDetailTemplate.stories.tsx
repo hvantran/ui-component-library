@@ -24,6 +24,28 @@ export const Default: Story = {
         { propName: 'status', propValue: 'ENABLED', propType: PropType.Selection, propLabel: 'Status' },
       ]}
       onPropertyChange={() => {}}
+      onAddJob={() => alert('Add job clicked')}
+      jobsTableProps={{
+        name: 'Action Jobs',
+        columns: [
+          { id: 'jobId', label: 'Job ID', isSortable: true },
+          { id: 'name', label: 'Job Name' },
+          { id: 'status', label: 'Status' },
+        ],
+        keyColumn: 'jobId',
+        pagingResult: {
+          totalElements: 1,
+          content: [{ jobId: 'job-1', name: 'Poller Instance 1', status: 'RUNNING' }],
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'jobId',
+          searchText: '',
+          rowsPerPageOptions: [10, 20],
+          onPageChange: () => {},
+        },
+      }}
     />
   ),
 };

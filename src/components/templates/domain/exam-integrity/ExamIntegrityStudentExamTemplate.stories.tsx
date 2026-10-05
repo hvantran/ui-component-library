@@ -73,3 +73,18 @@ export const Default: Story = {
     />
   ),
 };
+
+export const LayoutWrapperMode: Story = {
+  render: () => (
+    <ExamIntegrityStudentExamTemplate>
+      <div className="max-w-4xl mx-auto py-12 px-6 space-y-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Exam Session Active</h1>
+        <Card className="p-6">
+          <p className="text-gray-600 dark:text-gray-300">
+            This mode matches the exact StudentManExamLayout container used across exam sessions.
+          </p>
+        </Card>
+      </div>
+    </ExamIntegrityStudentExamTemplate>
+  ),
+};

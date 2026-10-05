@@ -25,15 +25,21 @@ export const Default: Story = {
           { id: 'startedAt', label: 'Started At' },
         ],
         keyColumn: 'jobId',
-        data: [
-          { jobId: 'job-101', actionName: 'Lazada Poller', status: 'COMPLETED', startedAt: '2026-10-05 10:00' },
-          { jobId: 'job-102', actionName: 'Hasaki Poller', status: 'RUNNING', startedAt: '2026-10-05 10:15' },
-        ],
-        totalElements: 2,
-        pageIndex: 0,
-        pageSize: 10,
-        orderBy: 'jobId',
-        onPageChange: () => {},
+        pagingResult: {
+          totalElements: 2,
+          content: [
+            { jobId: 'job-101', actionName: 'Lazada Poller', status: 'COMPLETED', startedAt: '2026-10-05 10:00' },
+            { jobId: 'job-102', actionName: 'Hasaki Poller', status: 'RUNNING', startedAt: '2026-10-05 10:15' },
+          ],
+        },
+        pagingOptions: {
+          pageIndex: 0,
+          pageSize: 10,
+          orderBy: 'jobId',
+          searchText: '',
+          rowsPerPageOptions: [10, 20, 50],
+          onPageChange: () => {},
+        },
       }}
     />
   ),
