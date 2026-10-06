@@ -9,3 +9,4 @@ export * from './AppFooter';
 export * from './BoardColumn';
 export * from './BoardView';
 export * from './AppSwitcher';
+export * from './domain';
