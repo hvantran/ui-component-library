@@ -120,6 +120,35 @@ describe('Domain Page Templates with App Prefix', () => {
       expect(html).toContain('Main Dashboard Content');
     });
 
+    it('renders ExamIntegrityTeacherDashboardTemplate with header slots and sync dialog', () => {
+      const html = renderToString(
+        <ExamIntegrityTeacherDashboardTemplate
+          headerTitle="Dashboard"
+          headerSubtitle="Manage all active and draft exams"
+          headerActionsSlot={<button type="button">Custom Action</button>}
+          filtersSlot={<div>Filter Controls</div>}
+          syncDialogState={{
+            examId: 'exam-123',
+            examTitle: 'Math Finals',
+            linkedQuestionCount: 20,
+          }}
+          isSyncingQuestions={false}
+          onConfirmSync={() => {}}
+          onCancelSync={() => {}}
+        >
+          <div>Exam Grid</div>
+        </ExamIntegrityTeacherDashboardTemplate>,
+      );
+      expect(html).toContain('Dashboard');
+      expect(html).toContain('Manage all active and draft exams');
+      expect(html).toContain('Custom Action');
+      expect(html).toContain('Filter Controls');
+      expect(html).toContain('Sync Questions from Bank');
+      expect(html).toContain('Math Finals');
+      expect(html).toContain('Linked questions eligible for sync:');
+      expect(html).toContain('20');
+    });
+
     it('renders ExamIntegrityScoringTemplate', () => {
       const html = renderToString(
         <ExamIntegrityScoringTemplate
