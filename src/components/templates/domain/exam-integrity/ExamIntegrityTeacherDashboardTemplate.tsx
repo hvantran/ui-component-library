@@ -15,6 +15,7 @@ import {
 import { cn } from '../../../../utils/cn';
 import { AppTopBar } from '../../../organisms/AppTopBar';
 import { Button } from '../../../atoms/Button';
+import { ConfirmationDialog } from '../../../molecules/ConfirmationDialog';
 
 export type ExamIntegrityDashboardSection =
   | 'dashboard'
@@ -23,6 +24,12 @@ export type ExamIntegrityDashboardSection =
   | 'scoring'
   | 'question-bank'
   | 'reports';
+
+export interface SyncExamDialogState {
+  examId: string;
+  examTitle: string;
+  linkedQuestionCount?: number;
+}
 
 export interface ExamIntegrityTeacherDashboardTemplateProps {
   userName?: string;
@@ -36,9 +43,22 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
   onHelp?: () => void;
+  headerTitle?: string;
+  headerSubtitle?: string;
+  headerActionsSlot?: React.ReactNode;
+  filtersSlot?: React.ReactNode;
   sidebar?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+
+  /** State for inner sync questions confirmation dialog */
+  syncDialogState?: SyncExamDialogState | null;
+  /** Callback when teacher confirms sync in inner dialog */
+  onConfirmSync?: () => void;
+  /** Callback when teacher cancels or dismisses sync dialog */
+  onCancelSync?: () => void;
+  /** Whether question sync operation is currently in progress */
+  isSyncingQuestions?: boolean;
 }
 
 const defaultNavItems: { section: ExamIntegrityDashboardSection; icon: React.ReactNode; label: string }[] = [
@@ -64,9 +84,17 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
   onSearch,
   onNotifications,
   onHelp,
+  headerTitle,
+  headerSubtitle,
+  headerActionsSlot,
+  filtersSlot,
   sidebar,
   children,
   className,
+  syncDialogState,
+  onConfirmSync,
+  onCancelSync,
+  isSyncingQuestions = false,
 }) => {
   return (
     <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
@@ -188,9 +216,66 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
           )}
         </aside>
         <main className="ml-64 flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="max-w-7xl mx-auto space-y-6">
+            {(headerTitle || headerActionsSlot) && (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
+                <div>
+                  {headerTitle && (
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      {headerTitle}
+                    </h1>
+                  )}
+                  {headerSubtitle && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      {headerSubtitle}
+                    </p>
+                  )}
+                </div>
+                {headerActionsSlot && (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {headerActionsSlot}
+                  </div>
+                )}
+              </div>
+            )}
+            {filtersSlot && <div>{filtersSlot}</div>}
+            {children}
+          </div>
         </main>
       </div>
+
+      {/* Inner Sync Questions Confirmation Dialog */}
+      {syncDialogState && (
+        <ConfirmationDialog
+          open={Boolean(syncDialogState)}
+          title="Sync Questions from Bank"
+          positiveText={isSyncingQuestions ? 'Syncing…' : 'Sync Questions'}
+          negativeText="Cancel"
+          loading={isSyncingQuestions}
+          positiveAction={onConfirmSync}
+          negativeAction={onCancelSync}
+          onClose={onCancelSync}
+          positiveVariant="primary"
+        >
+          <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+            <p>
+              Are you sure you want to synchronize questions for{' '}
+              <strong className="text-gray-900 dark:text-gray-100">
+                {syncDialogState.examTitle}
+              </strong>{' '}
+              with the latest question bank data?
+            </p>
+            {typeof syncDialogState.linkedQuestionCount === 'number' && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Linked questions eligible for sync: {syncDialogState.linkedQuestionCount}
+              </p>
+            )}
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Any modifications made in the question bank (content, options, answer key, rubric, points) will overwrite the corresponding questions in this exam.
+            </p>
+          </div>
+        </ConfirmationDialog>
+      )}
     </div>
   );
 };

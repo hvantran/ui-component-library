@@ -78,3 +78,58 @@ export const CustomSidebar: Story = {
     </ExamIntegrityTeacherDashboardTemplate>
   ),
 };
+
+export const WithSyncQuestionsWorkflow: Story = {
+  render: () => {
+    const [syncTarget, setSyncTarget] = useState<{
+      examId: string;
+      examTitle: string;
+      linkedQuestionCount: number;
+    } | null>({
+      examId: 'exam-101',
+      examTitle: 'Midterm Calculus 2026',
+      linkedQuestionCount: 15,
+    });
+    const [isSyncing, setIsSyncing] = useState(false);
+
+    return (
+      <ExamIntegrityTeacherDashboardTemplate
+        userName="Prof. Alexander Wright"
+        userRole="Lead Proctor"
+        headerTitle="Dashboard"
+        headerSubtitle="Exams in the system, including drafts and published exams"
+        syncDialogState={syncTarget}
+        isSyncingQuestions={isSyncing}
+        onConfirmSync={() => {
+          setIsSyncing(true);
+          setTimeout(() => {
+            setIsSyncing(false);
+            setSyncTarget(null);
+            alert('Synced successfully!');
+          }, 1000);
+        }}
+        onCancelSync={() => setSyncTarget(null)}
+      >
+        <Card className="p-6">
+          <p className="text-sm text-gray-600">
+            Click to reopen sync dialog for exam:
+          </p>
+          <button
+            type="button"
+            className="mt-3 px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+            onClick={() =>
+              setSyncTarget({
+                examId: 'exam-101',
+                examTitle: 'Midterm Calculus 2026',
+                linkedQuestionCount: 15,
+              })
+            }
+          >
+            Trigger Sync Dialog
+          </button>
+        </Card>
+      </ExamIntegrityTeacherDashboardTemplate>
+    );
+  },
+};
+
