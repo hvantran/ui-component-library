@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ExamIntegrityTeacherDashboardSidebar } from './ExamIntegrityTeacherDashboardSidebar';
-import type { ExamIntegrityDashboardSection } from '../../../templates/domain/exam-integrity/ExamIntegrityTeacherDashboardTemplate';
+import type { ExamIntegrityDashboardSection } from '../../../templates/ExamIntegrityTeacherDashboardTemplate';
 
 const meta: Meta<typeof ExamIntegrityTeacherDashboardSidebar> = {
   title: 'Organisms/Domain/ExamIntegrity/ExamIntegrityTeacherDashboardSidebar',

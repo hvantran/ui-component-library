@@ -12,7 +12,7 @@ import {
 import { Button } from '../../../atoms/Button';
 import { cn } from '../../../../utils/cn';
 import { EXAM_INTEGRITY_APP_BAR_HEIGHT } from './ExamIntegrityTopBar';
-import type { ExamIntegrityDashboardSection } from '../../../templates/domain/exam-integrity/ExamIntegrityTeacherDashboardTemplate';
+import type { ExamIntegrityDashboardSection } from '../../../templates/ExamIntegrityTeacherDashboardTemplate';
 
 export const EXAM_INTEGRITY_TEACHER_SIDEBAR_WIDTH = 256;
 
