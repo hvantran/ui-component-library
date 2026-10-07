@@ -1,0 +1,15 @@
+import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{E as m}from"./ExamIntegrityStudentProTips-CWS4TX1E.js";import{c}from"./cn-DOIGBiOF.js";import"./index-Bc2G9s8g.js";const r=({children:d,proTips:a,footer:s,className:o})=>e.jsx("div",{className:c("flex justify-center items-start px-2 md:px-8 py-4 md:pt-12 max-w-[1440px] mx-auto w-full font-sans",o),children:e.jsx("div",{className:"w-full rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm p-4 md:p-8 min-h-[600px] flex flex-col",children:e.jsxs("div",{className:"flex flex-col xl:flex-row gap-6 flex-1",children:[e.jsxs("div",{className:"flex-1 bg-white dark:bg-gray-900 min-w-0 flex flex-col",children:[d,s&&e.jsxs(e.Fragment,{children:[e.jsx("div",{className:"border-t border-slate-200 dark:border-gray-800 mt-6 pt-6"}),s]})]}),a&&a.length>0&&e.jsx("div",{className:"xl:w-[280px] xl:min-w-[220px] xl:max-w-[280px] self-start",children:e.jsx(m,{tips:a})})]})})});r.displayName="ExamIntegrityStudentExamContentTemplate";r.__docgenInfo={description:"",methods:[],displayName:"ExamIntegrityStudentExamContentTemplate",props:{children:{required:!0,tsType:{name:"ReactReactNode",raw:"React.ReactNode"},description:""},proTips:{required:!1,tsType:{name:"Array",elements:[{name:"string"}],raw:"string[]"},description:""},footer:{required:!1,tsType:{name:"ReactReactNode",raw:"React.ReactNode"},description:""},className:{required:!1,tsType:{name:"string"},description:""}}};const f={title:"Templates/ExamIntegrityStudentExamContentTemplate",component:r,parameters:{layout:"fullscreen"},tags:["autodocs"]},t={args:{children:e.jsxs("div",{className:"p-4 bg-gray-50 dark:bg-gray-800 rounded-lg",children:[e.jsx("h2",{className:"text-xl font-bold text-gray-900 dark:text-white mb-4",children:"Exam Question Area"}),e.jsx("p",{className:"text-gray-600 dark:text-gray-300",children:"Calculate the square root of 144 and multiply by 3."})]}),proTips:["Read questions carefully before answering.","Check time limits periodically."],footer:e.jsxs("div",{className:"flex justify-between items-center text-sm text-gray-500",children:[e.jsx("span",{children:"Question 1 of 20"}),e.jsx("span",{children:"Autosaved 1 min ago"})]})}};var l,i,n;t.parameters={...t.parameters,docs:{...(l=t.parameters)==null?void 0:l.docs,source:{originalSource:`{
+  args: {
+    children: <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Exam Question Area</h2>
+        <p className="text-gray-600 dark:text-gray-300">
+          Calculate the square root of 144 and multiply by 3.
+        </p>
+      </div>,
+    proTips: ['Read questions carefully before answering.', 'Check time limits periodically.'],
+    footer: <div className="flex justify-between items-center text-sm text-gray-500">
+        <span>Question 1 of 20</span>
+        <span>Autosaved 1 min ago</span>
+      </div>
+  }
+}`,...(n=(i=t.parameters)==null?void 0:i.docs)==null?void 0:n.source}}};const y=["Default"];export{t as Default,y as __namedExportsOrder,f as default};
