@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExamIntegrityStudentProTips } from '../../organisms/domain/exam-integrity/ExamIntegrityStudentProTips';
+import { ExamIntegrityStudentProTips } from '../../organisms/ExamIntegrityStudentProTips';
 import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityStudentExamContentTemplateProps {

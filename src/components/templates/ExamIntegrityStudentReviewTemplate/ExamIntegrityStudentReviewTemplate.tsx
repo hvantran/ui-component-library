@@ -1,9 +1,9 @@
 import React from 'react';
-import { ExamIntegrityTopBar } from '../../organisms/domain/exam-integrity/ExamIntegrityTopBar';
+import { ExamIntegrityTopBar } from '../../organisms/ExamIntegrityTopBar';
 import {
   ExamIntegrityStudentPortalSidebar,
   ExamIntegrityStudentPortalSection,
-} from '../../organisms/domain/exam-integrity/ExamIntegrityStudentPortalSidebar';
+} from '../../organisms/ExamIntegrityStudentPortalSidebar';
 import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityStudentReviewTemplateProps {

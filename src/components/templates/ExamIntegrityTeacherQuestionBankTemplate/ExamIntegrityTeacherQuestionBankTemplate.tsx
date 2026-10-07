@@ -1,7 +1,7 @@
 import React from 'react';
 import { Skeleton } from '../../atoms/Skeleton';
-import { ExamIntegrityTopBar } from '../../organisms/domain/exam-integrity/ExamIntegrityTopBar';
-import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/domain/exam-integrity/ExamIntegrityTeacherDashboardSidebar';
+import { ExamIntegrityTopBar } from '../../organisms/ExamIntegrityTopBar';
+import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import type { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 import { cn } from '../../../utils/cn';
 

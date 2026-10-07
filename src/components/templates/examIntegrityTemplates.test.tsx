@@ -190,3 +190,4 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Approved Questions');
   });
 });
+

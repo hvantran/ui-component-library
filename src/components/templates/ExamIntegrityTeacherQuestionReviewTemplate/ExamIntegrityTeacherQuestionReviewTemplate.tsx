@@ -2,8 +2,8 @@ import React from 'react';
 import { Replace, Trash2, CircleCheck } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { Skeleton } from '../../atoms/Skeleton';
-import { ExamIntegrityTopBar } from '../../organisms/domain/exam-integrity/ExamIntegrityTopBar';
-import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/domain/exam-integrity/ExamIntegrityTeacherDashboardSidebar';
+import { ExamIntegrityTopBar } from '../../organisms/ExamIntegrityTopBar';
+import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import type { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 import { cn } from '../../../utils/cn';
 
