@@ -1,8 +1,9 @@
 import { default as React } from '../../../../node_modules/react';
+export type ExamIntegrityScoreStatus = 'CORRECT' | 'INCORRECT' | 'PARTIAL' | 'SELF_GRADE_REQUIRED' | 'PENDING_ESSAY' | 'INCOMPLETE_QUESTION' | 'MULTIPLE_ANSWERS_FLAG' | (string & {});
 export interface ExamIntegrityScoreItem {
     questionId: string;
     questionNumber?: number;
-    status: 'CORRECT' | 'INCORRECT' | 'SELF_GRADE_REQUIRED' | 'PENDING_ESSAY';
+    status: ExamIntegrityScoreStatus;
     studentAnswer?: string;
     correctAnswer?: string;
     earnedPoints?: number;
