@@ -3,10 +3,20 @@ import { Skeleton } from '../../atoms/Skeleton';
 import { Card } from '../../atoms/Card';
 import { cn } from '../../../utils/cn';
 
+export type ExamIntegrityScoreStatus =
+  | 'CORRECT'
+  | 'INCORRECT'
+  | 'PARTIAL'
+  | 'SELF_GRADE_REQUIRED'
+  | 'PENDING_ESSAY'
+  | 'INCOMPLETE_QUESTION'
+  | 'MULTIPLE_ANSWERS_FLAG'
+  | (string & {});
+
 export interface ExamIntegrityScoreItem {
   questionId: string;
   questionNumber?: number;
-  status: 'CORRECT' | 'INCORRECT' | 'SELF_GRADE_REQUIRED' | 'PENDING_ESSAY';
+  status: ExamIntegrityScoreStatus;
   studentAnswer?: string;
   correctAnswer?: string;
   earnedPoints?: number;
