@@ -92,15 +92,6 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
           <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200">
             <span className="font-semibold">{studentName}</span>
             {studentRole && <span className="text-xs text-gray-500">({studentRole})</span>}
-            {onLogout && (
-              <button
-                type="button"
-                onClick={onLogout}
-                className="ml-2 text-xs text-blue-600 hover:underline dark:text-blue-400"
-              >
-                Logout
-              </button>
-            )}
           </div>
         }
       />
