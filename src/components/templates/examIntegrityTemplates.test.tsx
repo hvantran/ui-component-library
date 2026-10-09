@@ -83,12 +83,14 @@ describe('Exam Integrity Templates', () => {
 
   it('renders ExamIntegrityStudentLandingTemplate', () => {
     const html = renderToString(
-      <ExamIntegrityStudentLandingTemplate>
+      <ExamIntegrityStudentLandingTemplate starCount={95} studentName="Alice">
         <div>Exam Cards Grid</div>
       </ExamIntegrityStudentLandingTemplate>,
     );
     expect(html).toContain('My Assigned Exams');
     expect(html).toContain('Exam Cards Grid');
+    expect(html).toContain('95');
+    expect(html).toContain('student-star-badge');
   });
 
   it('renders ExamIntegrityStudentExamContentTemplate', () => {
@@ -112,12 +114,14 @@ describe('Exam Integrity Templates', () => {
 
   it('renders ExamIntegrityStudentReviewTemplate', () => {
     const html = renderToString(
-      <ExamIntegrityStudentReviewTemplate studentName="Alice">
+      <ExamIntegrityStudentReviewTemplate studentName="Alice" starCount={95}>
         <div>Student Review Body</div>
       </ExamIntegrityStudentReviewTemplate>,
     );
     expect(html).toContain('Alice');
     expect(html).toContain('Student Review Body');
+    expect(html).toContain('95');
+    expect(html).toContain('star-counter-badge');
   });
 
   it('renders ExamIntegrityTeacherQuestionReviewTemplate', () => {

@@ -7,6 +7,7 @@ export const EXAM_INTEGRITY_APP_BAR_HEIGHT = 64;
 export interface ExamIntegrityTopBarProps {
   appTitle?: string;
   userName?: string;
+  starCount?: number;
   showSearch?: boolean;
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
@@ -47,6 +48,7 @@ const defaultPlatformApps: AppSwitcherItem[] = [
 export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
   appTitle = 'Academic Management',
   userName,
+  starCount,
   appSwitcherItems = defaultPlatformApps,
   onNavigateApp,
   className,
@@ -83,6 +85,15 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
             }
           }}
         />
+        {starCount !== undefined && (
+          <div
+            data-testid="star-counter-badge"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 font-bold text-sm shadow-xs select-none"
+          >
+            <span className="text-base leading-none">⭐</span>
+            <span>{starCount}</span>
+          </div>
+        )}
         {userName && (
           <div className="ml-2 flex items-center gap-2">
             <span className="font-semibold text-gray-700 dark:text-gray-200 text-sm">{userName}</span>

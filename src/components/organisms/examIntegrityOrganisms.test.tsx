@@ -125,10 +125,12 @@ describe('ExamIntegrity Organisms', () => {
 
   it('renders ExamIntegrityTopBar', () => {
     const html = renderToString(
-      <ExamIntegrityTopBar appTitle="Test Portal" userName="Teacher User" />
+      <ExamIntegrityTopBar appTitle="Test Portal" userName="Teacher User" starCount={88} />
     );
     expect(html).toContain('Test Portal');
     expect(html).toContain('Teacher User');
+    expect(html).toContain('88');
+    expect(html).toContain('star-counter-badge');
   });
 
   it('renders ExamIntegrityReviewDashboard', () => {

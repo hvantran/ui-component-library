@@ -75,3 +75,24 @@ export const Default: Story = {
     );
   },
 };
+
+export const WithStarCounter: Story = {
+  render: () => {
+    const [activeSection, setActiveSection] = useState<StudentPortalSection>('dashboard');
+
+    return (
+      <ExamIntegrityStudentLandingTemplate
+        studentName="Alex Rivera"
+        studentRole="Grade 5 Adventurer"
+        starCount={125}
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+      >
+        <div className="p-8 bg-amber-50 rounded-2xl border-2 border-amber-200 text-center">
+          <h2 className="text-xl font-bold text-amber-900">Elementary Quest Dashboard</h2>
+          <p className="text-amber-700 mt-1">Total stars earned: 125 ⭐</p>
+        </div>
+      </ExamIntegrityStudentLandingTemplate>
+    );
+  },
+};
