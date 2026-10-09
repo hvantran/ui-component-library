@@ -29,6 +29,33 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Main Dashboard Content');
   });
 
+  it('renders ExamIntegrityTeacherDashboardTemplate in docked and auto-hide modes with dock controls', () => {
+    const onDockChange = vi.fn();
+    const dockedHtml = renderToString(
+      <ExamIntegrityTeacherDashboardTemplate
+        dockMode="docked"
+        onDockModeChange={onDockChange}
+      >
+        <div>Content</div>
+      </ExamIntegrityTeacherDashboardTemplate>
+    );
+    expect(dockedHtml).toContain('data-dock-mode="docked"');
+    expect(dockedHtml).toContain('ml-[72px]');
+    expect(dockedHtml).toContain('data-testid="teacher-sidebar-dock-controls"');
+
+    const autohideHtml = renderToString(
+      <ExamIntegrityTeacherDashboardTemplate
+        dockMode="auto-hide"
+        onDockModeChange={onDockChange}
+      >
+        <div>Content</div>
+      </ExamIntegrityTeacherDashboardTemplate>
+    );
+    expect(autohideHtml).toContain('data-dock-mode="auto-hide"');
+    expect(autohideHtml).toContain('data-testid="sidebar-autohide-trigger"');
+    expect(autohideHtml).toContain('ml-0');
+  });
+
   it('renders ExamIntegrityTeacherDashboardTemplate with header slots and sync dialog', () => {
     const html = renderToString(
       <ExamIntegrityTeacherDashboardTemplate
@@ -96,6 +123,8 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Exam Cards Grid');
     expect(html).toContain('95');
     expect(html).toContain('student-star-badge');
+    expect(html).toContain('top-16 bottom-0');
+    expect(html).not.toContain('inset-y-16');
   });
 
   it('renders ExamIntegrityStudentLandingTemplate in docked and auto-hide modes with dock controls', () => {

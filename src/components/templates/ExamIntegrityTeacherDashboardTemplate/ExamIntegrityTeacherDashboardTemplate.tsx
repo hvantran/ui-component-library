@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Home,
   Upload,
@@ -11,11 +11,20 @@ import {
   PlusCircle,
   Bell,
   HelpCircle,
+  Pin,
+  PanelLeftClose,
+  ChevronRight,
+  EyeOff,
 } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { AppTopBar } from '../../organisms/AppTopBar';
 import { Button } from '../../atoms/Button';
 import { ConfirmationDialog } from '../../molecules/ConfirmationDialog';
+import {
+  EXAM_INTEGRITY_TEACHER_SIDEBAR_WIDTH,
+  EXAM_INTEGRITY_TEACHER_SIDEBAR_DOCKED_WIDTH,
+  type ExamIntegrityNavDockMode,
+} from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 
 export type ExamIntegrityDashboardSection =
   | 'dashboard'
@@ -24,6 +33,8 @@ export type ExamIntegrityDashboardSection =
   | 'scoring'
   | 'question-bank'
   | 'reports';
+
+export type { ExamIntegrityNavDockMode };
 
 export interface SyncExamDialogState {
   examId: string;
@@ -50,6 +61,11 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
   sidebar?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+
+  /** Navigation dock mode ('pinned' | 'docked' | 'auto-hide') */
+  dockMode?: ExamIntegrityNavDockMode;
+  /** Callback when user changes navigation dock mode */
+  onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 
   /** State for inner sync questions confirmation dialog */
   syncDialogState?: SyncExamDialogState | null;
@@ -91,11 +107,25 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
   sidebar,
   children,
   className,
+  dockMode = 'pinned',
+  onDockModeChange,
   syncDialogState,
   onConfirmSync,
   onCancelSync,
   isSyncingQuestions = false,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const isAutoHide = dockMode === 'auto-hide';
+  const isDocked = dockMode === 'docked';
+  const isExpanded = !isDocked || (isAutoHide && isHovered);
+  const showSidebar = !isAutoHide || isHovered;
+
+  const mainMarginClass = isAutoHide
+    ? 'ml-0'
+    : isDocked
+    ? 'ml-[72px]'
+    : 'ml-64';
+
   return (
     <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
       <AppTopBar
@@ -152,70 +182,227 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
           </div>
         }
       />
-      <div className="flex pt-16">
-        <aside className="w-64 fixed inset-y-16 left-0 z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6">
-          {sidebar || (
-            <>
-              <div className="space-y-4 px-4">
-                {onCreateExam && (
-                  <Button
-                    variant="primary"
-                    className="w-full flex items-center justify-center gap-2 text-sm"
-                    onClick={onCreateExam}
-                  >
-                    <PlusCircle size={16} />
-                    <span>Create Exam</span>
-                  </Button>
+      <div className="flex pt-16 relative">
+        {/* Edge trigger handle for auto-hide mode on desktop */}
+        {isAutoHide && !sidebar && (
+          <div
+            data-testid="sidebar-autohide-trigger"
+            onMouseEnter={() => setIsHovered(true)}
+            onClick={() => setIsHovered(true)}
+            className={cn(
+              'fixed left-0 top-20 z-40 h-24 w-4 bg-blue-600/90 hover:bg-blue-600 hover:w-6 transition-all duration-200 rounded-r-lg hidden lg:flex items-center justify-center cursor-pointer shadow-lg group',
+              isHovered && 'opacity-0 pointer-events-none'
+            )}
+            title="Hover to reveal navigation"
+            aria-label="Expand hidden navigation"
+          >
+            <ChevronRight size={14} className="text-white group-hover:scale-125 transition-transform" />
+          </div>
+        )}
+
+        {/* Sidebar */}
+        {sidebar ? (
+          sidebar
+        ) : (
+          <aside
+            aria-label="Teacher navigation"
+            data-testid="teacher-dashboard-sidebar"
+            data-dock-mode={dockMode}
+            onMouseEnter={() => isAutoHide && setIsHovered(true)}
+            onMouseLeave={() => isAutoHide && setIsHovered(false)}
+            className={cn(
+              'fixed top-16 bottom-0 left-0 z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6 transition-all duration-300 ease-in-out',
+              isDocked && !isAutoHide && 'w-[72px] items-center px-2',
+              !isDocked && !isAutoHide && 'w-64',
+              isAutoHide && [
+                'w-64 shadow-2xl z-50',
+                showSidebar ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 pointer-events-none',
+              ]
+            )}
+            style={{
+              width:
+                isDocked && !isAutoHide
+                  ? EXAM_INTEGRITY_TEACHER_SIDEBAR_DOCKED_WIDTH
+                  : EXAM_INTEGRITY_TEACHER_SIDEBAR_WIDTH,
+            }}
+          >
+            <div className="space-y-4 w-full">
+              {/* Institution Identity */}
+              <div
+                className={cn(
+                  'px-6 mb-2 flex items-center gap-3',
+                  isDocked && !isAutoHide && 'px-0 justify-center mb-4'
                 )}
-                <nav className="space-y-1">
-                  {defaultNavItems.map(({ section, icon, label }) => {
-                    const isActive = activeSection === section;
-                    return (
-                      <button
-                        key={section}
-                        type="button"
-                        onClick={() => onNavigate?.(section)}
-                        className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left',
-                          isActive
-                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-                        )}
-                      >
-                        {icon}
-                        <span>{label}</span>
-                      </button>
-                    );
-                  })}
-                </nav>
+              >
+                <div className="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm font-bold text-xs select-none">
+                  EI
+                </div>
+                {isExpanded && (
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-bold text-gray-900 dark:text-white leading-tight text-sm truncate">
+                      Teacher Portal
+                    </span>
+                    {userName && (
+                      <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {userName}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
-              <div className="px-4 border-t border-gray-200 dark:border-gray-700 pt-4 space-y-1">
-                {onSettings && (
-                  <button
-                    type="button"
-                    onClick={onSettings}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 text-left"
+              {onCreateExam && (
+                <div className={cn('px-4', isDocked && !isAutoHide && 'px-1 w-full')}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className={cn(
+                      'w-full flex items-center',
+                      isDocked && !isAutoHide ? 'justify-center p-2' : 'justify-center gap-2'
+                    )}
+                    onClick={onCreateExam}
+                    title="Create Exam"
+                    aria-label="Create Exam"
+                    icon={<PlusCircle size={16} />}
                   >
-                    <Settings size={18} />
-                    <span>Settings</span>
-                  </button>
-                )}
-                {onLogout && (
-                  <button
-                    type="button"
-                    onClick={onLogout}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-left"
-                  >
-                    <LogOut size={18} />
-                    <span>Logout</span>
-                  </button>
-                )}
-              </div>
-            </>
-          )}
-        </aside>
-        <main className="ml-64 flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto">
+                    {isExpanded && <span>Create Exam</span>}
+                  </Button>
+                </div>
+              )}
+
+              <nav className={cn('space-y-1', isDocked && !isAutoHide ? 'px-1 w-full' : 'px-4')}>
+                {defaultNavItems.map(({ section, icon, label }) => {
+                  const isActive = activeSection === section;
+                  return (
+                    <button
+                      key={section}
+                      type="button"
+                      title={label}
+                      aria-label={label}
+                      onClick={() => onNavigate?.(section)}
+                      className={cn(
+                        'w-full flex items-center rounded-lg text-sm font-medium transition-colors text-left',
+                        isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2',
+                        isActive
+                          ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-semibold'
+                          : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                      )}
+                    >
+                      <span className="shrink-0">{icon}</span>
+                      {isExpanded && <span>{label}</span>}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Footer actions: Settings, Dock controls, Logout */}
+            <div
+              className={cn(
+                'border-t border-gray-200 dark:border-gray-700 pt-3 space-y-1',
+                isDocked && !isAutoHide ? 'px-1 w-full' : 'px-4'
+              )}
+            >
+              {onSettings && (
+                <button
+                  type="button"
+                  title="Settings"
+                  aria-label="Settings"
+                  onClick={onSettings}
+                  className={cn(
+                    'w-full flex items-center rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 text-left transition-colors',
+                    isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2'
+                  )}
+                >
+                  <Settings size={18} className="shrink-0" />
+                  {isExpanded && <span>Settings</span>}
+                </button>
+              )}
+
+              {/* Dock mode controls */}
+              {onDockModeChange && (
+                <div
+                  data-testid="teacher-sidebar-dock-controls"
+                  className={cn(
+                    'pt-2 pb-1 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs text-gray-400',
+                    isDocked && !isAutoHide && 'flex-col gap-1.5 px-0'
+                  )}
+                >
+                  {isExpanded && (
+                    <span className="font-semibold uppercase tracking-wider text-[10px] text-gray-400">
+                      Sidebar Mode
+                    </span>
+                  )}
+                  <div className={cn('flex items-center gap-1', isDocked && !isAutoHide && 'flex-col')}>
+                    <button
+                      type="button"
+                      data-testid="dock-mode-pinned-btn"
+                      onClick={() => onDockModeChange('pinned')}
+                      title="Pin navigation bar"
+                      aria-label="Pin navigation"
+                      className={cn(
+                        'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                        dockMode === 'pinned'
+                          ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50'
+                          : 'text-gray-400'
+                      )}
+                    >
+                      <Pin size={14} className={dockMode === 'pinned' ? 'fill-current' : ''} />
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="dock-mode-docked-btn"
+                      onClick={() => onDockModeChange('docked')}
+                      title="Dock to mini-rail"
+                      aria-label="Dock navigation to rail"
+                      className={cn(
+                        'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                        dockMode === 'docked'
+                          ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50'
+                          : 'text-gray-400'
+                      )}
+                    >
+                      <PanelLeftClose size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="dock-mode-autohide-btn"
+                      onClick={() => onDockModeChange('auto-hide')}
+                      title="Auto-hide navigation bar"
+                      aria-label="Auto hide navigation"
+                      className={cn(
+                        'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                        dockMode === 'auto-hide'
+                          ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50'
+                          : 'text-gray-400'
+                      )}
+                    >
+                      <EyeOff size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {onLogout && (
+                <button
+                  type="button"
+                  title="Logout"
+                  aria-label="Logout"
+                  onClick={onLogout}
+                  className={cn(
+                    'w-full flex items-center rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-left transition-colors',
+                    isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2'
+                  )}
+                >
+                  <LogOut size={18} className="shrink-0" />
+                  {isExpanded && <span>Logout</span>}
+                </button>
+              )}
+            </div>
+          </aside>
+        )}
+
+        <main className={cn(mainMarginClass, 'flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto transition-all duration-300')}>
           <div className="max-w-7xl mx-auto space-y-6">
             {(headerTitle || headerActionsSlot) && (
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">

@@ -2,7 +2,10 @@ import React from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ExamIntegrityTopBar } from '../../organisms/ExamIntegrityTopBar';
-import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
+import {
+  ExamIntegrityTeacherDashboardSidebar,
+  type ExamIntegrityNavDockMode,
+} from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import type { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 import { cn } from '../../../utils/cn';
 
@@ -21,6 +24,8 @@ export interface ExamIntegrityTeacherReportsTemplateProps {
   onLogout?: () => void;
   children: React.ReactNode;
   className?: string;
+  dockMode?: ExamIntegrityNavDockMode;
+  onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 }
 
 export const ExamIntegrityTeacherReportsTemplate: React.FC<
@@ -40,6 +45,8 @@ export const ExamIntegrityTeacherReportsTemplate: React.FC<
   onLogout,
   children,
   className,
+  dockMode = 'pinned',
+  onDockModeChange,
 }) => (
   <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-950 font-sans', className)}>
     <ExamIntegrityTopBar
@@ -55,8 +62,15 @@ export const ExamIntegrityTeacherReportsTemplate: React.FC<
       userRole={userRole}
       onNavigate={onNavigate}
       onLogout={onLogout}
+      dockMode={dockMode}
+      onDockModeChange={onDockModeChange}
     />
-    <div className="ml-[256px] pt-[64px] min-h-screen flex flex-col">
+    <div
+      className={cn(
+        dockMode === 'auto-hide' ? 'ml-0' : dockMode === 'docked' ? 'ml-[72px]' : 'ml-[256px]',
+        'pt-[64px] min-h-screen flex flex-col transition-all duration-300'
+      )}
+    >
       {/* Page-level toolbar: tabs + export */}
       <div className="sticky top-[64px] z-20 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-6 pr-8">
         <div className="flex space-x-2 min-h-[48px]">

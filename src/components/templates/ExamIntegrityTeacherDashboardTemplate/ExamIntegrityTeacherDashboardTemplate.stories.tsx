@@ -133,3 +133,49 @@ export const WithSyncQuestionsWorkflow: Story = {
   },
 };
 
+export const InteractiveDocking: Story = {
+  render: () => {
+    const [dockMode, setDockMode] = useState<ExamIntegrityNavDockMode>('pinned');
+    const [section, setSection] = useState<ExamIntegrityDashboardSection>('dashboard');
+
+    return (
+      <ExamIntegrityTeacherDashboardTemplate
+        userName="Prof. Alexander Wright"
+        userRole="Lead Proctor"
+        activeSection={section}
+        onNavigate={setSection}
+        dockMode={dockMode}
+        onDockModeChange={setDockMode}
+        onCreateExam={() => alert('Create Exam clicked')}
+        onSettings={() => alert('Settings clicked')}
+        onLogout={() => alert('Logout clicked')}
+      >
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              Teacher Dashboard (Mode: {dockMode})
+            </h1>
+            <p className="text-sm text-gray-500">
+              Switch between Pin, Dock (mini-rail 72px), and Auto-hide modes using the controls at the bottom of the sidebar.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="p-5">
+              <p className="text-sm text-gray-500">Active Students</p>
+              <p className="text-3xl font-bold mt-2">128</p>
+            </Card>
+            <Card className="p-5">
+              <p className="text-sm text-gray-500">Anomalies Detected</p>
+              <p className="text-3xl font-bold text-amber-600 mt-2">4</p>
+            </Card>
+            <Card className="p-5">
+              <p className="text-sm text-gray-500">Completed Submissions</p>
+              <p className="text-3xl font-bold text-green-600 mt-2">84</p>
+            </Card>
+          </div>
+        </div>
+      </ExamIntegrityTeacherDashboardTemplate>
+    );
+  },
+};
+

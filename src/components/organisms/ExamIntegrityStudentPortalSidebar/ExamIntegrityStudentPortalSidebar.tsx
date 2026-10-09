@@ -100,7 +100,7 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
         onMouseEnter={() => isAutoHide && setIsHovered(true)}
         onMouseLeave={() => isAutoHide && setIsHovered(false)}
         className={cn(
-          'fixed left-0 top-16 h-[calc(100vh-64px)] z-30 flex flex-col gap-2 pt-6 pb-6 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-y-auto transition-all duration-300 ease-in-out',
+          'fixed left-0 top-16 bottom-0 z-30 flex flex-col gap-2 pt-6 pb-6 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-y-auto transition-all duration-300 ease-in-out',
           mobileVisibilityClass,
           isDocked && !isAutoHide && 'w-[72px] items-center px-2',
           !isDocked && !isAutoHide && 'w-[256px]',
