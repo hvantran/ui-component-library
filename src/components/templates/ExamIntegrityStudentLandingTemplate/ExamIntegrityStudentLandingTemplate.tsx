@@ -110,7 +110,7 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
           </div>
         }
       />
-      <div className="flex pt-16">
+      <div className="flex">
         <aside className="w-64 fixed inset-y-16 left-0 z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6">
           {sidebarSlot || (
             <>
