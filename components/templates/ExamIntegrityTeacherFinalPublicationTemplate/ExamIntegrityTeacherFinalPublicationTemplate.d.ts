@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 export interface ExamIntegrityFinalPublicationStats {
     approvedQuestions?: number;
@@ -36,6 +37,8 @@ export interface ExamIntegrityTeacherFinalPublicationTemplateProps {
     onSaveDraft?: () => void;
     onPublish?: () => void;
     questions?: ExamIntegrityDraftQuestionSummary[];
+    dockMode?: ExamIntegrityNavDockMode;
+    onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
     className?: string;
 }
 export declare const ExamIntegrityTeacherFinalPublicationTemplate: React.FC<ExamIntegrityTeacherFinalPublicationTemplateProps>;

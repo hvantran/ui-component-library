@@ -1,5 +1,7 @@
 import { default as React } from '../../../../node_modules/react';
+import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 export type ExamIntegrityDashboardSection = 'dashboard' | 'ingestion' | 'review' | 'scoring' | 'question-bank' | 'reports';
+export type { ExamIntegrityNavDockMode };
 export interface SyncExamDialogState {
     examId: string;
     examTitle: string;
@@ -24,6 +26,10 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
     sidebar?: React.ReactNode;
     children: React.ReactNode;
     className?: string;
+    /** Navigation dock mode ('pinned' | 'docked' | 'auto-hide') */
+    dockMode?: ExamIntegrityNavDockMode;
+    /** Callback when user changes navigation dock mode */
+    onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
     /** State for inner sync questions confirmation dialog */
     syncDialogState?: SyncExamDialogState | null;
     /** Callback when teacher confirms sync in inner dialog */

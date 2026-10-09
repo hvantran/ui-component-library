@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 export interface ExamIntegrityTeacherQuestionBankTemplateProps {
     userName?: string;
@@ -15,6 +16,8 @@ export interface ExamIntegrityTeacherQuestionBankTemplateProps {
     isLoading?: boolean;
     children?: React.ReactNode;
     className?: string;
+    dockMode?: ExamIntegrityNavDockMode;
+    onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 }
 export declare const ExamIntegrityTeacherQuestionBankTemplate: React.FC<ExamIntegrityTeacherQuestionBankTemplateProps>;
 export default ExamIntegrityTeacherQuestionBankTemplate;
