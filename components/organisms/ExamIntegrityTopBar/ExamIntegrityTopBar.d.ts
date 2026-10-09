@@ -10,6 +10,7 @@ export interface ExamIntegrityTopBarProps {
     onNotifications?: () => void;
     onHelp?: () => void;
     onLogout?: () => void;
+    onMenuToggle?: () => void;
     appSwitcherItems?: AppSwitcherItem[];
     onNavigateApp?: (app: AppSwitcherItem) => void;
     className?: string;

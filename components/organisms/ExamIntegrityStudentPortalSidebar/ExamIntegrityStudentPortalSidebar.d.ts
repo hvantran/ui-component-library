@@ -7,6 +7,8 @@ export interface ExamIntegrityStudentPortalSidebarProps {
     activeSection?: ExamIntegrityStudentPortalSection;
     studentName?: string;
     studentRole?: string;
+    isOpen?: boolean;
+    onClose?: () => void;
     onNavigate?: (section: ExamIntegrityStudentPortalSection) => void;
     onHelp?: () => void;
     onLogout?: () => void;
