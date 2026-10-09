@@ -38,23 +38,24 @@ export const ExamIntegrityStudentExamNavigationBar: React.FC<
       )}
       aria-label="Exam question actions"
     >
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Button
           variant="accent"
           icon={<ArrowLeft size={18} className="text-white/90" />}
           onClick={onPrevious}
           disabled={!canGoPrev}
-          className="min-w-[122px] self-start"
+          className="w-full sm:w-auto min-w-0 sm:min-w-[122px] justify-center"
         >
           Previous
         </Button>
 
-        <div className="flex flex-wrap items-center gap-2 md:gap-3 md:justify-end">
+        <div className="flex items-center gap-2 sm:gap-3 justify-end flex-wrap sm:flex-nowrap">
           {hasFlaggedReviewAction && onReviewFlagged && (
             <Button
               variant="warning"
               icon={<ClipboardEdit size={18} className="text-amber-700" />}
               onClick={onReviewFlagged}
+              className="flex-1 sm:flex-none justify-center text-xs sm:text-sm"
             >
               {`Review Flagged (${flaggedCount})`}
             </Button>
@@ -66,13 +67,13 @@ export const ExamIntegrityStudentExamNavigationBar: React.FC<
             iconPlacement="right"
             onClick={onNext}
             disabled={!canGoNext}
-            className="min-w-[122px]"
+            className="flex-1 sm:flex-none min-w-0 sm:min-w-[122px] justify-center"
           >
             Next
           </Button>
 
           {isLastQuestion && (
-            <Button variant="danger" onClick={onSubmit}>
+            <Button variant="danger" onClick={onSubmit} className="w-full sm:w-auto justify-center">
               Submit Exam
             </Button>
           )}

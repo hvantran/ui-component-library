@@ -77,22 +77,24 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
   onDockModeChange,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const isAutoHide = dockMode === 'auto-hide';
   const isDocked = dockMode === 'docked';
   const isExpanded = !isDocked || (isAutoHide && isHovered);
   const showSidebar = !isAutoHide || isHovered;
 
-  // Margin left for main content based on dock mode
+  // Margin left for main content on desktop (always 0 on mobile/tablet)
   const mainMarginClass = isAutoHide
     ? 'ml-0'
     : isDocked
-    ? 'ml-[72px]'
-    : 'ml-64';
+    ? 'ml-0 lg:ml-[72px]'
+    : 'ml-0 lg:ml-64';
 
   return (
     <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
       <AppTopBar
         title="Exam Integrity Student Portal"
+        onMenuToggle={() => setIsMobileNavOpen((prev) => !prev)}
         searchSlot={
           onSearch && (
             <input
@@ -134,14 +136,24 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
         }
       />
       <div className="flex relative">
-        {/* Edge trigger handle for auto-hide mode */}
+        {/* Mobile backdrop overlay */}
+        {isMobileNavOpen && (
+          <div
+            data-testid="mobile-nav-backdrop"
+            onClick={() => setIsMobileNavOpen(false)}
+            className="fixed inset-0 bg-black/40 z-40 lg:hidden transition-opacity"
+            aria-hidden="true"
+          />
+        )}
+
+        {/* Edge trigger handle for auto-hide mode on desktop */}
         {isAutoHide && (
           <div
             data-testid="sidebar-autohide-trigger"
             onMouseEnter={() => setIsHovered(true)}
             onClick={() => setIsHovered(true)}
             className={cn(
-              'fixed left-0 top-20 z-40 h-24 w-4 bg-blue-600/90 hover:bg-blue-600 hover:w-6 transition-all duration-200 rounded-r-lg flex items-center justify-center cursor-pointer shadow-lg group',
+              'fixed left-0 top-20 z-40 h-24 w-4 bg-blue-600/90 hover:bg-blue-600 hover:w-6 transition-all duration-200 rounded-r-lg hidden lg:flex items-center justify-center cursor-pointer shadow-lg group',
               isHovered && 'opacity-0 pointer-events-none'
             )}
             title="Hover to reveal navigation"
@@ -159,12 +171,15 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
           onMouseEnter={() => isAutoHide && setIsHovered(true)}
           onMouseLeave={() => isAutoHide && setIsHovered(false)}
           className={cn(
-            'fixed inset-y-16 left-0 z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6 transition-all duration-300 ease-in-out',
-            isDocked && !isAutoHide && 'w-[72px] items-center px-2',
-            !isDocked && !isAutoHide && 'w-64',
+            'fixed inset-y-16 left-0 z-50 lg:z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6 transition-all duration-300 ease-in-out',
+            // Mobile: drawer behavior
+            isMobileNavOpen ? 'translate-x-0 shadow-2xl w-64' : '-translate-x-full lg:translate-x-0',
+            // Desktop dock mode behavior
+            isDocked && !isAutoHide && 'lg:w-[72px] lg:items-center lg:px-2',
+            !isDocked && !isAutoHide && 'lg:w-64',
             isAutoHide && [
-              'w-64 shadow-2xl z-50',
-              showSidebar ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 pointer-events-none',
+              'lg:w-64 lg:shadow-2xl lg:z-50',
+              showSidebar ? 'lg:translate-x-0 lg:opacity-100' : 'lg:-translate-x-full lg:opacity-0 lg:pointer-events-none',
             ]
           )}
         >
@@ -204,7 +219,10 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
                         type="button"
                         title={label}
                         aria-label={label}
-                        onClick={() => onNavigate?.(id)}
+                        onClick={() => {
+                          onNavigate?.(id);
+                          setIsMobileNavOpen(false);
+                        }}
                         className={cn(
                           'w-full flex items-center rounded-lg text-sm font-medium transition-colors text-left',
                           isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2',
@@ -325,7 +343,7 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
         {/* Main Content Area */}
         <main
           className={cn(
-            'flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto transition-[margin] duration-300 ease-in-out',
+            'flex-1 min-h-[calc(100vh-4rem)] p-4 sm:p-6 overflow-y-auto transition-[margin] duration-300 ease-in-out',
             mainMarginClass
           )}
         >
@@ -333,9 +351,9 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
             {bannerSlot}
 
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
               {pageSubtitle && (
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{pageSubtitle}</p>
+                <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">{pageSubtitle}</p>
               )}
             </div>
 
@@ -347,7 +365,7 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
                     type="button"
                     onClick={() => onFilterChange?.(f.value)}
                     className={cn(
-                      'px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors',
+                      'px-3.5 py-1.5 min-h-[38px] sm:min-h-[32px] rounded-full text-xs font-semibold transition-colors inline-flex items-center justify-center',
                       activeFilter === f.value
                         ? 'bg-blue-600 text-white'
                         : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700',
