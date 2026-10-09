@@ -73,21 +73,21 @@ export const ExamIntegrityReviewDashboard: React.FC<ExamIntegrityReviewDashboard
   ).length;
 
   return (
-    <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-2 md:px-8', className)}>
+    <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900 py-6 sm:py-10 px-2 sm:px-8', className)}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Score hero card */}
-        <div className="p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-lg bg-gradient-to-br from-blue-800 to-blue-500 text-white">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">
+        <div className="p-5 sm:p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-lg bg-gradient-to-br from-blue-800 to-blue-500 text-white">
+          <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 flex items-center justify-center text-xl sm:text-2xl">
               🎓
             </div>
-            <div className="font-bold text-2xl">Exam Results</div>
+            <div className="font-bold text-xl sm:text-2xl">Exam Results</div>
           </div>
 
           {/* Big score */}
-          <div className="text-6xl font-extrabold leading-none mb-2">
+          <div className="text-4xl sm:text-6xl font-extrabold leading-none mb-2">
             {dashboard.finalScore10.toFixed(1)}
-            <span className="text-2xl font-normal opacity-80">/10</span>
+            <span className="text-xl sm:text-2xl font-normal opacity-80">/10</span>
           </div>
 
           <div className="w-full bg-white/25 rounded-full h-1.5 mb-3">
@@ -98,25 +98,25 @@ export const ExamIntegrityReviewDashboard: React.FC<ExamIntegrityReviewDashboard
           </div>
 
           {/* Stats row */}
-          <div className="flex flex-wrap items-center gap-6 sm:gap-8 pt-2">
-            <div className="flex items-center gap-2">
-              <span className="text-lg">✅</span>
-              <span className="font-semibold text-sm sm:text-base">Correct</span>
-              <span className="font-bold text-lg ml-1">{correctCount}</span>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-8 pt-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-base sm:text-lg">✅</span>
+              <span className="font-semibold text-xs sm:text-base">Correct</span>
+              <span className="font-bold text-base sm:text-lg ml-1">{correctCount}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-lg">❌</span>
-              <span className="font-semibold text-sm sm:text-base">Incorrect</span>
-              <span className="font-bold text-lg ml-1">{incorrectCount}</span>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-base sm:text-lg">❌</span>
+              <span className="font-semibold text-xs sm:text-base">Incorrect</span>
+              <span className="font-bold text-base sm:text-lg ml-1">{incorrectCount}</span>
             </div>
             {pendingCount > 0 && (
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🕒</span>
-                <span className="font-semibold text-sm sm:text-base">Awaiting Teacher</span>
-                <span className="font-bold text-lg ml-1">{pendingCount}</span>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-base sm:text-lg">🕒</span>
+                <span className="font-semibold text-xs sm:text-base">Awaiting Teacher</span>
+                <span className="font-bold text-base sm:text-lg ml-1">{pendingCount}</span>
               </div>
             )}
-            <span className="text-sm sm:text-base opacity-90 ml-auto font-medium">
+            <span className="text-xs sm:text-base opacity-90 sm:ml-auto font-medium">
               {dashboard.totalEarned.toFixed(1)} / {dashboard.totalMax.toFixed(1)} pts
             </span>
           </div>

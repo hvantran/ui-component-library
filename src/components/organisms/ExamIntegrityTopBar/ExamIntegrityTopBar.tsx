@@ -1,4 +1,5 @@
 import React from 'react';
+import { Menu } from 'lucide-react';
 import { AppSwitcher, AppSwitcherItem } from '../AppSwitcher';
 import { cn } from '../../../utils/cn';
 
@@ -13,6 +14,7 @@ export interface ExamIntegrityTopBarProps {
   onNotifications?: () => void;
   onHelp?: () => void;
   onLogout?: () => void;
+  onMenuToggle?: () => void;
   appSwitcherItems?: AppSwitcherItem[];
   onNavigateApp?: (app: AppSwitcherItem) => void;
   className?: string;
@@ -49,6 +51,7 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
   appTitle = 'Academic Management',
   userName,
   starCount,
+  onMenuToggle,
   appSwitcherItems = defaultPlatformApps,
   onNavigateApp,
   className,
@@ -66,13 +69,25 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 h-16 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-6 font-sans',
+        'fixed top-0 left-0 right-0 h-16 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-3 sm:px-6 font-sans',
         className
       )}
     >
-      <span className="font-bold text-2xl text-blue-700 dark:text-blue-400 select-none tracking-tight">
-        {appTitle}
-      </span>
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        {onMenuToggle && (
+          <button
+            type="button"
+            aria-label="Toggle navigation menu"
+            onClick={onMenuToggle}
+            className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none lg:hidden"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        <span className="font-bold text-lg sm:text-2xl text-blue-700 dark:text-blue-400 select-none tracking-tight truncate">
+          {appTitle}
+        </span>
+      </div>
       <div className="flex items-center gap-4">
         {starCount !== undefined && (
           <div

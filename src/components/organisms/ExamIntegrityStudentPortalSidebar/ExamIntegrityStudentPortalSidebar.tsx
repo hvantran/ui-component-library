@@ -9,6 +9,7 @@ import {
   PanelLeftClose,
   ChevronRight,
   EyeOff,
+  X,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { cn } from '../../../utils/cn';
@@ -33,6 +34,8 @@ export interface ExamIntegrityStudentPortalSidebarProps {
   activeSection?: ExamIntegrityStudentPortalSection;
   studentName?: string;
   studentRole?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
   onNavigate?: (section: ExamIntegrityStudentPortalSection) => void;
   onHelp?: () => void;
   onLogout?: () => void;
@@ -47,6 +50,8 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
   activeSection = 'dashboard',
   studentName = '',
   studentRole = 'Learning Center',
+  isOpen,
+  onClose,
   onNavigate,
   onHelp,
   onLogout,
@@ -61,6 +66,13 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
 
   const showSidebar = !isAutoHide || isHovered;
 
+  const mobileVisibilityClass =
+    isOpen === undefined
+      ? ''
+      : isOpen
+      ? 'translate-x-0 shadow-2xl z-50'
+      : '-translate-x-full lg:translate-x-0';
+
   return (
     <>
       {/* Edge trigger handle for auto-hide mode */}
@@ -70,7 +82,7 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
           onMouseEnter={() => setIsHovered(true)}
           onClick={() => setIsHovered(true)}
           className={cn(
-            'fixed left-0 top-20 z-40 h-24 w-4 bg-blue-600/90 hover:bg-blue-600 hover:w-6 transition-all duration-200 rounded-r-lg flex items-center justify-center cursor-pointer shadow-lg group',
+            'fixed left-0 top-20 z-40 h-24 w-4 bg-blue-600/90 hover:bg-blue-600 hover:w-6 transition-all duration-200 rounded-r-lg hidden lg:flex items-center justify-center cursor-pointer shadow-lg group',
             isHovered && 'opacity-0 pointer-events-none'
           )}
           title="Hover to reveal navigation"
@@ -89,6 +101,7 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
         onMouseLeave={() => isAutoHide && setIsHovered(false)}
         className={cn(
           'fixed left-0 top-16 h-[calc(100vh-64px)] z-30 flex flex-col gap-2 pt-6 pb-6 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-y-auto transition-all duration-300 ease-in-out',
+          mobileVisibilityClass,
           isDocked && !isAutoHide && 'w-[72px] items-center px-2',
           !isDocked && !isAutoHide && 'w-[256px]',
           isAutoHide && [
@@ -102,22 +115,34 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
         }}
       >
         {/* Student identity block */}
-        <div className={cn('px-6 mb-4 flex items-center gap-3', isDocked && !isAutoHide && 'px-0 justify-center mb-6')}>
-          <div
-            className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-base border border-blue-300 dark:border-blue-700 shrink-0"
-            title={studentName || 'Student'}
-          >
-            {studentName ? studentName.slice(0, 2).toUpperCase() : 'ST'}
-          </div>
-          {isExpanded && (
-            <div className="min-w-0">
-              <div className="text-base font-bold text-gray-900 dark:text-white leading-snug truncate">
-                {studentName || 'Student'}
-              </div>
-              <div className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-tight truncate">
-                {studentRole}
-              </div>
+        <div className={cn('px-6 mb-4 flex items-center justify-between', isDocked && !isAutoHide && 'px-0 justify-center mb-6')}>
+          <div className="flex items-center gap-3 min-w-0">
+            <div
+              className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-base border border-blue-300 dark:border-blue-700 shrink-0"
+              title={studentName || 'Student'}
+            >
+              {studentName ? studentName.slice(0, 2).toUpperCase() : 'ST'}
             </div>
+            {isExpanded && (
+              <div className="min-w-0">
+                <div className="text-base font-bold text-gray-900 dark:text-white leading-snug truncate">
+                  {studentName || 'Student'}
+                </div>
+                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-tight truncate">
+                  {studentRole}
+                </div>
+              </div>
+            )}
+          </div>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 lg:hidden"
+              aria-label="Close sidebar"
+            >
+              <X size={18} />
+            </button>
           )}
         </div>
 
