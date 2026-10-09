@@ -1,5 +1,7 @@
 import { default as React } from '../../../../node_modules/react';
+import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results';
+export type { ExamIntegrityNavDockMode };
 export interface FilterItem {
     label: string;
     value: string;
@@ -23,6 +25,8 @@ export interface ExamIntegrityStudentLandingTemplateProps {
     children: React.ReactNode;
     onLogout?: () => void;
     className?: string;
+    dockMode?: ExamIntegrityNavDockMode;
+    onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 }
 export declare const ExamIntegrityStudentLandingTemplate: React.FC<ExamIntegrityStudentLandingTemplateProps>;
 export default ExamIntegrityStudentLandingTemplate;

@@ -1,4 +1,4 @@
-import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{r as g}from"./index-Bc2G9s8g.js";import{B as w}from"./Button-CHA6iI3F.js";import{C as V}from"./Card-C-7XTUWd.js";import{c as x}from"./cn-DOIGBiOF.js";import{c as L}from"./createLucideIcon-B_AfoRjS.js";import{a as $,C as H}from"./chevron-right-CbamweGA.js";import{S as K}from"./search-BA6qmz_L.js";/**
+import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{r as g}from"./index-Bc2G9s8g.js";import{B as w}from"./Button-CHA6iI3F.js";import{C as V}from"./Card-C-7XTUWd.js";import{c as x}from"./cn-DOIGBiOF.js";import{c as L}from"./createLucideIcon-B_AfoRjS.js";import{C as $}from"./chevron-left-CKd1PQWo.js";import{C as H}from"./chevron-right-DDBX69dD.js";import{S as K}from"./search-BA6qmz_L.js";/**
  * @license lucide-react v0.454.0 - ISC
  *
  * This source code is licensed under the ISC license.
@@ -41,7 +41,7 @@ import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{r as g}from"./index-Bc2G9s8
     badgeClass: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300',
     activeClass: 'border-rose-600 bg-rose-50 text-rose-900 dark:bg-rose-950 dark:text-rose-200',
   },
-]`,computed:!1}},className:{required:!1,tsType:{name:"string"},description:""}}};const W=[{sessionId:"s-1",studentId:"ST-101",studentName:"Alice Nguyen",examTitle:"Midterm Math Exam",totalEarned:9.5,totalMax:10,finalScore10:9.5},{sessionId:"s-2",studentId:"ST-102",studentName:"Bob Tran",examTitle:"Midterm Math Exam",totalEarned:8,totalMax:10,finalScore10:8},{sessionId:"s-3",studentId:"ST-103",studentName:"Charlie Le",examTitle:"Midterm Math Exam",totalEarned:6.2,totalMax:10,finalScore10:6.2,pendingEssayCount:1},{sessionId:"s-4",studentId:"ST-104",studentName:"David Pham",examTitle:"Midterm Math Exam",totalEarned:4.5,totalMax:10,finalScore10:4.5}],de={title:"Organisms/ExamIntegrityStudentGradeSwitcher",component:v,parameters:{layout:"padded"},tags:["autodocs"]},h={args:{students:W,selectedSessionId:"s-1",onSelectStudent:()=>{}}},k={args:{students:[],onSelectStudent:()=>{}}};var E,I,T;h.parameters={...h.parameters,docs:{...(E=h.parameters)==null?void 0:E.docs,source:{originalSource:`{
+]`,computed:!1}},className:{required:!1,tsType:{name:"string"},description:""}}};const W=[{sessionId:"s-1",studentId:"ST-101",studentName:"Alice Nguyen",examTitle:"Midterm Math Exam",totalEarned:9.5,totalMax:10,finalScore10:9.5},{sessionId:"s-2",studentId:"ST-102",studentName:"Bob Tran",examTitle:"Midterm Math Exam",totalEarned:8,totalMax:10,finalScore10:8},{sessionId:"s-3",studentId:"ST-103",studentName:"Charlie Le",examTitle:"Midterm Math Exam",totalEarned:6.2,totalMax:10,finalScore10:6.2,pendingEssayCount:1},{sessionId:"s-4",studentId:"ST-104",studentName:"David Pham",examTitle:"Midterm Math Exam",totalEarned:4.5,totalMax:10,finalScore10:4.5}],ne={title:"Organisms/ExamIntegrityStudentGradeSwitcher",component:v,parameters:{layout:"padded"},tags:["autodocs"]},h={args:{students:W,selectedSessionId:"s-1",onSelectStudent:()=>{}}},k={args:{students:[],onSelectStudent:()=>{}}};var E,I,T;h.parameters={...h.parameters,docs:{...(E=h.parameters)==null?void 0:E.docs,source:{originalSource:`{
   args: {
     students: mockStudents,
     selectedSessionId: 's-1',
@@ -52,4 +52,4 @@ import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{r as g}from"./index-Bc2G9s8
     students: [],
     onSelectStudent: () => {}
   }
-}`,...(G=(R=k.parameters)==null?void 0:R.docs)==null?void 0:G.source}}};const ne=["Default","EmptyList"];export{h as Default,k as EmptyList,ne as __namedExportsOrder,de as default};
+}`,...(G=(R=k.parameters)==null?void 0:R.docs)==null?void 0:G.source}}};const ie=["Default","EmptyList"];export{h as Default,k as EmptyList,ie as __namedExportsOrder,ne as default};
