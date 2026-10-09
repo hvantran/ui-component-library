@@ -26,3 +26,11 @@ export const WithoutUser: Story = {
   },
 };
 
+export const WithStarCounter: Story = {
+  args: {
+    appTitle: 'Academic Management',
+    userName: 'Hoa Tran (Student)',
+    starCount: 128,
+  },
+};
+

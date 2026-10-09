@@ -20,6 +20,7 @@ export interface FilterItem {
 export interface ExamIntegrityStudentLandingTemplateProps {
   studentName?: string;
   studentRole?: string;
+  starCount?: number;
   activeSection?: StudentPortalSection;
   pageTitle?: string;
   pageSubtitle?: string;
@@ -47,6 +48,7 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
 > = ({
   studentName = 'Student',
   studentRole = 'Student',
+  starCount,
   activeSection = 'dashboard',
   pageTitle = 'My Assigned Exams',
   pageSubtitle = 'Select an ongoing examination to begin.',
@@ -89,9 +91,20 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
           )
         }
         userSlot={
-          <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200">
-            <span className="font-semibold">{studentName}</span>
-            {studentRole && <span className="text-xs text-gray-500">({studentRole})</span>}
+          <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-200">
+            {starCount !== undefined && (
+              <div
+                data-testid="student-star-badge"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 font-bold text-xs select-none shadow-xs"
+              >
+                <span className="text-sm leading-none">⭐</span>
+                <span>{starCount}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">{studentName}</span>
+              {studentRole && <span className="text-xs text-gray-500">({studentRole})</span>}
+            </div>
           </div>
         }
       />
@@ -106,7 +119,14 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
                   </div>
                   <div>
                     <div className="text-base font-bold text-gray-900 dark:text-white leading-snug">{studentName}</div>
-                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-tight">{studentRole}</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-tight">{studentRole}</span>
+                      {starCount !== undefined && (
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400">
+                          ⭐ {starCount}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 

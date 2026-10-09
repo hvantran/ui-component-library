@@ -8,6 +8,7 @@ import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityStudentReviewTemplateProps {
   studentName?: string;
+  starCount?: number;
   activeSection?: ExamIntegrityStudentPortalSection;
   onNavigate?: (section: ExamIntegrityStudentPortalSection) => void;
   onHelp?: () => void;
@@ -21,6 +22,7 @@ export const ExamIntegrityStudentReviewTemplate: React.FC<
   ExamIntegrityStudentReviewTemplateProps
 > = ({
   studentName = '',
+  starCount,
   activeSection = 'results',
   onNavigate,
   onHelp,
@@ -33,6 +35,7 @@ export const ExamIntegrityStudentReviewTemplate: React.FC<
     <ExamIntegrityTopBar
       appTitle="Academic Management"
       userName={studentName}
+      starCount={starCount}
       onSearch={onSearch}
       onNotifications={onNotifications}
       onHelp={onHelp}

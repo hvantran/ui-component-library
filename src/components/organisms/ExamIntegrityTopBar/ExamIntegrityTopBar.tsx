@@ -7,6 +7,7 @@ export const EXAM_INTEGRITY_APP_BAR_HEIGHT = 64;
 export interface ExamIntegrityTopBarProps {
   appTitle?: string;
   userName?: string;
+  starCount?: number;
   showSearch?: boolean;
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
@@ -47,6 +48,7 @@ const defaultPlatformApps: AppSwitcherItem[] = [
 export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
   appTitle = 'Academic Management',
   userName,
+  starCount,
   appSwitcherItems = defaultPlatformApps,
   onNavigateApp,
   className,
@@ -72,6 +74,23 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
         {appTitle}
       </span>
       <div className="flex items-center gap-4">
+        {starCount !== undefined && (
+          <div
+            data-testid="star-counter-badge"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 font-bold text-sm shadow-xs select-none"
+          >
+            <span className="text-base leading-none">⭐</span>
+            <span>{starCount}</span>
+          </div>
+        )}
+        {userName && (
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-gray-700 dark:text-gray-200 text-sm">{userName}</span>
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-bold text-sm">
+              {initials}
+            </span>
+          </div>
+        )}
         <AppSwitcher
           items={appSwitcherItems}
           currentAppId="exam-integrity"
@@ -83,14 +102,6 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
             }
           }}
         />
-        {userName && (
-          <div className="ml-2 flex items-center gap-2">
-            <span className="font-semibold text-gray-700 dark:text-gray-200 text-sm">{userName}</span>
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-bold text-sm">
-              {initials}
-            </span>
-          </div>
-        )}
       </div>
     </header>
   );
