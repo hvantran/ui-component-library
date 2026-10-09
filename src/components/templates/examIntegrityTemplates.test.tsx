@@ -83,11 +83,16 @@ describe('Exam Integrity Templates', () => {
 
   it('renders ExamIntegrityStudentLandingTemplate', () => {
     const html = renderToString(
-      <ExamIntegrityStudentLandingTemplate starCount={95} studentName="Alice">
+      <ExamIntegrityStudentLandingTemplate
+        starCount={95}
+        studentName="Alice"
+        bannerSlot={<div data-testid="welcome-banner">Welcome Banner</div>}
+      >
         <div>Exam Cards Grid</div>
       </ExamIntegrityStudentLandingTemplate>,
     );
     expect(html).toContain('My Assigned Exams');
+    expect(html).toContain('Welcome Banner');
     expect(html).toContain('Exam Cards Grid');
     expect(html).toContain('95');
     expect(html).toContain('student-star-badge');

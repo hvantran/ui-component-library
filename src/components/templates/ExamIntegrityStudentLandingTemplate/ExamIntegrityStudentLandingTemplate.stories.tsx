@@ -96,3 +96,35 @@ export const WithStarCounter: Story = {
     );
   },
 };
+
+export const WithBannerSlot: Story = {
+  render: () => {
+    const [activeSection, setActiveSection] = useState<StudentPortalSection>('dashboard');
+
+    return (
+      <ExamIntegrityStudentLandingTemplate
+        studentName="Alex Rivera"
+        studentRole="Grade 5 Adventurer"
+        starCount={125}
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+        pageTitle="Learning Quests 🌟"
+        pageSubtitle="Choose a fun learning quest below!"
+        bannerSlot={
+          <div className="rounded-3xl border-2 border-amber-300 bg-amber-100/80 p-6 shadow-md flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-amber-400 flex items-center justify-center text-3xl">🦁</div>
+            <div>
+              <h2 className="text-xl font-bold text-slate-900">Welcome back, Alex! 🚀</h2>
+              <p className="text-sm text-slate-700">Ready for today's learning adventures?</p>
+            </div>
+          </div>
+        }
+      >
+        <div className="p-8 bg-white rounded-2xl border border-gray-200 text-center">
+          <p className="text-gray-700">Learning Quests content</p>
+        </div>
+      </ExamIntegrityStudentLandingTemplate>
+    );
+  },
+};
+
