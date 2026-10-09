@@ -3,7 +3,10 @@ import { Replace, Trash2, CircleCheck } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { Skeleton } from '../../atoms/Skeleton';
 import { ExamIntegrityTopBar } from '../../organisms/ExamIntegrityTopBar';
-import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
+import {
+  ExamIntegrityTeacherDashboardSidebar,
+  type ExamIntegrityNavDockMode,
+} from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import type { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 import { cn } from '../../../utils/cn';
 
@@ -28,6 +31,8 @@ export interface ExamIntegrityTeacherQuestionReviewTemplateProps {
   leftPanel?: React.ReactNode;
   rightPanel?: React.ReactNode;
   className?: string;
+  dockMode?: ExamIntegrityNavDockMode;
+  onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 }
 
 export const ExamIntegrityTeacherQuestionReviewTemplate: React.FC<
@@ -53,6 +58,8 @@ export const ExamIntegrityTeacherQuestionReviewTemplate: React.FC<
   leftPanel,
   rightPanel,
   className,
+  dockMode = 'pinned',
+  onDockModeChange,
 }) => (
   <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col font-sans', className)}>
     <ExamIntegrityTopBar
@@ -70,10 +77,17 @@ export const ExamIntegrityTeacherQuestionReviewTemplate: React.FC<
       onCreateExam={onCreateExam}
       onSettings={onSettings}
       onLogout={onLogout}
+      dockMode={dockMode}
+      onDockModeChange={onDockModeChange}
     />
 
     {/* Content Area */}
-    <div className="ml-[256px] pt-[64px] min-h-screen flex flex-col">
+    <div
+      className={cn(
+        dockMode === 'auto-hide' ? 'ml-0' : dockMode === 'docked' ? 'ml-[72px]' : 'ml-[256px]',
+        'pt-[64px] min-h-screen flex flex-col transition-all duration-300'
+      )}
+    >
       {/* Sub-header / Breadcrumbs bar */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-8 py-3 flex items-center justify-between sticky top-[64px] z-20">
         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">

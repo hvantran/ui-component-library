@@ -20,6 +20,33 @@ describe('ExamIntegrity Organisms', () => {
     const html = renderToString(<ExamIntegrityTeacherDashboardSidebar activeSection="dashboard" />);
     expect(html).toContain('Teacher Portal');
     expect(html).toContain('Dashboard');
+    expect(html).toContain('top-16 bottom-0');
+  });
+
+  it('renders ExamIntegrityTeacherDashboardSidebar in docked and auto-hide modes with controls', () => {
+    const onDockChange = vi.fn();
+    const dockedHtml = renderToString(
+      <ExamIntegrityTeacherDashboardSidebar
+        userName="Prof. Wright"
+        dockMode="docked"
+        onDockModeChange={onDockChange}
+      />
+    );
+    expect(dockedHtml).toContain('data-dock-mode="docked"');
+    expect(dockedHtml).toContain('data-testid="dock-mode-pinned-btn"');
+    expect(dockedHtml).toContain('data-testid="dock-mode-docked-btn"');
+    expect(dockedHtml).toContain('data-testid="dock-mode-autohide-btn"');
+    expect(dockedHtml).toContain('w-[72px]');
+
+    const autohideHtml = renderToString(
+      <ExamIntegrityTeacherDashboardSidebar
+        userName="Prof. Wright"
+        dockMode="auto-hide"
+        onDockModeChange={onDockChange}
+      />
+    );
+    expect(autohideHtml).toContain('data-dock-mode="auto-hide"');
+    expect(autohideHtml).toContain('data-testid="sidebar-autohide-trigger"');
   });
 
   it('renders ExamIntegrityStudentPortalSidebar', () => {

@@ -3,7 +3,10 @@ import { Plus } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { Skeleton } from '../../atoms/Skeleton';
 import { ExamIntegrityTopBar } from '../../organisms/ExamIntegrityTopBar';
-import { ExamIntegrityTeacherDashboardSidebar } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
+import {
+  ExamIntegrityTeacherDashboardSidebar,
+  type ExamIntegrityNavDockMode,
+} from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 import type { ExamIntegrityDashboardSection } from '../ExamIntegrityTeacherDashboardTemplate';
 import { cn } from '../../../utils/cn';
 
@@ -21,6 +24,8 @@ export interface ExamIntegrityTeacherIngestionTemplateProps {
   isLoading?: boolean;
   children?: React.ReactNode;
   className?: string;
+  dockMode?: ExamIntegrityNavDockMode;
+  onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 }
 
 export const ExamIntegrityTeacherIngestionTemplate: React.FC<
@@ -39,6 +44,8 @@ export const ExamIntegrityTeacherIngestionTemplate: React.FC<
   isLoading = false,
   children,
   className,
+  dockMode = 'pinned',
+  onDockModeChange,
 }) => (
   <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-950 font-sans', className)}>
     <ExamIntegrityTopBar
@@ -56,8 +63,15 @@ export const ExamIntegrityTeacherIngestionTemplate: React.FC<
       onCreateExam={onCreateExam}
       onSettings={onSettings}
       onLogout={onLogout}
+      dockMode={dockMode}
+      onDockModeChange={onDockModeChange}
     />
-    <main className="ml-[256px] pt-[64px] min-h-screen overflow-y-auto">
+    <main
+      className={cn(
+        dockMode === 'auto-hide' ? 'ml-0' : dockMode === 'docked' ? 'ml-[72px]' : 'ml-[256px]',
+        'pt-[64px] min-h-screen overflow-y-auto transition-all duration-300'
+      )}
+    >
       <div className="p-6 max-w-6xl mx-auto">
         {/* Page header */}
         <div className="flex justify-between items-center mb-8">
