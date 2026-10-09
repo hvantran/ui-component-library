@@ -2,6 +2,7 @@ import { default as React } from '../../../../node_modules/react';
 import { ExamIntegrityStudentPortalSection } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 export interface ExamIntegrityStudentReviewTemplateProps {
     studentName?: string;
+    starCount?: number;
     activeSection?: ExamIntegrityStudentPortalSection;
     onNavigate?: (section: ExamIntegrityStudentPortalSection) => void;
     onHelp?: () => void;

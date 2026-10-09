@@ -4,6 +4,7 @@ export declare const EXAM_INTEGRITY_APP_BAR_HEIGHT = 64;
 export interface ExamIntegrityTopBarProps {
     appTitle?: string;
     userName?: string;
+    starCount?: number;
     showSearch?: boolean;
     onSearch?: (query: string) => void;
     onNotifications?: () => void;
