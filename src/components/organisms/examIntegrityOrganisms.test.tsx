@@ -30,6 +30,29 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('My Exams');
   });
 
+  it('renders ExamIntegrityStudentPortalSidebar in docked and auto-hide modes with controls', () => {
+    const onDockChange = vi.fn();
+    const dockedHtml = renderToString(
+      <ExamIntegrityStudentPortalSidebar
+        studentName="John Doe"
+        dockMode="docked"
+        onDockModeChange={onDockChange}
+      />
+    );
+    expect(dockedHtml).toContain('data-dock-mode="docked"');
+    expect(dockedHtml).toContain('data-testid="dock-mode-pinned-btn"');
+
+    const autohideHtml = renderToString(
+      <ExamIntegrityStudentPortalSidebar
+        studentName="John Doe"
+        dockMode="auto-hide"
+        onDockModeChange={onDockChange}
+      />
+    );
+    expect(autohideHtml).toContain('data-dock-mode="auto-hide"');
+    expect(autohideHtml).toContain('data-testid="sidebar-autohide-trigger"');
+  });
+
   it('renders ExamIntegrityStudentExamHeader', () => {
     const html = renderToString(
       <ExamIntegrityStudentExamHeader

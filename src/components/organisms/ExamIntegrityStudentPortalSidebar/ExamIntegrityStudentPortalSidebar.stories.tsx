@@ -18,6 +18,25 @@ export const Default: Story = {
     activeSection: 'dashboard',
     studentName: 'Alex Nguyen',
     studentRole: 'Grade 10 Student',
+    dockMode: 'pinned',
+  },
+};
+
+export const DockedMiniRail: Story = {
+  args: {
+    activeSection: 'dashboard',
+    studentName: 'Alex Nguyen',
+    studentRole: 'Grade 10 Student',
+    dockMode: 'docked',
+  },
+};
+
+export const AutoHide: Story = {
+  args: {
+    activeSection: 'dashboard',
+    studentName: 'Alex Nguyen',
+    studentRole: 'Grade 10 Student',
+    dockMode: 'auto-hide',
   },
 };
 
@@ -26,6 +45,7 @@ export const MyExams: Story = {
     activeSection: 'my-exams',
     studentName: 'Sarah Smith',
     studentRole: 'Grade 11 Student',
+    dockMode: 'pinned',
   },
 };
 
@@ -34,6 +54,6 @@ export const Results: Story = {
     activeSection: 'results',
     studentName: 'David Lee',
     studentRole: 'Grade 12 Student',
+    dockMode: 'pinned',
   },
 };
-
