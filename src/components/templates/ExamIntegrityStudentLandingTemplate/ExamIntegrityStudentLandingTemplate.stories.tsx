@@ -128,3 +128,53 @@ export const WithBannerSlot: Story = {
   },
 };
 
+export const DockedMiniRail: Story = {
+  render: () => {
+    const [activeSection, setActiveSection] = useState<StudentPortalSection>('dashboard');
+    const [dockMode, setDockMode] = useState<ExamIntegrityNavDockMode>('docked');
+
+    return (
+      <ExamIntegrityStudentLandingTemplate
+        studentName="Jane Doe"
+        studentRole="Grade 10"
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+        dockMode={dockMode}
+        onDockModeChange={setDockMode}
+      >
+        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-bold">Docked Mini-Rail Mode</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Navigation is compacted into a 72px rail on the left, maximizing content area.
+          </p>
+        </div>
+      </ExamIntegrityStudentLandingTemplate>
+    );
+  },
+};
+
+export const AutoHideMode: Story = {
+  render: () => {
+    const [activeSection, setActiveSection] = useState<StudentPortalSection>('dashboard');
+    const [dockMode, setDockMode] = useState<ExamIntegrityNavDockMode>('auto-hide');
+
+    return (
+      <ExamIntegrityStudentLandingTemplate
+        studentName="Jane Doe"
+        studentRole="Grade 10"
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+        dockMode={dockMode}
+        onDockModeChange={setDockMode}
+      >
+        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-bold">Auto-Hide Mode</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Navigation hides off-screen. Hover over the left edge tab to reveal the full drawer.
+          </p>
+        </div>
+      </ExamIntegrityStudentLandingTemplate>
+    );
+  },
+};
+

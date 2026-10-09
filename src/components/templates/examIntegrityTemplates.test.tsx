@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {
@@ -96,6 +96,35 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Exam Cards Grid');
     expect(html).toContain('95');
     expect(html).toContain('student-star-badge');
+  });
+
+  it('renders ExamIntegrityStudentLandingTemplate in docked and auto-hide modes with dock controls', () => {
+    const onDockChange = vi.fn();
+    const dockedHtml = renderToString(
+      <ExamIntegrityStudentLandingTemplate
+        studentName="Alice"
+        dockMode="docked"
+        onDockModeChange={onDockChange}
+      >
+        <div>Content</div>
+      </ExamIntegrityStudentLandingTemplate>
+    );
+    expect(dockedHtml).toContain('data-dock-mode="docked"');
+    expect(dockedHtml).toContain('ml-[72px]');
+    expect(dockedHtml).toContain('data-testid="dock-mode-pinned-btn"');
+
+    const autohideHtml = renderToString(
+      <ExamIntegrityStudentLandingTemplate
+        studentName="Alice"
+        dockMode="auto-hide"
+        onDockModeChange={onDockChange}
+      >
+        <div>Content</div>
+      </ExamIntegrityStudentLandingTemplate>
+    );
+    expect(autohideHtml).toContain('data-dock-mode="auto-hide"');
+    expect(autohideHtml).toContain('data-testid="sidebar-autohide-trigger"');
+    expect(autohideHtml).toContain('ml-0');
   });
 
   it('renders ExamIntegrityStudentExamContentTemplate', () => {

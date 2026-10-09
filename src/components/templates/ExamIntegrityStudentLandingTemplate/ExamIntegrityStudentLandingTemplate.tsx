@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   LayoutDashboard,
   ClipboardList,
@@ -6,11 +6,17 @@ import {
   HelpCircle,
   LogOut,
   Bell,
+  Pin,
+  PanelLeftClose,
+  ChevronRight,
+  EyeOff,
 } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 import { AppTopBar } from '../../organisms/AppTopBar';
+import type { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 
 export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results';
+export type { ExamIntegrityNavDockMode };
 
 export interface FilterItem {
   label: string;
@@ -36,6 +42,8 @@ export interface ExamIntegrityStudentLandingTemplateProps {
   children: React.ReactNode;
   onLogout?: () => void;
   className?: string;
+  dockMode?: ExamIntegrityNavDockMode;
+  onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
 }
 
 const defaultPortalNavItems: { id: StudentPortalSection; label: string; icon: React.ReactNode }[] = [
@@ -65,7 +73,22 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
   children,
   onLogout,
   className,
+  dockMode = 'pinned',
+  onDockModeChange,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const isAutoHide = dockMode === 'auto-hide';
+  const isDocked = dockMode === 'docked';
+  const isExpanded = !isDocked || (isAutoHide && isHovered);
+  const showSidebar = !isAutoHide || isHovered;
+
+  // Margin left for main content based on dock mode
+  const mainMarginClass = isAutoHide
+    ? 'ml-0'
+    : isDocked
+    ? 'ml-[72px]'
+    : 'ml-64';
+
   return (
     <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
       <AppTopBar
@@ -110,77 +133,202 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
           </div>
         }
       />
-      <div className="flex">
-        <aside className="w-64 fixed inset-y-16 left-0 z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6">
+      <div className="flex relative">
+        {/* Edge trigger handle for auto-hide mode */}
+        {isAutoHide && (
+          <div
+            data-testid="sidebar-autohide-trigger"
+            onMouseEnter={() => setIsHovered(true)}
+            onClick={() => setIsHovered(true)}
+            className={cn(
+              'fixed left-0 top-20 z-40 h-24 w-4 bg-blue-600/90 hover:bg-blue-600 hover:w-6 transition-all duration-200 rounded-r-lg flex items-center justify-center cursor-pointer shadow-lg group',
+              isHovered && 'opacity-0 pointer-events-none'
+            )}
+            title="Hover to reveal navigation"
+            aria-label="Expand hidden navigation"
+          >
+            <ChevronRight size={14} className="text-white group-hover:scale-125 transition-transform" />
+          </div>
+        )}
+
+        {/* Left Navigation Sidebar */}
+        <aside
+          aria-label="Student portal navigation"
+          data-testid="student-landing-sidebar"
+          data-dock-mode={dockMode}
+          onMouseEnter={() => isAutoHide && setIsHovered(true)}
+          onMouseLeave={() => isAutoHide && setIsHovered(false)}
+          className={cn(
+            'fixed inset-y-16 left-0 z-30 overflow-y-auto bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col justify-between py-6 transition-all duration-300 ease-in-out',
+            isDocked && !isAutoHide && 'w-[72px] items-center px-2',
+            !isDocked && !isAutoHide && 'w-64',
+            isAutoHide && [
+              'w-64 shadow-2xl z-50',
+              showSidebar ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 pointer-events-none',
+            ]
+          )}
+        >
           {sidebarSlot || (
             <>
-              <div>
-                <div className="px-6 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base border border-blue-300">
+              <div className="space-y-4 w-full">
+                {/* Identity */}
+                <div className={cn('px-6 mb-4 flex items-center gap-3', isDocked && !isAutoHide && 'px-0 justify-center mb-6')}>
+                  <div
+                    className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base border border-blue-300 shrink-0"
+                    title={studentName}
+                  >
                     {studentName.slice(0, 2).toUpperCase()}
                   </div>
-                  <div>
-                    <div className="text-base font-bold text-gray-900 dark:text-white leading-snug">{studentName}</div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-tight">{studentRole}</span>
-                      {starCount !== undefined && (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400">
-                          ⭐ {starCount}
-                        </span>
-                      )}
+                  {isExpanded && (
+                    <div className="min-w-0">
+                      <div className="text-base font-bold text-gray-900 dark:text-white leading-snug truncate">{studentName}</div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-tight truncate">{studentRole}</span>
+                        {starCount !== undefined && (
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0">
+                            ⭐ {starCount}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
-                <nav className="space-y-1 px-4 font-sans">
+                {/* Nav items */}
+                <nav className={cn('space-y-1 font-sans', isDocked && !isAutoHide ? 'px-1 w-full' : 'px-4')}>
                   {defaultPortalNavItems.map(({ id, label, icon }) => {
                     const isActive = activeSection === id;
                     return (
                       <button
                         key={id}
                         type="button"
+                        title={label}
+                        aria-label={label}
                         onClick={() => onNavigate?.(id)}
                         className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left',
+                          'w-full flex items-center rounded-lg text-sm font-medium transition-colors text-left',
+                          isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2',
                           isActive
-                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-semibold'
                             : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                         )}
                       >
-                        {icon}
-                        <span>{label}</span>
+                        <span className="shrink-0">{icon}</span>
+                        {isExpanded && <span>{label}</span>}
                       </button>
                     );
                   })}
                 </nav>
               </div>
 
-              <div className="px-4 border-t border-gray-200 dark:border-gray-700 pt-4 space-y-1">
+              {/* Footer actions with dock controls before Logout */}
+              <div
+                className={cn(
+                  'border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2',
+                  isDocked && !isAutoHide ? 'px-1 w-full' : 'px-4'
+                )}
+              >
                 {onHelp && (
                   <button
                     type="button"
+                    title="Help & Support"
+                    aria-label="Help & Support"
                     onClick={onHelp}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 text-left"
+                    className={cn(
+                      'w-full flex items-center rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 text-left transition-colors',
+                      isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2'
+                    )}
                   >
-                    <HelpCircle size={18} />
-                    <span>Help & Support</span>
+                    <HelpCircle size={18} className="shrink-0" />
+                    {isExpanded && <span>Help & Support</span>}
                   </button>
                 )}
+
+                {/* Dock Controls at end before Logout */}
+                {onDockModeChange && (
+                  <div
+                    data-testid="sidebar-dock-controls"
+                    className={cn(
+                      'pt-2 pb-1 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs text-gray-400',
+                      isDocked && !isAutoHide && 'flex-col gap-1.5 px-0'
+                    )}
+                  >
+                    {isExpanded && (
+                      <span className="font-semibold uppercase tracking-wider text-[10px] text-gray-400">
+                        Sidebar Mode
+                      </span>
+                    )}
+                    <div className={cn('flex items-center gap-1', isDocked && !isAutoHide && 'flex-col')}>
+                      <button
+                        type="button"
+                        data-testid="dock-mode-pinned-btn"
+                        onClick={() => onDockModeChange('pinned')}
+                        title="Pin navigation bar"
+                        aria-label="Pin navigation"
+                        className={cn(
+                          'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                          dockMode === 'pinned' ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/40' : 'text-gray-400'
+                        )}
+                      >
+                        <Pin size={14} className={dockMode === 'pinned' ? 'fill-current' : ''} />
+                      </button>
+                      <button
+                        type="button"
+                        data-testid="dock-mode-docked-btn"
+                        onClick={() => onDockModeChange('docked')}
+                        title="Dock to mini-rail"
+                        aria-label="Dock navigation to rail"
+                        className={cn(
+                          'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                          dockMode === 'docked' ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/40' : 'text-gray-400'
+                        )}
+                      >
+                        <PanelLeftClose size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        data-testid="dock-mode-autohide-btn"
+                        onClick={() => onDockModeChange('auto-hide')}
+                        title="Auto-hide navigation bar"
+                        aria-label="Auto hide navigation"
+                        className={cn(
+                          'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                          dockMode === 'auto-hide' ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/40' : 'text-gray-400'
+                        )}
+                      >
+                        <EyeOff size={14} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {onLogout && (
                   <button
                     type="button"
+                    title="Logout"
+                    aria-label="Logout"
                     onClick={onLogout}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-left"
+                    className={cn(
+                      'w-full flex items-center rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-left transition-colors',
+                      isDocked && !isAutoHide ? 'justify-center p-2.5' : 'gap-3 px-3 py-2'
+                    )}
                   >
-                    <LogOut size={18} />
-                    <span>Logout</span>
+                    <LogOut size={18} className="shrink-0" />
+                    {isExpanded && <span>Logout</span>}
                   </button>
                 )}
               </div>
             </>
           )}
         </aside>
-        <main className="ml-64 flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto">
+
+        {/* Main Content Area */}
+        <main
+          className={cn(
+            'flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto transition-[margin] duration-300 ease-in-out',
+            mainMarginClass
+          )}
+        >
           <div className="max-w-7xl mx-auto space-y-6">
             {bannerSlot}
 
