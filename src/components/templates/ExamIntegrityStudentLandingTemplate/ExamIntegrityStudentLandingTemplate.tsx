@@ -32,6 +32,7 @@ export interface ExamIntegrityStudentLandingTemplateProps {
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
   sidebarSlot?: React.ReactNode;
+  bannerSlot?: React.ReactNode;
   children: React.ReactNode;
   onLogout?: () => void;
   className?: string;
@@ -60,6 +61,7 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
   onSearch,
   onNotifications,
   sidebarSlot,
+  bannerSlot,
   children,
   onLogout,
   className,
@@ -180,6 +182,8 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
         </aside>
         <main className="ml-64 flex-1 min-h-[calc(100vh-4rem)] p-6 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-6">
+            {bannerSlot}
+
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
               {pageSubtitle && (
