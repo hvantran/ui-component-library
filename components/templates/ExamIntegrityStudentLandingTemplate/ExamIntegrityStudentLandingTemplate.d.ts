@@ -19,6 +19,7 @@ export interface ExamIntegrityStudentLandingTemplateProps {
     onSearch?: (query: string) => void;
     onNotifications?: () => void;
     sidebarSlot?: React.ReactNode;
+    bannerSlot?: React.ReactNode;
     children: React.ReactNode;
     onLogout?: () => void;
     className?: string;
