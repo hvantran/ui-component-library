@@ -22,6 +22,7 @@ export interface ExamIntegrityStudentEggShopTemplateProps {
   isElementary?: boolean;
   pageTitle?: string;
   pageSubtitle?: string;
+  activeSection?: StudentPortalSection;
   activeTab?: EggShopTab;
   onTabChange?: (tab: EggShopTab) => void;
   incubatingEggs?: IncubatingEgg[];
@@ -44,6 +45,7 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
   isElementary = false,
   pageTitle,
   pageSubtitle,
+  activeSection = 'shop',
   activeTab = 'shop',
   onTabChange,
   incubatingEggs = [],
@@ -71,7 +73,7 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
     <ExamIntegrityStudentLandingTemplate
       studentName={studentName}
       starCount={starCount}
-      activeSection="shop"
+      activeSection={activeSection}
       pageTitle={resolvedTitle}
       pageSubtitle={resolvedSubtitle}
       onNavigate={onNavigate}

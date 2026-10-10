@@ -4,6 +4,7 @@ import {
   ClipboardList,
   BarChart2,
   ShoppingBag,
+  Sparkles,
   Headphones,
   LogOut,
   Pin,
@@ -18,7 +19,7 @@ import { cn } from '../../../utils/cn';
 export const EXAM_INTEGRITY_STUDENT_SIDEBAR_WIDTH = 256;
 export const EXAM_INTEGRITY_STUDENT_SIDEBAR_DOCKED_WIDTH = 72;
 
-export type ExamIntegrityStudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop';
+export type ExamIntegrityStudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop' | 'collection';
 export type ExamIntegrityNavDockMode = 'pinned' | 'docked' | 'auto-hide';
 
 const NAV_ITEMS: {
@@ -30,6 +31,7 @@ const NAV_ITEMS: {
   { id: 'my-exams', label: 'My Exams', Icon: ClipboardList },
   { id: 'results', label: 'Results', Icon: BarChart2 },
   { id: 'shop', label: 'Shop', Icon: ShoppingBag },
+  { id: 'collection', label: 'Collection', Icon: Sparkles },
 ];
 
 export interface ExamIntegrityStudentPortalSidebarProps {
