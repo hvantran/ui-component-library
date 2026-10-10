@@ -3,9 +3,16 @@ import { analyzeFormula, MathFormulaType } from '../../../utils/mathFormulaAnaly
 import SimpleArithmeticInput from './SimpleArithmeticInput';
 import ComplexFormulaInput from './ComplexFormulaInput';
 import LongDivisionInput from './LongDivisionInput';
+import SplitMergeArithmeticInput from './SplitMergeArithmeticInput';
+import BridgeTenArithmeticInput from './BridgeTenArithmeticInput';
 
 const sanitizeDigitsOnly = (raw: string): string => raw.replace(/\D+/g, '');
 const sanitizeLongDivisionValue = (raw: string): string =>
+  raw
+    .split('\n')
+    .map((line) => line.replace(/\D+/g, ''))
+    .join('\n');
+const sanitizeBridgeTenValue = (raw: string): string =>
   raw
     .split('\n')
     .map((line) => line.replace(/\D+/g, ''))
@@ -29,6 +36,9 @@ interface MathQuestionInputProps {
  *
  * Renders:
  * - SimpleArithmeticInput for single-operator formulas (addition, subtraction, multiplication, division)
+ * - SplitMergeArithmeticInput for Grade 1 addition/subtraction (number bonds / split-merge)
+ * - BridgeTenArithmeticInput for Grade 1-2 addition/subtraction over 10 (Make 10 strategy)
+ * - LongDivisionInput for Grade 3 division
  * - ComplexFormulaInput for multi-operator formulas
  */
 const MathQuestionInput: React.FC<MathQuestionInputProps> = ({
@@ -43,6 +53,33 @@ const MathQuestionInput: React.FC<MathQuestionInputProps> = ({
   }, [questionText]);
 
   const isGrade3 = tags.some((t) => /grade\s*3/i.test(t));
+  const isGrade2 = tags.some((t) => /grade\s*2/i.test(t));
+  const isGrade1 = tags.some((t) => /grade\s*1/i.test(t));
+  const hasBridgeTenTag = tags.some((t) => /(bridge\s*10|make\s*10|qua\s*10)/i.test(t));
+
+  const operands = parsedFormula.operands || [];
+  const [opA, opB] = operands;
+
+  const isAdditionBridgingTen =
+    parsedFormula.type === 'SIMPLE_ADDITION' &&
+    typeof opA === 'number' &&
+    typeof opB === 'number' &&
+    opA < 10 &&
+    opB < 10 &&
+    opA + opB > 10;
+
+  const isSubtractionBridgingTen =
+    parsedFormula.type === 'SIMPLE_SUBTRACTION' &&
+    typeof opA === 'number' &&
+    typeof opB === 'number' &&
+    opA > 10 &&
+    opA < 20 &&
+    opB < 10 &&
+    opA - opB < 10;
+
+  const shouldUseBridgeTen =
+    hasBridgeTenTag ||
+    ((isGrade1 || isGrade2) && (isAdditionBridgingTen || isSubtractionBridgingTen));
 
   const isSimpleArithmetic = [
     'SIMPLE_ADDITION',
@@ -61,6 +98,33 @@ const MathQuestionInput: React.FC<MathQuestionInputProps> = ({
         value={value}
         disabled={disabled}
         onChange={(nextValue) => onChange(sanitizeLongDivisionValue(nextValue))}
+      />
+    );
+  }
+
+  // 10-bridging layout (Make 10 / Decompose over ten to twenty)
+  if (shouldUseBridgeTen) {
+    return (
+      <BridgeTenArithmeticInput
+        formula={parsedFormula}
+        value={value}
+        disabled={disabled}
+        onChange={(nextValue) => onChange(sanitizeBridgeTenValue(nextValue))}
+      />
+    );
+  }
+
+  // Grade-1 split and merge layout for addition and subtraction
+  if (
+    isGrade1 &&
+    (parsedFormula.type === 'SIMPLE_ADDITION' || parsedFormula.type === 'SIMPLE_SUBTRACTION')
+  ) {
+    return (
+      <SplitMergeArithmeticInput
+        formula={parsedFormula}
+        value={value}
+        disabled={disabled}
+        onChange={(nextValue) => onChange(sanitizeDigitsOnly(nextValue))}
       />
     );
   }
