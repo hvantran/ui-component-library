@@ -3,6 +3,7 @@ import {
   LayoutDashboard,
   ClipboardList,
   BarChart2,
+  ShoppingBag,
   HelpCircle,
   LogOut,
   Bell,
@@ -15,7 +16,7 @@ import { cn } from '../../../utils/cn';
 import { AppTopBar } from '../../organisms/AppTopBar';
 import type { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 
-export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results';
+export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop';
 export type { ExamIntegrityNavDockMode };
 
 export interface FilterItem {
@@ -50,6 +51,7 @@ const defaultPortalNavItems: { id: StudentPortalSection; label: string; icon: Re
   { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
   { id: 'my-exams', label: 'My Exams', icon: <ClipboardList size={18} /> },
   { id: 'results', label: 'Results', icon: <BarChart2 size={18} /> },
+  { id: 'shop', label: 'Shop', icon: <ShoppingBag size={18} /> },
 ];
 
 export const ExamIntegrityStudentLandingTemplate: React.FC<

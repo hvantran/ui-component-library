@@ -14,6 +14,7 @@ export interface ExamIntegrityStudentReviewTemplateProps {
   onHelp?: () => void;
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
+  onLogout?: () => void;
   children: React.ReactNode;
   className?: string;
 }
@@ -28,6 +29,7 @@ export const ExamIntegrityStudentReviewTemplate: React.FC<
   onHelp,
   onSearch,
   onNotifications,
+  onLogout,
   children,
   className,
 }) => {
@@ -42,6 +44,7 @@ export const ExamIntegrityStudentReviewTemplate: React.FC<
         onSearch={onSearch}
         onNotifications={onNotifications}
         onHelp={onHelp}
+        onLogout={onLogout}
         onMenuToggle={() => setIsMobileNavOpen((prev) => !prev)}
       />
 
@@ -65,6 +68,7 @@ export const ExamIntegrityStudentReviewTemplate: React.FC<
           setIsMobileNavOpen(false);
         }}
         onHelp={onHelp}
+        onLogout={onLogout}
       />
       <main className="ml-0 lg:ml-[256px] pt-16 min-h-screen overflow-y-auto">
         <div className="p-3 sm:p-6 max-w-6xl mx-auto">{children}</div>

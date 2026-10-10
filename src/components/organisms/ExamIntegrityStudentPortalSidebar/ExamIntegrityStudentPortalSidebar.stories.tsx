@@ -57,3 +57,12 @@ export const Results: Story = {
     dockMode: 'pinned',
   },
 };
+
+export const Shop: Story = {
+  args: {
+    activeSection: 'shop',
+    studentName: 'Alex Nguyen',
+    studentRole: 'Grade 10 Student',
+    dockMode: 'pinned',
+  },
+};

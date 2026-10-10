@@ -13,6 +13,8 @@ import {
   ExamIntegrityStudentGradeSwitcher,
   ExamIntegrityTopBar,
   ExamIntegrityReviewDashboard,
+  ExamIntegrityEggShop,
+  ExamIntegrityPetHatchery,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -55,6 +57,7 @@ describe('ExamIntegrity Organisms', () => {
     );
     expect(html).toContain('John Doe');
     expect(html).toContain('My Exams');
+    expect(html).toContain('Shop');
   });
 
   it('renders ExamIntegrityStudentPortalSidebar in docked and auto-hide modes with controls', () => {
@@ -196,6 +199,20 @@ describe('ExamIntegrity Organisms', () => {
     );
     expect(html).toContain('Exam Results');
     expect(html).toContain('10.0');
+  });
+
+  it('renders ExamIntegrityEggShop', () => {
+    const html = renderToString(<ExamIntegrityEggShop starBalance={1200} />);
+    expect(html).toContain('3D Pet Egg Shop');
+    expect(html).toContain('1,200');
+    expect(html).toContain('Stars');
+  });
+
+  it('renders ExamIntegrityPetHatchery', () => {
+    const html = renderToString(<ExamIntegrityPetHatchery starBalance={300} />);
+    expect(html).toContain('Pet Hatchery &amp; Sanctuary');
+    expect(html).toContain('Incubator');
+    expect(html).toContain('My Pets');
   });
 });
 

@@ -123,6 +123,7 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Exam Cards Grid');
     expect(html).toContain('95');
     expect(html).toContain('student-star-badge');
+    expect(html).toContain('Shop');
     expect(html).toContain('top-16 bottom-0');
     expect(html).not.toContain('inset-y-16');
   });
