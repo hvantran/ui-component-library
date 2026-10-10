@@ -8,6 +8,7 @@ export interface ExamIntegrityStudentReviewTemplateProps {
     onHelp?: () => void;
     onSearch?: (query: string) => void;
     onNotifications?: () => void;
+    onLogout?: () => void;
     children: React.ReactNode;
     className?: string;
 }

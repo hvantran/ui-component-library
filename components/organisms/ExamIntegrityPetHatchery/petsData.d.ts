@@ -1,0 +1,100 @@
+import { EggTier } from '../../molecules/ThreeEggViewer';
+export interface EvolutionStageInfo {
+    stage: number;
+    minLevel: number;
+    name: string;
+    title: string;
+    description: string;
+    avatarEmoji: string;
+    imageUrl: string;
+}
+export interface StudentPet {
+    id: string;
+    name: string;
+    species: string;
+    tier: EggTier;
+    rarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+    element: string;
+    level: number;
+    maxLevel: number;
+    currentExp: number;
+    expNeeded: number;
+    growthCostInStars: number;
+    stats: {
+        vitality: number;
+        wisdom: number;
+        integrityBond: number;
+        solarRadiance?: number;
+    };
+    avatarEmoji: string;
+    imageUrl?: string;
+    stageName: string;
+    stageLevel: number;
+    evolutionStages?: EvolutionStageInfo[];
+    isEquipped?: boolean;
+}
+export interface PetCodexEntry {
+    key: string;
+    name: string;
+    species: string;
+    rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+    element: string;
+    avatarEmoji: string;
+    tier: EggTier;
+    totalStages: number;
+    stages: EvolutionStageInfo[];
+    description: string;
+    bannerGradient: string;
+}
+export declare const SPROUTLING_EVOLUTIONS: EvolutionStageInfo[];
+export declare const PIPFLICK_EVOLUTIONS: EvolutionStageInfo[];
+export declare const EMBERSQUEAK_EVOLUTIONS: EvolutionStageInfo[];
+export declare const ZEPHYRPUFF_EVOLUTIONS: EvolutionStageInfo[];
+export declare const FROSTPAW_EVOLUTIONS: EvolutionStageInfo[];
+export declare const MAGMAFANG_EVOLUTIONS: EvolutionStageInfo[];
+export declare const VOLTWING_EVOLUTIONS: EvolutionStageInfo[];
+export declare const THUNDERCAT_EVOLUTIONS: EvolutionStageInfo[];
+export declare const FIRE_PHOENIX_EVOLUTIONS: EvolutionStageInfo[];
+export declare const CHRONO_CHIMERA_EVOLUTIONS: EvolutionStageInfo[];
+export declare const SHADOWPANTHER_EVOLUTIONS: EvolutionStageInfo[];
+export declare const STORMSTAG_EVOLUTIONS: EvolutionStageInfo[];
+export declare const ASTRAL_DRAGON_EVOLUTIONS: EvolutionStageInfo[];
+export declare const ASTRAL_LEVIATHAN_EVOLUTIONS: EvolutionStageInfo[];
+export declare const SOLAR_WYVERN_EVOLUTIONS: EvolutionStageInfo[];
+export declare const VOID_DRAGON_EVOLUTIONS: EvolutionStageInfo[];
+export declare const CHRONO_DRACO_EVOLUTIONS: EvolutionStageInfo[];
+export declare const AEGIS_PALADIN_EVOLUTIONS: EvolutionStageInfo[];
+export declare function createSproutlingPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createPipflickPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createEmbersqueakPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createZephyrpuffPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createFrostpawPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createMagmafangPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createVoltwingPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createThundercatPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createFirePhoenixPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createChronoChimeraPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createShadowpantherPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createStormstagPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createAstralDragonPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createAstralLeviathanPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createSolarWyvernPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createVoidDragonPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createChronoDracoPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare function createAegisPaladinPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
+export declare const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry>;
+export declare const PET_CODEX_REGISTRY: Record<string, PetCodexEntry>;
+export declare const ALL_SHOP_STARTER_PETS: StudentPet[];
+export declare const ALL_FIRE_PHOENIX_LEVELS: StudentPet[];
+export declare const ALL_ROSTER_STARTER_PETS: StudentPet[];
+export type PetRarity = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+export interface RarityDropRateInfo {
+    rarity: PetRarity;
+    percent: number;
+    stages: number;
+    label: string;
+    badgeClass: string;
+    glowClass: string;
+}
+export declare const RARITY_DROP_RATES: Record<PetRarity, RarityDropRateInfo>;
+export declare function rollMysteryPet(fixedRoll?: number): StudentPet;

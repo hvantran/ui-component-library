@@ -14,3 +14,4 @@ export * from './Combobox';
 export * from './NavMenuItem';
 export * from './ScrollArea';
 export * from './TimerDisplay';
+export * from './ThreeEggViewer';
