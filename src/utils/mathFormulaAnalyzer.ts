@@ -122,10 +122,11 @@ const normalizeFormula = (formula: string): string => {
  */
 const extractOperators = (formula: string): string[] => {
   const operators: string[] = [];
-  const operatorRegex = /[\+\-x*/:=]/;
+  const operatorRegex = /[\+\-x*/:]/;
+  const expression = formula.replace(/=\s*(\?|\.\.\.|_.*)?$/, '');
 
-  for (let i = 0; i < formula.length; i += 1) {
-    const char = formula[i];
+  for (let i = 0; i < expression.length; i += 1) {
+    const char = expression[i];
     if (!operatorRegex.test(char)) {
       continue;
     }
@@ -133,11 +134,11 @@ const extractOperators = (formula: string): string[] => {
     // Treat unary minus as part of a number, not an arithmetic operator.
     if (char === '-') {
       let prevIndex = i - 1;
-      while (prevIndex >= 0 && formula[prevIndex] === ' ') {
+      while (prevIndex >= 0 && expression[prevIndex] === ' ') {
         prevIndex -= 1;
       }
 
-      const prevChar = prevIndex >= 0 ? formula[prevIndex] : '';
+      const prevChar = prevIndex >= 0 ? expression[prevIndex] : '';
       if (!prevChar || prevChar === '(' || operatorRegex.test(prevChar)) {
         continue;
       }
@@ -154,8 +155,9 @@ const extractOperators = (formula: string): string[] => {
  */
 const extractOperands = (formula: string): number[] => {
   // Capture grouped-thousands numbers like "21 607" as a single token.
+  const formulaBeforeEquals = formula.replace(/=\s*(\?|\.\.\.|_.*)?$/, '');
   const numberRegex = /-?\d{1,3}(?: \d{3})+(?:[.,]\d+)?|-?\d+(?:[.,]\d+)?/g;
-  const matches = formula.match(numberRegex) || [];
+  const matches = formulaBeforeEquals.match(numberRegex) || [];
 
   return matches.map((num) => {
     const normalized = num.replace(/[ ,]/g, '');

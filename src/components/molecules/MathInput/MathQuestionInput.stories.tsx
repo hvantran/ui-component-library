@@ -43,6 +43,22 @@ export const LongDivisionGrade3: Story = {
   render: () => <InteractiveWrapper questionText="93 645 : 9 = ?" tags={['grade 3']} />,
 };
 
+export const Grade1AdditionSplitMerge: Story = {
+  render: () => <InteractiveWrapper questionText="3 + 2 = ?" tags={['grade 1']} />,
+};
+
+export const Grade1SubtractionSplitMerge: Story = {
+  render: () => <InteractiveWrapper questionText="5 - 2 = ?" tags={['grade 1']} />,
+};
+
+export const Grade1AdditionMakeTen: Story = {
+  render: () => <InteractiveWrapper questionText="9 + 8 = ?" tags={['grade 1']} />,
+};
+
+export const Grade1SubtractionBridgeTen: Story = {
+  render: () => <InteractiveWrapper questionText="15 - 6 = ?" tags={['grade 1']} />,
+};
+
 export const ComplexFormula: Story = {
   render: () => (
     <InteractiveWrapper questionText="12 740 + 5 037 x 4 = ?" />
