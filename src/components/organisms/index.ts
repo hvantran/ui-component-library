@@ -22,4 +22,8 @@ export * from './ExamIntegrityTeacherDashboardSidebar';
 export * from './ExamIntegrityTopBar';
 export * from './ExamIntegrityEggShop';
 export * from './ExamIntegrityPetHatchery';
+export * from './ExamIntegrityQuestionPanel';
+export * from './ExamIntegrityResultsCelebration';
+export * from './ExamIntegrityQuestionDisplay';
+export * from './ExamIntegrityQuestionPickerModal';
 

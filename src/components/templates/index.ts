@@ -18,4 +18,4 @@ export * from './ExamIntegrityTeacherQuestionBankTemplate';
 export * from './ExamIntegrityTeacherQuestionReviewTemplate';
 export * from './ExamIntegrityTeacherReportsTemplate';
 export * from './domain';
-
+export * from './ExamIntegrityStudentEggShopTemplate';
