@@ -13,7 +13,6 @@ export * from './ExamIntegrityReviewDashboard';
 export * from './ExamIntegrityStudentExamHeader';
 export * from './ExamIntegrityStudentExamNavigationBar';
 export * from './ExamIntegrityStudentFlaggedSidebar';
-export * from './ExamIntegrityStudentGradeSwitcher';
 export * from './ExamIntegrityStudentPortalSidebar';
 export * from './ExamIntegrityStudentProTips';
 export * from './ExamIntegrityStudentQuestionPanelHeader';

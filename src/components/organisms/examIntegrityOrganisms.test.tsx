@@ -10,7 +10,6 @@ import {
   ExamIntegrityStudentProTips,
   ExamIntegrityStudentQuestionPanelHeader,
   ExamIntegrityStudentSubmitModal,
-  ExamIntegrityStudentGradeSwitcher,
   ExamIntegrityTopBar,
   ExamIntegrityReviewDashboard,
   ExamIntegrityEggShop,
@@ -154,26 +153,6 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('Confirm Submission');
     expect(html).toContain('Answer Progress');
     expect(html).toMatch(/8(<!-- -->)?\s*\/\s*(<!-- -->)?10/);
-  });
-
-  it('renders ExamIntegrityStudentGradeSwitcher', () => {
-    const html = renderToString(
-      <ExamIntegrityStudentGradeSwitcher
-        students={[
-          {
-            sessionId: 's-1',
-            studentId: 'ST-1',
-            studentName: 'Student 1',
-            finalScore10: 9.2,
-            totalEarned: 9.2,
-            totalMax: 10,
-          },
-        ]}
-        onSelectStudent={vi.fn()}
-      />
-    );
-    expect(html).toContain('Student Exam Submissions');
-    expect(html).toContain('Student 1');
   });
 
   it('renders ExamIntegrityTopBar', () => {
