@@ -20,4 +20,6 @@ export * from './ExamIntegrityStudentQuestionPanelHeader';
 export * from './ExamIntegrityStudentSubmitModal';
 export * from './ExamIntegrityTeacherDashboardSidebar';
 export * from './ExamIntegrityTopBar';
+export * from './ExamIntegrityEggShop';
+export * from './ExamIntegrityPetHatchery';
 
