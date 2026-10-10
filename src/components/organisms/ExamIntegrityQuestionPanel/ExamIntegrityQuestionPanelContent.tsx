@@ -371,18 +371,41 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
             </section>
           ))}
         </div>
-      ) : (
-        <div className="border-l-4 border-slate-300 pl-4">
-          <textarea
-            rows={7}
-            placeholder={Array(7).fill(DOTTED_LINE).join('\n')}
-            value={selectedAnswer ?? ''}
-            disabled={disabled}
-            onChange={(e) => onAnswerChange(e.target.value)}
-            className="w-full font-mono text-center text-sm leading-6 border border-dashed border-slate-300 rounded-xl p-3 bg-white resize-vertical text-slate-900 outline-none focus:border-sky-400"
-          />
-        </div>
-      )}
+      ) : (() => {
+        const questionFormula = analyzeFormula(questionText);
+        const isMathQuestion = [
+          'SIMPLE_ADDITION',
+          'SIMPLE_SUBTRACTION',
+          'SIMPLE_MULTIPLICATION',
+          'SIMPLE_DIVISION',
+          'COMPLEX_FORMULA',
+        ].includes(questionFormula.type);
+
+        if (isMathQuestion && !isLongEssay) {
+          return (
+            <MathQuestionInput
+              questionText={questionText}
+              value={selectedAnswer ?? ''}
+              disabled={disabled}
+              tags={gradeLevel ? [gradeLevel] : []}
+              onChange={(val) => onAnswerChange(val)}
+            />
+          );
+        }
+
+        return (
+          <div className="border-l-4 border-slate-300 pl-4">
+            <textarea
+              rows={7}
+              placeholder={Array(7).fill(DOTTED_LINE).join('\n')}
+              value={selectedAnswer ?? ''}
+              disabled={disabled}
+              onChange={(e) => onAnswerChange(e.target.value)}
+              className="w-full font-mono text-center text-sm leading-6 border border-dashed border-slate-300 rounded-xl p-3 bg-white resize-vertical text-slate-900 outline-none focus:border-sky-400"
+            />
+          </div>
+        );
+      })()}
     </>
   );
 };

@@ -56,5 +56,37 @@ describe('ExamIntegrityQuestionPanel organism', () => {
     expect(html).toContain('Write an essay about integrity.');
     expect(html).toContain('<textarea');
   });
+
+  it('renders Grade 1 math input when questionText is a math formula', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionPanel
+        questionNumber={1}
+        subject="Toán"
+        gradeLevel="Grade 1"
+        questionText="15 - 9 = ?"
+        questionType="ESSAY_SHORT"
+        selectedAnswer=""
+        onAnswerChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-testid="bridge-ten-arithmetic-input"');
+  });
+
+  it('renders Grade 1 math input when questionText has prefix like a, 15 - 8 = ?', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionPanel
+        questionNumber={2}
+        subject="Toán"
+        gradeLevel="Lớp 1"
+        questionText="a, 15 - 8 = ?"
+        questionType="ESSAY_SHORT"
+        selectedAnswer=""
+        onAnswerChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-testid="bridge-ten-arithmetic-input"');
+  });
 });
 

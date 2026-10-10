@@ -52,9 +52,9 @@ const MathQuestionInput: React.FC<MathQuestionInputProps> = ({
     return analyzeFormula(questionText);
   }, [questionText]);
 
-  const isGrade3 = tags.some((t) => /grade\s*3/i.test(t));
-  const isGrade2 = tags.some((t) => /grade\s*2/i.test(t));
-  const isGrade1 = tags.some((t) => /grade\s*1/i.test(t));
+  const isGrade3 = tags.some((t) => /(grade|lop|lớp)\s*3/i.test(t));
+  const isGrade2 = tags.some((t) => /(grade|lop|lớp)\s*2/i.test(t));
+  const isGrade1 = tags.some((t) => /(grade|lop|lớp)\s*1/i.test(t));
   const hasBridgeTenTag = tags.some((t) => /(bridge\s*10|make\s*10|qua\s*10)/i.test(t));
 
   const operands = parsedFormula.operands || [];

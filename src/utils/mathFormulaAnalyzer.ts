@@ -107,6 +107,7 @@ export const analyzeFormula = (formula: string): ParsedFormula => {
 const normalizeFormula = (formula: string): string => {
   return formula
     .trim()
+    .replace(/^[a-zA-Z\d]+[.,:\)\-]\s+/, '')
     .replace(/\s+/g, ' ')
     .replace(/–/g, '-')
     .replace(/×/g, 'x')

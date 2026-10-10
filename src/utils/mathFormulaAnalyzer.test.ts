@@ -121,6 +121,16 @@ describe('mathFormulaAnalyzer', () => {
       expect(parsed.type).toBe('UNKNOWN');
       expect(parsed.operatorCount).toBe(1);
     });
+
+    it('strips question part prefixes like a, or a. before classifying', () => {
+      const parsedA = analyzeFormula('a, 15 - 8 = ?');
+      expect(parsedA.type).toBe('SIMPLE_SUBTRACTION');
+      expect(parsedA.operands).toEqual([15, 8]);
+
+      const parsedB = analyzeFormula('b. 9 + 8 = ?');
+      expect(parsedB.type).toBe('SIMPLE_ADDITION');
+      expect(parsedB.operands).toEqual([9, 8]);
+    });
   });
 
   describe('validateAnswerFormat', () => {
