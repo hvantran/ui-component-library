@@ -1,9 +1,0 @@
-import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{r as h}from"./index-Bc2G9s8g.js";import{M as j}from"./MathQuestionInput-C6Pme5KT.js";const E={title:"Molecules/MathInput/MathQuestionInput",component:j,parameters:{layout:"centered"},tags:["autodocs"]},o=({questionText:q,tags:I})=>{const[T,M]=h.useState("");return e.jsx("div",{className:"w-[500px]",children:e.jsx(j,{questionText:q,value:T,onChange:M,tags:I})})},r={render:()=>e.jsx(o,{questionText:"4 722 + 5 369 = ?"})},t={render:()=>e.jsx(o,{questionText:"21 607 x 4 = ?"})},s={render:()=>e.jsx(o,{questionText:"93 645 : 9 = ?",tags:["grade 3"]})},a={render:()=>e.jsx(o,{questionText:"12 740 + 5 037 x 4 = ?"})};var n,i,p;r.parameters={...r.parameters,docs:{...(n=r.parameters)==null?void 0:n.docs,source:{originalSource:`{
-  render: () => <InteractiveWrapper questionText="4 722 + 5 369 = ?" />
-}`,...(p=(i=r.parameters)==null?void 0:i.docs)==null?void 0:p.source}}};var c,u,m;t.parameters={...t.parameters,docs:{...(c=t.parameters)==null?void 0:c.docs,source:{originalSource:`{
-  render: () => <InteractiveWrapper questionText="21 607 x 4 = ?" />
-}`,...(m=(u=t.parameters)==null?void 0:u.docs)==null?void 0:m.source}}};var d,x,l;s.parameters={...s.parameters,docs:{...(d=s.parameters)==null?void 0:d.docs,source:{originalSource:`{
-  render: () => <InteractiveWrapper questionText="93 645 : 9 = ?" tags={['grade 3']} />
-}`,...(l=(x=s.parameters)==null?void 0:x.docs)==null?void 0:l.source}}};var g,v,S;a.parameters={...a.parameters,docs:{...(g=a.parameters)==null?void 0:g.docs,source:{originalSource:`{
-  render: () => <InteractiveWrapper questionText="12 740 + 5 037 x 4 = ?" />
-}`,...(S=(v=a.parameters)==null?void 0:v.docs)==null?void 0:S.source}}};const A=["SimpleAddition","SimpleMultiplication","LongDivisionGrade3","ComplexFormula"];export{a as ComplexFormula,s as LongDivisionGrade3,r as SimpleAddition,t as SimpleMultiplication,A as __namedExportsOrder,E as default};

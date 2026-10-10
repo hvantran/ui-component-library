@@ -1,0 +1,11 @@
+import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{r as E}from"./index-Bc2G9s8g.js";import{B as j}from"./BridgeTenArithmeticInput-DafVfd3A.js";import{a as y}from"./mathFormulaAnalyzer-CZA20v8i.js";const C={title:"Molecules/MathInput/BridgeTenArithmeticInput",component:j,parameters:{layout:"centered"},tags:["autodocs"]},r=({formulaText:I,disabled:b})=>{const[v,M]=E.useState(""),k=y(I);return e.jsx("div",{className:"w-[500px]",children:e.jsx(j,{formula:k,value:v,disabled:b,onChange:M})})},t={render:()=>e.jsx(r,{formulaText:"9 + 8 = ?"})},a={render:()=>e.jsx(r,{formulaText:"15 - 6 = ?"})},o={render:()=>e.jsx(r,{formulaText:"8 + 5 = ?"})},s={render:()=>e.jsx(r,{formulaText:"13 - 7 = ?"})},n={render:()=>e.jsx(r,{formulaText:"9 + 8 = ?",disabled:!0})};var c,d,i;t.parameters={...t.parameters,docs:{...(c=t.parameters)==null?void 0:c.docs,source:{originalSource:`{
+  render: () => <InteractiveBridgeTen formulaText="9 + 8 = ?" />
+}`,...(i=(d=t.parameters)==null?void 0:d.docs)==null?void 0:i.source}}};var m,u,p;a.parameters={...a.parameters,docs:{...(m=a.parameters)==null?void 0:m.docs,source:{originalSource:`{
+  render: () => <InteractiveBridgeTen formulaText="15 - 6 = ?" />
+}`,...(p=(u=a.parameters)==null?void 0:u.docs)==null?void 0:p.source}}};var l,T,x;o.parameters={...o.parameters,docs:{...(l=o.parameters)==null?void 0:l.docs,source:{originalSource:`{
+  render: () => <InteractiveBridgeTen formulaText="8 + 5 = ?" />
+}`,...(x=(T=o.parameters)==null?void 0:T.docs)==null?void 0:x.source}}};var g,f,B;s.parameters={...s.parameters,docs:{...(g=s.parameters)==null?void 0:g.docs,source:{originalSource:`{
+  render: () => <InteractiveBridgeTen formulaText="13 - 7 = ?" />
+}`,...(B=(f=s.parameters)==null?void 0:f.docs)==null?void 0:B.source}}};var S,A,h;n.parameters={...n.parameters,docs:{...(S=n.parameters)==null?void 0:S.docs,source:{originalSource:`{
+  render: () => <InteractiveBridgeTen formulaText="9 + 8 = ?" disabled={true} />
+}`,...(h=(A=n.parameters)==null?void 0:A.docs)==null?void 0:h.source}}};const F=["AdditionMakeTen","SubtractionBridgeTen","AnotherAdditionMakeTen","AnotherSubtractionBridgeTen","DisabledState"];export{t as AdditionMakeTen,o as AnotherAdditionMakeTen,s as AnotherSubtractionBridgeTen,n as DisabledState,a as SubtractionBridgeTen,F as __namedExportsOrder,C as default};

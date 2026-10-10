@@ -15,6 +15,9 @@ interface MathQuestionInputProps {
  *
  * Renders:
  * - SimpleArithmeticInput for single-operator formulas (addition, subtraction, multiplication, division)
+ * - SplitMergeArithmeticInput for Grade 1 addition/subtraction (number bonds / split-merge)
+ * - BridgeTenArithmeticInput for Grade 1-2 addition/subtraction over 10 (Make 10 strategy)
+ * - LongDivisionInput for Grade 3 division
  * - ComplexFormulaInput for multi-operator formulas
  */
 declare const MathQuestionInput: React.FC<MathQuestionInputProps>;
