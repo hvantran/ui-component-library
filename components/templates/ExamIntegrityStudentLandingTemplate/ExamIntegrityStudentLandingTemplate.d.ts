@@ -1,6 +1,6 @@
 import { default as React } from '../../../../node_modules/react';
 import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
-export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop';
+export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop' | 'collection';
 export type { ExamIntegrityNavDockMode };
 export interface FilterItem {
     label: string;
