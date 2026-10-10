@@ -3,17 +3,12 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {
   ExamIntegrityTeacherDashboardTemplate,
-  ExamIntegrityScoringTemplate,
   ExamIntegrityStudentExamTemplate,
   ExamIntegrityStudentLandingTemplate,
-  ExamIntegrityStudentExamContentTemplate,
   ExamIntegrityStudentExamFooterTemplate,
   ExamIntegrityStudentReviewTemplate,
   ExamIntegrityTeacherQuestionReviewTemplate,
   ExamIntegrityTeacherQuestionBankTemplate,
-  ExamIntegrityTeacherProctorTemplate,
-  ExamIntegrityTeacherDraftsTemplate,
-  ExamIntegrityTeacherReportsTemplate,
   ExamIntegrityTeacherIngestionTemplate,
   ExamIntegrityTeacherFinalPublicationTemplate,
 } from './index';
@@ -85,17 +80,6 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('20');
   });
 
-  it('renders ExamIntegrityScoringTemplate', () => {
-    const html = renderToString(
-      <ExamIntegrityScoringTemplate
-        queueSlot={<div>Submission Queue</div>}
-        detailSlot={<div>Grading Detail</div>}
-      />,
-    );
-    expect(html).toContain('Essay Scoring');
-    expect(html).toContain('Submission Queue');
-    expect(html).toContain('Grading Detail');
-  });
 
   it('renders ExamIntegrityStudentExamTemplate', () => {
     const html = renderToString(
@@ -157,15 +141,6 @@ describe('Exam Integrity Templates', () => {
     expect(autohideHtml).toContain('ml-0');
   });
 
-  it('renders ExamIntegrityStudentExamContentTemplate', () => {
-    const html = renderToString(
-      <ExamIntegrityStudentExamContentTemplate proTips={['Focus on accuracy']}>
-        <div>Main Content Area</div>
-      </ExamIntegrityStudentExamContentTemplate>,
-    );
-    expect(html).toContain('Main Content Area');
-    expect(html).toContain('Focus on accuracy');
-  });
 
   it('renders ExamIntegrityStudentExamFooterTemplate', () => {
     const html = renderToString(
@@ -210,33 +185,6 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Question Bank Items');
   });
 
-  it('renders ExamIntegrityTeacherProctorTemplate', () => {
-    const html = renderToString(
-      <ExamIntegrityTeacherProctorTemplate brandName="TestProctor">
-        <div>Proctor Grid</div>
-      </ExamIntegrityTeacherProctorTemplate>,
-    );
-    expect(html).toContain('TestProctor');
-    expect(html).toContain('Proctor Grid');
-  });
-
-  it('renders ExamIntegrityTeacherDraftsTemplate', () => {
-    const html = renderToString(
-      <ExamIntegrityTeacherDraftsTemplate>
-        <div>Draft Exams List</div>
-      </ExamIntegrityTeacherDraftsTemplate>,
-    );
-    expect(html).toContain('Draft Exams List');
-  });
-
-  it('renders ExamIntegrityTeacherReportsTemplate', () => {
-    const html = renderToString(
-      <ExamIntegrityTeacherReportsTemplate>
-        <div>Reports Dashboard</div>
-      </ExamIntegrityTeacherReportsTemplate>,
-    );
-    expect(html).toContain('Reports Dashboard');
-  });
 
   it('renders ExamIntegrityTeacherIngestionTemplate', () => {
     const html = renderToString(
