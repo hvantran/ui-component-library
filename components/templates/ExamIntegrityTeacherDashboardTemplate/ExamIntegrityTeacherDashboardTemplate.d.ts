@@ -1,6 +1,6 @@
 import { default as React } from '../../../../node_modules/react';
 import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
-export type ExamIntegrityDashboardSection = 'dashboard' | 'ingestion' | 'review' | 'scoring' | 'question-bank' | 'reports';
+export type ExamIntegrityDashboardSection = 'dashboard' | 'ingestion' | 'review' | 'scoring' | 'question-bank' | 'reports' | 'settings';
 export type { ExamIntegrityNavDockMode };
 export interface SyncExamDialogState {
     examId: string;
