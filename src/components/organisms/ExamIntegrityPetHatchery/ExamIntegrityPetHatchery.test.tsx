@@ -262,6 +262,64 @@ describe('ExamIntegrityPetHatchery', () => {
     // Locked higher stages should display lock indicator
     expect(html).toContain('🔒');
   });
+
+  it('locks cracking and disables button when active egg is still hatching', () => {
+    const hatchingEggs = [
+      {
+        ...DEFAULT_INCUBATING_EGGS[0],
+        remainingSeconds: 14400, // 4 hours remaining
+      },
+    ];
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={500}
+        incubatingEggs={hatchingEggs}
+      />
+    );
+
+    expect(html).toContain('HATCHING IN PROGRESS (04h 00m 00s LEFT)');
+    expect(html).toContain('disabled=""');
+    expect(html).toContain('Cracking locked until incubation completes');
+  });
+
+  it('displays remaining hatching time in incubator queue and ready status when hatching finished', () => {
+    const mixedEggs = [
+      {
+        ...DEFAULT_INCUBATING_EGGS[0],
+        id: 'egg-hatching-1',
+        name: 'Cosmic Dragon Egg',
+        remainingSeconds: 7200,
+      },
+      {
+        ...DEFAULT_INCUBATING_EGGS[1],
+        id: 'egg-ready-2',
+        name: 'Primordial Phoenix Egg',
+        remainingSeconds: 0,
+      },
+    ];
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={500}
+        incubatingEggs={mixedEggs}
+      />
+    );
+
+    expect(html).toContain('Incubator Queue (2)');
+    expect(html).toContain('02h 00m 00s left');
+    expect(html).toContain('Ready to Crack &amp; Hatch!');
+  });
+
+  it('displays empty queue notice when incubator has 0 eggs', () => {
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={500}
+        incubatingEggs={[]}
+      />
+    );
+
+    expect(html).toContain('Incubator Queue (0)');
+    expect(html).toContain('Queue is empty');
+  });
 });
 
 
