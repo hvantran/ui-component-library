@@ -43,15 +43,27 @@ export const analyzeFormula = (formula: string): ParsedFormula => {
   const operators = extractOperators(normalizedFormula);
   const operatorCount = operators.length;
 
+  // If the prompt contains a comparison placeholder between operands (e.g. "8 ...... 3 + 5" or "8 ... 9"),
+  // treat as UNKNOWN arithmetic formula so it routes to comparator UI rather than arithmetic inputs.
+  if (/\d+\s*(?:\.{2,}|…+|\?|_{2,})\s*\d+/u.test(normalizedFormula)) {
+    return {
+      type: 'UNKNOWN',
+      formula: normalizedFormula,
+      operatorCount,
+      hasDecimal: false,
+      displayFormula: normalizedFormula,
+    };
+  }
+
   // Check if it's a simple formula (single operator)
   if (operatorCount === 1) {
     const operator = operators[0];
     const operands = extractOperands(normalizedFormula);
     const hasDecimal = /\./g.test(normalizedFormula) || /,/g.test(normalizedFormula);
 
-    // Treat as arithmetic only when two numeric operands are present.
-    // This avoids classifying prose prompts like "a. Góc đỉnh: ..." as division.
-    if (operands.length < 2) {
+    // Treat as simple arithmetic only when EXACTLY two numeric operands are present.
+    // Avoids classifying prompts with 3+ numbers (like "8 ...... 3 + 5") or prose prompts as simple arithmetic.
+    if (operands.length !== 2) {
       return {
         type: 'UNKNOWN',
         formula: normalizedFormula,

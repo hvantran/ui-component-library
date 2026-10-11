@@ -15,15 +15,20 @@ const meta: Meta<typeof BridgeTenArithmeticInput> = {
 export default meta;
 type Story = StoryObj<typeof BridgeTenArithmeticInput>;
 
-const InteractiveBridgeTen: React.FC<{ formulaText: string; disabled?: boolean }> = ({
+const InteractiveBridgeTen: React.FC<{
+  formulaText: string;
+  disabled?: boolean;
+  className?: string;
+}> = ({
   formulaText,
   disabled,
+  className = 'w-[500px] max-w-full',
 }) => {
   const [value, setValue] = useState('');
   const formula = analyzeFormula(formulaText);
 
   return (
-    <div className="w-[500px]">
+    <div className={className}>
       <BridgeTenArithmeticInput
         formula={formula}
         value={value}
@@ -52,5 +57,23 @@ export const AnotherSubtractionBridgeTen: Story = {
 
 export const DisabledState: Story = {
   render: () => <InteractiveBridgeTen formulaText="9 + 8 = ?" disabled={true} />,
+};
+
+export const ResponsiveTwoColumnGrid: Story = {
+  render: () => {
+    return (
+      <div className="w-full max-w-[760px] p-4 bg-slate-100 rounded-3xl">
+        <h3 className="text-base font-bold text-slate-800 mb-4">
+          Số? (Hai cột mô phỏng màn hình thi)
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <InteractiveBridgeTen formulaText="12 - 9 = ?" className="w-full" />
+          <InteractiveBridgeTen formulaText="7 + 5 = ?" className="w-full" />
+          <InteractiveBridgeTen formulaText="12 - 9 = ?" className="w-full" />
+          <InteractiveBridgeTen formulaText="15 - 7 = ?" className="w-full" />
+        </div>
+      </div>
+    );
+  },
 };
 

@@ -66,20 +66,20 @@ const ComplexFormulaInput: React.FC<ComplexFormulaInputProps> = ({
   const finalAnswer = useMemo(() => extractFinalComplexResult(value), [value]);
 
   return (
-    <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 via-surface-50 to-accent-50 p-4 md:p-6">
-      <div className="space-y-4">
+    <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 via-surface-50 to-accent-50 p-3.5 sm:p-4 md:p-5 w-full min-w-0 overflow-hidden">
+      <div className="space-y-4 min-w-0">
         {/* Formula Display */}
-        <div className="bg-surface-50 rounded-xl border border-primary-200 p-4">
+        <div className="bg-surface-50 rounded-xl border border-primary-200 p-3 sm:p-4 min-w-0 overflow-hidden">
           <div className="text-xs font-semibold text-primary-700 uppercase tracking-wide mb-2">
             Formula
           </div>
-          <div className="text-lg md:text-2xl font-mono font-bold text-slate-900 text-center break-words">
+          <div className="text-base sm:text-lg md:text-2xl font-mono font-bold text-slate-900 text-center break-words">
             {formula.displayFormula}
           </div>
         </div>
 
         {/* Work Area Section */}
-        <div>
+        <div className="min-w-0">
           <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide block mb-2">
             Your Work
           </label>
@@ -91,25 +91,25 @@ const ComplexFormulaInput: React.FC<ComplexFormulaInputProps> = ({
               onChange(normalizeComplexStepLines(e.target.value));
             }}
             rows={6}
-            className={`w-full font-mono text-sm leading-6 border border-primary-300 rounded-xl p-3 bg-surface-50 resize-vertical text-slate-900 outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-200 ${
+            className={`w-full max-w-full font-mono text-sm leading-6 border border-primary-300 rounded-xl p-3 bg-surface-50 resize-vertical text-slate-900 outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-200 ${
               disabled ? 'cursor-not-allowed opacity-60' : ''
             }`}
           />
         </div>
 
-        <div>
+        <div className="w-full min-w-0">
           <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide block mb-2">
             Final Answer
           </label>
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-slate-600">=</span>
+          <div className="flex items-center gap-2 w-full min-w-0">
+            <span className="text-lg md:text-xl font-bold text-slate-600 shrink-0">=</span>
             <input
               type="text"
               inputMode="decimal"
               value={finalAnswer}
               disabled
               placeholder="—"
-              className="flex-1 text-lg md:text-xl font-bold border border-primary-300 rounded-lg px-4 py-2 bg-slate-100/80 outline-none placeholder-slate-400 text-slate-900 cursor-not-allowed"
+              className="flex-1 min-w-0 max-w-full text-base sm:text-lg font-bold border border-primary-300 rounded-lg px-3 py-2 bg-slate-100/80 outline-none placeholder-slate-400 text-slate-900 cursor-not-allowed"
             />
           </div>
         </div>

@@ -74,3 +74,26 @@ export const LoadingState: Story = {
   },
 };
 
+export const Grade1MultiPartMathQuestion: Story = {
+  args: {
+    questionNumber: 1,
+    subject: 'Toán',
+    gradeLevel: 'Grade 1',
+    questionStem: 'Số?',
+    questionText: 'Số?',
+    questionType: 'ESSAY_SHORT',
+    questionParts: [
+      { key: 'A', prompt: '6 + 8 = .........' },
+      { key: 'B', prompt: '18 - 6 = .........' },
+      { key: 'C', prompt: '12 - 9 = .........' },
+      { key: 'D', prompt: '7 + 5 = .........' },
+      { key: 'E', prompt: '12 - 9 = .........' },
+      { key: 'F', prompt: '15 - 7 = .........' },
+    ],
+    selectedAnswerParts: [],
+    onAnswerChange: () => {},
+    onAnswerPartsChange: () => {},
+    onFlag: () => {},
+  },
+};
+
