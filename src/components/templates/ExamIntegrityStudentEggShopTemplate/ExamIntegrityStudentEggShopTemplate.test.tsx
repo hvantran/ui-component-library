@@ -13,7 +13,8 @@ describe('ExamIntegrityStudentEggShopTemplate', () => {
       />
     );
     expect(html).toContain('Lily');
-    expect(html).toContain('3D Egg Shop');
+    expect(html).toContain('Egg Shop');
+    expect(html).not.toContain('3D Egg Shop');
     expect(html).toContain('Pet Hatchery &amp; Sanctuary');
   });
 
@@ -25,7 +26,10 @@ describe('ExamIntegrityStudentEggShopTemplate', () => {
         isElementary={true}
       />
     );
-    expect(html).toContain('3D Pet Egg Shop');
+    expect(html).not.toContain('Pet Egg &amp; Reward Shop');
+    expect(html).not.toContain('Egg &amp; Reward Shop');
+    expect(html).not.toContain('Adopt companion eggs and rewards using stars earned from exams');
+    expect(html).not.toContain('3D Pet Egg Shop');
     expect(html).not.toContain('Pet Egg Emporium &amp; Hatchery');
   });
 });

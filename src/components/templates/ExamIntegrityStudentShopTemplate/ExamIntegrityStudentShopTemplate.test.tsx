@@ -12,7 +12,9 @@ describe('ExamIntegrityStudentShopTemplate', () => {
       />
     );
     expect(html).toContain('Lily');
-    expect(html).toContain('3D Egg Shop');
+    expect(html).not.toContain('Egg &amp; Reward Shop');
+    expect(html).not.toContain('Adopt companion eggs and rewards using stars earned from exams');
+    expect(html).not.toContain('3D Egg Shop');
     expect(html).toContain('Ancient Mysterious Egg');
     expect(html).toContain('Adopt Mystery Egg');
   });

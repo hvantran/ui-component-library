@@ -6,6 +6,7 @@ import {
 import {
   ExamIntegrityEggShop,
   type EggShopItem,
+  type EggShopCategory,
 } from '../../organisms/ExamIntegrityEggShop';
 import type { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 
@@ -16,6 +17,7 @@ export interface ExamIntegrityStudentShopTemplateProps {
   pageTitle?: string;
   pageSubtitle?: string;
   items?: EggShopItem[];
+  categories?: EggShopCategory[];
   onPurchaseEgg?: (item: EggShopItem) => void;
   onNavigate?: (section: StudentPortalSection) => void;
   onLogout?: () => void;
@@ -29,9 +31,10 @@ export const ExamIntegrityStudentShopTemplate: React.FC<
 > = ({
   studentName = 'Student',
   starCount = 0,
-  pageTitle,
-  pageSubtitle,
+  pageTitle = '',
+  pageSubtitle = '',
   items,
+  categories,
   onPurchaseEgg,
   onNavigate,
   onLogout,
@@ -39,17 +42,13 @@ export const ExamIntegrityStudentShopTemplate: React.FC<
   onDockModeChange,
   className,
 }) => {
-  const resolvedTitle = pageTitle ?? '3D Egg Shop';
-  const resolvedSubtitle =
-    pageSubtitle ?? 'Purchase 3D mystery eggs using stars earned from exams.';
-
   return (
     <ExamIntegrityStudentLandingTemplate
       studentName={studentName}
       starCount={starCount}
       activeSection="shop"
-      pageTitle={resolvedTitle}
-      pageSubtitle={resolvedSubtitle}
+      pageTitle={pageTitle}
+      pageSubtitle={pageSubtitle}
       onNavigate={onNavigate}
       onLogout={onLogout}
       dockMode={dockMode}
@@ -59,6 +58,7 @@ export const ExamIntegrityStudentShopTemplate: React.FC<
       <ExamIntegrityEggShop
         starBalance={starCount}
         items={items}
+        categories={categories}
         onPurchaseEgg={onPurchaseEgg}
       />
     </ExamIntegrityStudentLandingTemplate>
