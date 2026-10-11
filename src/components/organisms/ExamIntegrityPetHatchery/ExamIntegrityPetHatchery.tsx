@@ -241,6 +241,38 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    setCurrentEggs(incubatingEggs);
+    setSelectedEggIndex((prev) =>
+      incubatingEggs.length === 0 ? 0 : Math.min(prev, incubatingEggs.length - 1)
+    );
+  }, [incubatingEggs]);
+
+  useEffect(() => {
+    setCurrentPets(pets);
+  }, [pets]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentEggs((prev) => {
+        let hasHatching = false;
+        const next = prev.map((egg) => {
+          if ((egg.remainingSeconds ?? 0) > 0) {
+            hasHatching = true;
+            return {
+              ...egg,
+              remainingSeconds: Math.max(0, (egg.remainingSeconds ?? 0) - 1),
+            };
+          }
+          return egg;
+        });
+        return hasHatching ? next : prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const activeEgg = currentEggs[selectedEggIndex];
   const isHatching = Boolean(activeEgg && (activeEgg.remainingSeconds ?? 0) > 0);
 
