@@ -7,6 +7,7 @@ export interface EvolutionStageInfo {
     description: string;
     avatarEmoji: string;
     imageUrl: string;
+    imageName?: string;
 }
 export interface StudentPet {
     id: string;
@@ -28,6 +29,8 @@ export interface StudentPet {
     };
     avatarEmoji: string;
     imageUrl?: string;
+    imageName?: string;
+    petLibraryId?: string;
     stageName: string;
     stageLevel: number;
     evolutionStages?: EvolutionStageInfo[];
@@ -98,3 +101,31 @@ export interface RarityDropRateInfo {
 }
 export declare const RARITY_DROP_RATES: Record<PetRarity, RarityDropRateInfo>;
 export declare function rollMysteryPet(fixedRoll?: number): StudentPet;
+export declare const PET_IMAGE_MAP: Record<string, string>;
+export interface SyncPetLibraryStageDTO {
+    stage: number;
+    minLevel: number;
+    name: string;
+    title: string;
+    description: string;
+    avatarEmoji: string;
+    imageName?: string;
+}
+export interface SyncPetLibraryItemDTO {
+    id: string;
+    petKey: string;
+    name: string;
+    species: string;
+    rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+    tier: EggTier;
+    element: string;
+    avatarEmoji: string;
+    totalStages: number;
+    maxLevel: number;
+    eggShopPrice: number;
+    hatchDurationHours: number;
+    description: string;
+    bannerGradient: string;
+    stages: SyncPetLibraryStageDTO[];
+}
+export declare function getExportedPetLibrary(): SyncPetLibraryItemDTO[];

@@ -14,9 +14,17 @@ export interface EggShopItem {
     totalStages?: number;
     hatchDurationHours?: number;
 }
+export interface EggShopCategory {
+    id: string;
+    title: string;
+    description?: string;
+    icon?: React.ReactNode;
+    items: EggShopItem[];
+}
 export interface ExamIntegrityEggShopProps {
     starBalance?: number;
     items?: EggShopItem[];
+    categories?: EggShopCategory[];
     onPurchaseEgg?: (item: EggShopItem) => void;
     onOpenHatchery?: () => void;
     className?: string;

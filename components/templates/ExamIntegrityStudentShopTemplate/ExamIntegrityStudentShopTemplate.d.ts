@@ -1,6 +1,6 @@
 import { default as React } from '../../../../node_modules/react';
 import { StudentPortalSection } from '../ExamIntegrityStudentLandingTemplate';
-import { EggShopItem } from '../../organisms/ExamIntegrityEggShop';
+import { EggShopItem, EggShopCategory } from '../../organisms/ExamIntegrityEggShop';
 import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 export interface ExamIntegrityStudentShopTemplateProps {
     studentName?: string;
@@ -9,6 +9,7 @@ export interface ExamIntegrityStudentShopTemplateProps {
     pageTitle?: string;
     pageSubtitle?: string;
     items?: EggShopItem[];
+    categories?: EggShopCategory[];
     onPurchaseEgg?: (item: EggShopItem) => void;
     onNavigate?: (section: StudentPortalSection) => void;
     onLogout?: () => void;
