@@ -218,6 +218,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     element?: string;
     rarity?: string;
   } | null>(null);
+  const [wobblingPetId, setWobblingPetId] = useState<string | null>(null);
+  const [isModalPetWobbling, setIsModalPetWobbling] = useState(false);
 
   useEffect(() => {
     setCurrentEggs(incubatingEggs);
@@ -447,6 +449,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   };
 
   const handleGrowPet = (pet: StudentPet) => {
+    if (pet.level >= (pet.maxLevel || 10)) return;
     if (starBalance < pet.growthCostInStars) return;
 
     const gainedExp = 60;
@@ -801,8 +804,11 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       {activeTab === 'pets' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentPets.map((pet) => {
-            const expPercent = Math.round((pet.currentExp / pet.expNeeded) * 100);
-            const canGrow = starBalance >= pet.growthCostInStars;
+            const isMaxLevel = pet.level >= (pet.maxLevel || 10);
+            const expPercent = isMaxLevel
+              ? 100
+              : Math.min(100, Math.round((pet.currentExp / pet.expNeeded) * 100));
+            const canGrow = !isMaxLevel && starBalance >= pet.growthCostInStars;
             const stagesCount = pet.evolutionStages?.length || 0;
             const hasStages = stagesCount > 0;
 
@@ -838,20 +844,38 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                 )}
               >
                 {/* 3D Creature Art Banner from Stitch */}
-                <div className="relative h-64 w-full bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-stone-900 overflow-hidden flex items-center justify-center p-3">
+                <div
+                  className="relative h-64 w-full bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-stone-900 overflow-hidden flex items-center justify-center p-3 cursor-pointer group"
+                  onClick={() => {
+                    if (!isDisplayedStageLocked) {
+                      setWobblingPetId(pet.id);
+                      setTimeout(() => setWobblingPetId((curr) => (curr === pet.id ? null : curr)), 500);
+                    }
+                  }}
+                >
                   {displayedImageUrl ? (
                     <img
                       src={displayedImageUrl}
                       alt={displayedStageName}
                       className={cn(
-                        'h-full w-auto max-w-full object-contain transition-transform duration-300 hover:scale-105',
+                        'h-full w-auto max-w-full object-contain transition-transform duration-300 select-none',
                         isDisplayedStageLocked
                           ? 'brightness-0 opacity-40 contrast-200 drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]'
-                          : 'filter drop-shadow-[0_10px_20px_rgba(245,158,11,0.3)]'
+                          : cn(
+                              'filter drop-shadow-[0_10px_20px_rgba(245,158,11,0.3)] animate-pet-float animate-pet-glow group-hover:scale-105 active:scale-95',
+                              wobblingPetId === pet.id && 'animate-pet-wobble'
+                            )
                       )}
                     />
                   ) : (
-                    <div className={cn('text-6xl filter drop-shadow', isDisplayedStageLocked && 'opacity-40 grayscale')}>
+                    <div
+                      className={cn(
+                        'text-6xl filter drop-shadow select-none transition-transform duration-300',
+                        isDisplayedStageLocked
+                          ? 'opacity-40 grayscale'
+                          : cn('animate-pet-float', wobblingPetId === pet.id && 'animate-pet-wobble')
+                      )}
+                    >
                       {pet.avatarEmoji}
                     </div>
                   )}
@@ -993,7 +1017,9 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                       <div className="flex justify-between text-xs font-bold text-stone-600 dark:text-stone-300">
                         <span>Experience</span>
                         <span>
-                          {pet.currentExp} / {pet.expNeeded} XP ({expPercent}%)
+                          {isMaxLevel
+                            ? 'MAX LEVEL'
+                            : `${pet.currentExp} / ${pet.expNeeded} XP (${expPercent}%)`}
                         </span>
                       </div>
                       <ProgressBar value={expPercent} className="h-2.5" />
@@ -1050,16 +1076,20 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     <button
                       type="button"
                       onClick={() => handleGrowPet(pet)}
-                      disabled={!canGrow}
+                      disabled={!canGrow || isMaxLevel}
+                      data-testid={`grow-pet-btn-${pet.id}`}
                       className={cn(
                         'px-4 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wide transition-all',
-                        canGrow
+                        isMaxLevel
+                          ? 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed border border-stone-300/40 dark:border-stone-700/40'
+                          : canGrow
                           ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-[0_3px_0_#b45309] active:translate-y-[2px] active:shadow-[0_1px_0_#b45309]'
                           : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-600 cursor-not-allowed'
                       )}
                     >
-                      Grow ({pet.growthCostInStars} ⭐)
+                      {isMaxLevel ? 'Max Level' : `Grow (${pet.growthCostInStars} ⭐)`}
                     </button>
+
                   </div>
                 </div>
               </div>
@@ -1256,18 +1286,23 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative max-w-2xl w-full bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-stone-900 border border-amber-600/40 rounded-3xl p-6 shadow-2xl flex flex-col items-center gap-4 text-center"
+            className="relative max-w-2xl w-full bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-stone-900 border border-amber-600/40 rounded-3xl p-6 shadow-2xl flex flex-col items-center gap-4 text-center overflow-hidden"
           >
+            {/* Ambient background light pulse */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-40">
+              <div className="w-80 h-80 rounded-full bg-amber-500/20 blur-3xl animate-pulse" />
+            </div>
+
             <button
               type="button"
               aria-label="Close"
               data-testid="close-full-image-modal"
               onClick={() => setFullImageModalData(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700/60 transition-colors cursor-pointer"
+              className="absolute top-4 right-4 p-2 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700/60 transition-colors cursor-pointer z-10"
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="flex flex-col items-center gap-1 mt-2">
+            <div className="flex flex-col items-center gap-1 mt-2 z-10">
               <h3 className="text-2xl font-black text-amber-200 font-serif tracking-wide">
                 {fullImageModalData.name}
               </h3>
@@ -1287,13 +1322,22 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                 )}
               </div>
             </div>
-            <div className="w-full max-h-[70vh] flex items-center justify-center p-4">
+            <div className="w-full max-h-[70vh] flex items-center justify-center p-4 z-10">
               <img
                 src={fullImageModalData.imageUrl}
                 alt={fullImageModalData.stageName}
-                className="max-h-[60vh] max-w-full object-contain filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.35)]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsModalPetWobbling(true);
+                  setTimeout(() => setIsModalPetWobbling(false), 500);
+                }}
+                className={cn(
+                  'max-h-[60vh] max-w-full object-contain filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.45)] transition-transform duration-300 cursor-pointer select-none hover:scale-105 active:scale-95 animate-pet-float-slow',
+                  isModalPetWobbling && 'animate-pet-wobble'
+                )}
               />
             </div>
+
           </div>
         </div>
       )}
