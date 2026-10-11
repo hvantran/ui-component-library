@@ -32,7 +32,8 @@ export type ExamIntegrityDashboardSection =
   | 'review'
   | 'scoring'
   | 'question-bank'
-  | 'reports';
+  | 'reports'
+  | 'settings';
 
 export type { ExamIntegrityNavDockMode };
 
@@ -84,6 +85,7 @@ const defaultNavItems: { section: ExamIntegrityDashboardSection; icon: React.Rea
   { section: 'scoring', icon: <CheckSquare size={18} />, label: 'Scoring' },
   { section: 'question-bank', icon: <BookOpen size={18} />, label: 'Question Bank' },
   { section: 'reports', icon: <BarChart2 size={18} />, label: 'Reports' },
+  { section: 'settings', icon: <Settings size={18} />, label: 'Settings' },
 ];
 
 export const ExamIntegrityTeacherDashboardTemplate: React.FC<

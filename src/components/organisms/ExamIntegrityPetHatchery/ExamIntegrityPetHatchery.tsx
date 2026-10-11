@@ -14,6 +14,7 @@ import {
   RefreshCw,
   Lock,
   Clock,
+  Maximize2,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
@@ -200,6 +201,13 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   } | null>(null);
   const [inspectingEvolutionPet, setInspectingEvolutionPet] = useState<StudentPet | null>(null);
   const [previewStages, setPreviewStages] = useState<Record<string, number>>({});
+  const [fullImageModalData, setFullImageModalData] = useState<{
+    name: string;
+    stageName: string;
+    imageUrl: string;
+    element?: string;
+    rarity?: string;
+  } | null>(null);
 
   useEffect(() => {
     setCurrentEggs(incubatingEggs);
@@ -820,6 +828,28 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                       Active Companion
                     </div>
                   )}
+
+                  {displayedImageUrl && !isDisplayedStageLocked && (
+                    <button
+                      type="button"
+                      data-testid={`view-full-image-${pet.id}`}
+                      aria-label="View full image"
+                      title="View full image"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFullImageModalData({
+                          name: pet.name,
+                          stageName: displayedStageName,
+                          imageUrl: displayedImageUrl,
+                          element: pet.element,
+                          rarity: pet.rarity,
+                        });
+                      }}
+                      className="absolute bottom-3 right-3 p-1.5 rounded-xl bg-stone-950/80 hover:bg-stone-900 text-stone-300 hover:text-white border border-stone-700/60 transition-all hover:scale-110 shadow-md cursor-pointer z-10"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
 
                 {/* Card Body */}
@@ -1147,6 +1177,59 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
             >
               Meet {hatchedCelebration.name} in Sanctuary 💖
             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Full Image Preview Modal */}
+      {fullImageModalData && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          data-testid="pet-full-image-modal"
+          onClick={() => setFullImageModalData(null)}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-2xl w-full bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-stone-900 border border-amber-600/40 rounded-3xl p-6 shadow-2xl flex flex-col items-center gap-4 text-center"
+          >
+            <button
+              type="button"
+              aria-label="Close"
+              data-testid="close-full-image-modal"
+              onClick={() => setFullImageModalData(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-stone-900/80 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700/60 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="flex flex-col items-center gap-1 mt-2">
+              <h3 className="text-2xl font-black text-amber-200 font-serif tracking-wide">
+                {fullImageModalData.name}
+              </h3>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-stone-400">
+                  {fullImageModalData.stageName}
+                </span>
+                {fullImageModalData.element && (
+                  <span className="text-xs text-amber-500 font-bold">
+                    • {fullImageModalData.element}
+                  </span>
+                )}
+                {fullImageModalData.rarity && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40">
+                    {fullImageModalData.rarity}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="w-full max-h-[70vh] flex items-center justify-center p-4">
+              <img
+                src={fullImageModalData.imageUrl}
+                alt={fullImageModalData.stageName}
+                className="max-h-[60vh] max-w-full object-contain filter drop-shadow-[0_20px_35px_rgba(245,158,11,0.35)]"
+              />
+            </div>
           </div>
         </div>
       )}

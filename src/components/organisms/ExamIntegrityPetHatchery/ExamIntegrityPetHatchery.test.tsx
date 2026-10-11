@@ -320,6 +320,18 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Incubator Queue (0)');
     expect(html).toContain('Queue is empty');
   });
+
+  it('renders view full image button for unlocked pets on pets tab', () => {
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        defaultTab="pets"
+        pets={DEFAULT_STUDENT_PETS}
+      />
+    );
+
+    expect(html).toContain('data-testid="view-full-image-');
+    expect(html).toContain('aria-label="View full image"');
+  });
 });
 
 
