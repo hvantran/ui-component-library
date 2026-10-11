@@ -131,6 +131,13 @@ describe('mathFormulaAnalyzer', () => {
       expect(parsedB.type).toBe('SIMPLE_ADDITION');
       expect(parsedB.operands).toEqual([9, 8]);
     });
+
+    it('returns UNKNOWN for comparison expressions like 8 ...... 3 + 5', () => {
+      expect(analyzeFormula('8 ...... 3 + 5').type).toBe('UNKNOWN');
+      expect(analyzeFormula('8 .... 3 + 5').type).toBe('UNKNOWN');
+      expect(analyzeFormula('8 … 3 + 5').type).toBe('UNKNOWN');
+      expect(analyzeFormula('10 ...... 7 + 3').type).toBe('UNKNOWN');
+    });
   });
 
   describe('validateAnswerFormat', () => {

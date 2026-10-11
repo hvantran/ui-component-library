@@ -5,8 +5,8 @@ import { analyzeFormula } from '../../../utils/mathFormulaAnalyzer';
 
 const DOTTED_LINE = '      ..................................................';
 
-/** Matches prompts like "76 635 … 76 653" or "47 526 … 47 520 + 6" */
-const COMPARISON_RE = /^(.+?)\s*(?:\.{3}|…)\s*(.+)$/u;
+/** Matches prompts like "76 635 … 76 653", "47 526 … 47 520 + 6", "8 ...... 3 + 5", "8 .... 3 + 5", "8 ? 3 + 5" */
+const COMPARISON_RE = /^(.+?)\s*(?:\.{2,}|…+|\?|_{2,})\s*(.+)$/u;
 
 const MATH_OPERAND_RE = /^[\d\s()+\-*/xX×÷:.,]+$/u;
 
@@ -21,7 +21,7 @@ function isMathOperand(value: string): boolean {
   }
 
   // Reject placeholders/fillers made only from dots/ellipsis.
-  if (/^[.…]+$/u.test(trimmed)) {
+  if (/^[.…_?]+$/u.test(trimmed)) {
     return false;
   }
 
@@ -38,12 +38,22 @@ function isMathOperand(value: string): boolean {
   return MATH_OPERAND_RE.test(trimmed);
 }
 
-export function parseComparison(prompt: string): { left: string; right: string } | null {
-  const m = prompt.trim().match(COMPARISON_RE);
+export function parseComparison(
+  prompt: string,
+  _contextText?: string,
+): { left: string; right: string } | null {
+  if (!prompt || typeof prompt !== 'string') {
+    return null;
+  }
+
+  // Strip prompt prefixes like "a. ", "a) ", "d, ", "D. "
+  const stripped = prompt.trim().replace(/^[a-zA-Z\d]+[.,:\)\-]\s+/, '').trim();
+  const m = stripped.match(COMPARISON_RE);
   if (!m) return null;
 
-  const left = m[1].trim();
-  const right = m[2].trim();
+  // Clean remaining dots or ellipsis from operands
+  const left = m[1].replace(/^[.…_?\s]+|[.…_?\s]+$/g, '').trim();
+  const right = m[2].replace(/^[.…_?\s]+|[.…_?\s]+$/g, '').trim();
 
   if (!left || !right) {
     return null;
@@ -316,7 +326,7 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
           {questionParts?.map((part) => (
             <section
               key={part.key}
-              className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-sky-50/60 p-4 shadow-[0_12px_28px_-24px_rgba(15,23,42,0.45)] w-full sm:flex-1 sm:min-w-[calc(50%-0.5rem)]"
+              className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-sky-50/60 p-3.5 sm:p-4 shadow-[0_12px_28px_-24px_rgba(15,23,42,0.45)] w-full sm:flex-1 sm:min-w-[calc(50%-0.5rem)] min-w-0 overflow-hidden"
             >
               <div className="flex items-start gap-3 mb-3">
                 <div className="min-w-9 h-9 px-2 rounded-full bg-sky-600 text-white text-sm font-bold flex items-center justify-center uppercase shadow-sm">
@@ -329,7 +339,8 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
                 </div>
               </div>
               {(() => {
-                const comparison = parseComparison(part.prompt);
+                const comparisonContext = [questionStem, questionText].filter(Boolean).join(' ');
+                const comparison = parseComparison(part.prompt, comparisonContext);
                 if (comparison && !isLongEssay) {
                   return (
                     <ComparisonInput
@@ -372,6 +383,22 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
           ))}
         </div>
       ) : (() => {
+        const singleComparison = parseComparison(
+          questionText,
+          [questionStem, questionText].filter(Boolean).join(' '),
+        );
+        if (singleComparison && !isLongEssay) {
+          return (
+            <ComparisonInput
+              left={singleComparison.left}
+              right={singleComparison.right}
+              value={selectedAnswer ?? ''}
+              disabled={disabled}
+              onChange={(op) => onAnswerChange(op)}
+            />
+          );
+        }
+
         const questionFormula = analyzeFormula(questionText);
         const isMathQuestion = [
           'SIMPLE_ADDITION',
