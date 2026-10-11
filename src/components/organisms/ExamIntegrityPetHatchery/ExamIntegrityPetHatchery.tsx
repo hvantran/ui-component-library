@@ -12,7 +12,7 @@ import {
   X,
   Gavel,
   RefreshCw,
-  Eye,
+  Lock,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
@@ -42,8 +42,6 @@ import {
   createChronoDracoPet,
   createAegisPaladinPet,
   rollMysteryPet,
-  PET_CODEX_REGISTRY,
-  ALL_PET_CODEX_REGISTRY,
 } from './petsData';
 
 export interface IncubatingEgg {
@@ -64,11 +62,13 @@ export interface IncubatingEgg {
 
 export interface ExamIntegrityPetHatcheryProps {
   starBalance?: number;
+  crackCostInStars?: number;
   incubatingEggs?: IncubatingEgg[];
   pets?: StudentPet[];
-  defaultTab?: 'incubator' | 'pets' | 'codex';
+  defaultTab?: 'incubator' | 'pets';
   onGrowPet?: (petId: string, starsSpent: number) => void;
   onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
+  onStrikeCrack?: (eggId: string, starsSpent: number) => void;
   onEquipEgg?: (eggId: string, starCost: number) => void;
   onEquipPet?: (petId: string) => void;
   className?: string;
@@ -197,16 +197,20 @@ export function formatHatchTime(totalSeconds: number): string {
 
 export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> = ({
   starBalance = 450,
+  crackCostInStars = 25,
   incubatingEggs = DEFAULT_INCUBATING_EGGS,
   pets = DEFAULT_STUDENT_PETS,
   defaultTab = 'incubator',
   onGrowPet,
   onEggHatched,
+  onStrikeCrack,
   onEquipEgg,
   onEquipPet,
   className,
 }) => {
-  const [activeTab, setActiveTab] = useState<'incubator' | 'pets' | 'codex'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'incubator' | 'pets'>(
+    defaultTab === 'pets' ? 'pets' : 'incubator'
+  );
   const [currentEggs, setCurrentEggs] = useState<IncubatingEgg[]>(incubatingEggs);
   const [currentPets, setCurrentPets] = useState<StudentPet[]>(pets);
   const [selectedEggIndex, setSelectedEggIndex] = useState<number>(0);
@@ -217,13 +221,13 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   } | null>(null);
   const [inspectingEvolutionPet, setInspectingEvolutionPet] = useState<StudentPet | null>(null);
   const [previewStages, setPreviewStages] = useState<Record<string, number>>({});
-  const [selectedCodexPetKey, setSelectedCodexPetKey] = useState<string>('phoenix');
-  const [codexRarityFilter, setCodexRarityFilter] = useState<string>('All');
 
   const activeEgg = currentEggs[selectedEggIndex];
 
   const handleStrikeCrack = (amount: number = 0.25) => {
     if (!activeEgg) return;
+    if (activeEgg.crackProgress < 1.0 && starBalance < crackCostInStars) return;
+
     const newProgress = Math.min(1.0, activeEgg.crackProgress + amount);
     const secondsReduction = 7200; // 2 hours reduction per strike
     const newRemainingSeconds = Math.max(0, (activeEgg.remainingSeconds ?? 28800) - secondsReduction);
@@ -238,6 +242,10 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
         : egg
     );
     setCurrentEggs(updated);
+
+    if (activeEgg.crackProgress < 1.0 && onStrikeCrack) {
+      onStrikeCrack(activeEgg.id, crackCostInStars);
+    }
 
     if (newProgress >= 1.0) {
       let newPet: StudentPet;
@@ -450,7 +458,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
             Pet Hatchery & Sanctuary
           </h2>
           <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">
-            Equip 3D eggs, hatch legendary companions, and explore all 5 divine solar levels of the Fire Phoenix.
+            Incubate eggs, hatch companion beasts, and nurture your pets.
           </p>
         </div>
 
@@ -479,20 +487,6 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
             )}
           >
             My Pets ({currentPets.length})
-          </button>
-          <button
-            type="button"
-            data-testid="codex-tab-btn"
-            onClick={() => setActiveTab('codex')}
-            className={cn(
-              'px-5 py-2 rounded-full text-xs font-extrabold transition-all whitespace-nowrap flex items-center gap-1.5',
-              activeTab === 'codex'
-                ? 'bg-amber-500 text-white shadow-md'
-                : 'text-stone-600 dark:text-stone-300 hover:text-stone-900'
-            )}
-          >
-            <Flame className="w-3.5 h-3.5" />
-            Phoenix Codex (All 5 Levels)
           </button>
         </div>
       </div>
@@ -607,15 +601,22 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     <button
                       type="button"
                       onClick={() => handleStrikeCrack(0.25)}
+                      disabled={activeEgg.crackProgress < 1 && starBalance < crackCostInStars}
                       className={cn(
                         'flex-1 py-3 px-6 rounded-xl border font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg active:scale-[0.98]',
                         activeEgg.crackProgress >= 1
                           ? 'bg-gradient-to-r from-orange-700 via-red-600 to-orange-800 text-white border-orange-400'
+                          : starBalance < crackCostInStars
+                          ? 'bg-stone-800 text-stone-500 border-stone-700 cursor-not-allowed opacity-60'
                           : 'bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 hover:from-amber-600 hover:to-amber-700 text-amber-50 border-amber-500/60'
                       )}
                     >
                       <Gavel className="w-4 h-4" />
-                      <span>STRIKE & CRACK (+25%)</span>
+                      <span>
+                        {activeEgg.crackProgress >= 1
+                          ? 'READY TO HATCH! (+25%)'
+                          : `STRIKE & CRACK (+25% • ${crackCostInStars} ⭐)`}
+                      </span>
                     </button>
 
                     <button
@@ -700,6 +701,9 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               : undefined;
             const displayedImageUrl = displayedStage?.imageUrl || pet.imageUrl;
             const displayedStageName = displayedStage?.name || pet.stageName;
+            const isDisplayedStageLocked = Boolean(
+              hasStages && displayedStage && pet.level < displayedStage.minLevel
+            );
 
             return (
               <div
@@ -718,10 +722,29 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     <img
                       src={displayedImageUrl}
                       alt={displayedStageName}
-                      className="h-full w-auto max-w-full object-contain filter drop-shadow-[0_10px_20px_rgba(245,158,11,0.3)] transition-transform duration-300 hover:scale-105"
+                      className={cn(
+                        'h-full w-auto max-w-full object-contain transition-transform duration-300 hover:scale-105',
+                        isDisplayedStageLocked
+                          ? 'brightness-0 opacity-40 contrast-200 drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]'
+                          : 'filter drop-shadow-[0_10px_20px_rgba(245,158,11,0.3)]'
+                      )}
                     />
                   ) : (
-                    <div className="text-6xl filter drop-shadow">{pet.avatarEmoji}</div>
+                    <div className={cn('text-6xl filter drop-shadow', isDisplayedStageLocked && 'opacity-40 grayscale')}>
+                      {pet.avatarEmoji}
+                    </div>
+                  )}
+
+                  {isDisplayedStageLocked && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px] p-2 text-center pointer-events-none">
+                      <Lock className="w-8 h-8 text-amber-400 mb-1 drop-shadow" />
+                      <span className="text-xs font-black uppercase text-amber-300 tracking-wider">
+                        Level {displayedStage?.minLevel} Required
+                      </span>
+                      <span className="text-[10px] text-stone-300 font-semibold mt-0.5">
+                        Locked Evolution Shadow
+                      </span>
+                    </div>
                   )}
 
                   {/* Level & Equipped Badges on Character Canvas */}
@@ -813,7 +836,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                                     : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 border-stone-200 dark:border-stone-700 hover:bg-stone-200'
                                 )}
                               >
-                                <span>{stage.avatarEmoji}</span>
+                                <span>{isUnlocked ? stage.avatarEmoji : '🔒'}</span>
                                 <span>Lvl {stage.minLevel}</span>
                               </button>
                             );
@@ -902,200 +925,6 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
         </div>
       )}
 
-      {/* Codex Tab — All 5 Rarity Bestiary Showcase */}
-      {activeTab === 'codex' && (() => {
-        const activeCodexEntry = PET_CODEX_REGISTRY[selectedCodexPetKey] || PET_CODEX_REGISTRY.phoenix;
-        const currentActivePet = currentPets.find((p) =>
-          p.species.toLowerCase().includes(activeCodexEntry.name.toLowerCase()) ||
-          p.name.toLowerCase() === activeCodexEntry.name.toLowerCase() ||
-          (selectedCodexPetKey === 'phoenix' && p.species.includes('Phoenix'))
-        );
-
-        return (
-          <div className="space-y-6" data-testid="phoenix-all-levels-codex">
-            {/* Rarity Category Filter & Pet Selector Pills */}
-            <div className="space-y-3 p-3 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
-              <div className="flex flex-wrap items-center gap-1.5 border-b border-stone-100 dark:border-stone-800 pb-2.5">
-                <span className="text-xs font-bold text-stone-500 uppercase px-2 tracking-wider">
-                  Filter Rarity:
-                </span>
-                {['All', 'Common', 'Rare', 'Epic', 'Legendary', 'Mythic'].map((tier) => (
-                  <button
-                    key={tier}
-                    type="button"
-                    onClick={() => setCodexRarityFilter(tier)}
-                    className={cn(
-                      'px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all',
-                      codexRarityFilter === tier
-                        ? 'bg-amber-500 text-white shadow-sm'
-                        : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
-                    )}
-                  >
-                    {tier}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-bold text-stone-500 uppercase px-2 tracking-wider">
-                  Select Bestiary:
-                </span>
-                {Object.values(ALL_PET_CODEX_REGISTRY)
-                  .filter((entry) =>
-                    codexRarityFilter === 'All' ? true : entry.rarity === codexRarityFilter
-                  )
-                  .map((entry) => (
-                    <button
-                      key={entry.key}
-                      type="button"
-                      data-testid={`codex-filter-${entry.key}`}
-                      onClick={() => setSelectedCodexPetKey(entry.key)}
-                      className={cn(
-                        'px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 border',
-                        selectedCodexPetKey === entry.key
-                          ? 'bg-amber-500 text-white border-amber-400 shadow-md ring-2 ring-amber-300'
-                          : 'bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:bg-stone-100'
-                      )}
-                    >
-                      <span className="text-sm">{entry.avatarEmoji}</span>
-                      <span>{entry.name}</span>
-                      <span
-                        className={cn(
-                          'text-[10px] px-1.5 py-0.5 rounded-full font-extrabold uppercase',
-                          selectedCodexPetKey === entry.key
-                            ? 'bg-amber-900/60 text-amber-200'
-                            : 'bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
-                        )}
-                      >
-                        {entry.totalStages} Stages ({entry.rarity})
-                      </span>
-                    </button>
-                  ))}
-              </div>
-            </div>
-
-            {/* Hero Rarity Banner */}
-            <div
-              className={cn(
-                'p-6 sm:p-8 rounded-3xl bg-gradient-to-r text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all',
-                activeCodexEntry.bannerGradient
-              )}
-            >
-              <div className="space-y-2">
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-200 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  {activeCodexEntry.rarity} Companion Codex • {activeCodexEntry.element}
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold">
-                  {selectedCodexPetKey === 'phoenix'
-                    ? 'All 5 Fire Phoenix Evolution Forms'
-                    : `${activeCodexEntry.name} Evolution Bestiary`}
-                </h3>
-                <p className="text-xs sm:text-sm text-white/90 max-w-2xl leading-relaxed">
-                  {activeCodexEntry.description} Directly modeled in 3D studio from Stitch.
-                </p>
-              </div>
-              <div className="px-5 py-3 rounded-2xl bg-black/40 border border-white/20 text-white text-xs font-bold text-center backdrop-blur-sm shrink-0">
-                <div className="text-white/80">Total Evolution Stages</div>
-                <div className="text-2xl font-extrabold text-amber-300">
-                  {selectedCodexPetKey === 'phoenix'
-                    ? '5 Solar Tiers'
-                    : `${activeCodexEntry.totalStages} Evolution Tiers`}
-                </div>
-              </div>
-            </div>
-
-            {/* Stages Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {activeCodexEntry.stages.map((stage) => {
-                const isUnlocked = currentActivePet ? currentActivePet.level >= stage.minLevel : stage.stage === 1;
-
-                return (
-                  <div
-                    key={stage.stage}
-                    data-testid={`codex-card-stage-${stage.stage}`}
-                    className="rounded-3xl bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 shadow-md hover:shadow-2xl transition-all overflow-hidden flex flex-col justify-between"
-                  >
-                    {/* Hero 3D character render from Stitch */}
-                    <div className="relative h-64 w-full bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-stone-900 overflow-hidden flex items-center justify-center p-3">
-                      <img
-                        src={stage.imageUrl}
-                        alt={stage.name}
-                        className="h-full w-auto max-w-full object-contain filter drop-shadow-[0_12px_24px_rgba(245,158,11,0.4)] transition-transform duration-300 hover:scale-105"
-                      />
-
-                      {/* Stage & Level Badges */}
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                        <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-md">
-                          Stage {stage.stage}
-                        </span>
-                        <span
-                          className={cn(
-                            'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border backdrop-blur-sm',
-                            isUnlocked
-                              ? 'bg-amber-950/80 text-amber-300 border-amber-500/40'
-                              : 'bg-stone-900/80 text-stone-400 border-stone-700/40'
-                          )}
-                        >
-                          {isUnlocked ? `Unlocked` : `Lvl ${stage.minLevel}+`}
-                        </span>
-                      </div>
-
-                      <div className="absolute top-3 right-3 text-3xl">
-                        {stage.avatarEmoji}
-                      </div>
-                    </div>
-
-                    {/* Body Info */}
-                    <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                      <div className="space-y-2">
-                        <div>
-                          <h4 className="font-extrabold text-xl text-stone-900 dark:text-white">
-                            {stage.name}
-                          </h4>
-                          <div className="text-xs font-bold text-amber-600 dark:text-amber-400">
-                            {stage.title}
-                          </div>
-                        </div>
-
-                        <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                          {stage.description}
-                        </p>
-                      </div>
-
-                      {/* Evolution Requirement & Action */}
-                      <div className="pt-3 border-t border-stone-100 dark:border-stone-800 space-y-3">
-                        <div className="flex items-center justify-between text-xs font-bold">
-                          <span className="text-stone-500">Academic Requirement</span>
-                          <span className="text-amber-600 dark:text-amber-400">
-                            Reach Level {stage.minLevel}
-                          </span>
-                        </div>
-
-                        <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (currentActivePet) {
-                                handleSwitchPetStage(currentActivePet.id, stage.stage);
-                                setActiveTab('pets');
-                              }
-                            }}
-                            className="flex-1 py-2.5 px-4 rounded-xl text-xs font-extrabold bg-amber-500 hover:bg-amber-600 text-white shadow-[0_3px_0_#b45309] active:translate-y-[2px] transition-all flex items-center justify-center gap-1.5"
-                          >
-                            <Eye className="w-3.5 h-3.5" /> Inspect in Sanctuary
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })()}
-
       {/* Evolution Codex Modal */}
       {inspectingEvolutionPet && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
@@ -1138,15 +967,23 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                         : 'border-dashed border-stone-200 dark:border-stone-800 opacity-60'
                     )}
                   >
-                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0">
+                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative">
                       {stage.imageUrl ? (
                         <img
                           src={stage.imageUrl}
                           alt={stage.name}
-                          className="w-full h-full object-contain p-1"
+                          className={cn(
+                            'w-full h-full object-contain p-1',
+                            !isReached && 'brightness-0 opacity-40 contrast-200'
+                          )}
                         />
                       ) : (
-                        <span className="text-3xl">{stage.avatarEmoji}</span>
+                        <span className={cn('text-3xl', !isReached && 'opacity-40 grayscale')}>{stage.avatarEmoji}</span>
+                      )}
+                      {!isReached && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                          <Lock className="w-5 h-5 text-amber-400" />
+                        </div>
                       )}
                     </div>
                     <div className="flex-1 space-y-1.5 text-center sm:text-left">

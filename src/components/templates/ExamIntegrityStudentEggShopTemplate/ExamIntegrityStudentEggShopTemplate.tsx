@@ -30,6 +30,8 @@ export interface ExamIntegrityStudentEggShopTemplateProps {
   onPurchaseEgg?: (item: EggShopItem) => void;
   onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
   onGrowPet?: (petId: string, starsSpent: number) => void;
+  onStrikeCrack?: (eggId: string, starsSpent: number) => void;
+  crackCostInStars?: number;
   onNavigate?: (section: StudentPortalSection) => void;
   onLogout?: () => void;
   dockMode?: ExamIntegrityNavDockMode;
@@ -42,7 +44,7 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
 > = ({
   studentName = 'Student',
   starCount = 0,
-  isElementary = false,
+  isElementary: _isElementary = false,
   pageTitle,
   pageSubtitle,
   activeSection = 'shop',
@@ -53,21 +55,19 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
   onPurchaseEgg,
   onEggHatched,
   onGrowPet,
+  onStrikeCrack,
+  crackCostInStars = 25,
   onNavigate,
   onLogout,
   dockMode,
   onDockModeChange,
   className,
 }) => {
-  const resolvedTitle =
-    pageTitle ??
-    (isElementary ? 'Pet Egg Emporium & Hatchery 🐣' : '3D Pet Egg Shop');
+  const resolvedTitle = pageTitle ?? '3D Pet Egg Shop';
 
   const resolvedSubtitle =
     pageSubtitle ??
-    (isElementary
-      ? 'Spend earned stars on mysterious 3D eggs, hatch companion beasts, and nurture pets!'
-      : 'Purchase 3D mystery eggs using stars earned from exams and manage companion pets.');
+    'Purchase 3D mystery eggs using stars earned from exams and manage companion pets.';
 
   return (
     <ExamIntegrityStudentLandingTemplate
@@ -119,10 +119,12 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
         ) : (
           <ExamIntegrityPetHatchery
             starBalance={starCount}
+            crackCostInStars={crackCostInStars}
             incubatingEggs={incubatingEggs}
             pets={pets}
             onGrowPet={onGrowPet}
             onEggHatched={onEggHatched}
+            onStrikeCrack={onStrikeCrack}
           />
         )}
       </div>

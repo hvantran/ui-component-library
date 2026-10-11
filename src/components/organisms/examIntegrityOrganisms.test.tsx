@@ -182,9 +182,9 @@ describe('ExamIntegrity Organisms', () => {
 
   it('renders ExamIntegrityEggShop', () => {
     const html = renderToString(<ExamIntegrityEggShop starBalance={1200} />);
-    expect(html).toContain('3D Pet Egg Shop');
-    expect(html).toContain('1,200');
+    expect(html).toContain('Ancient Mysterious Egg');
     expect(html).toContain('Stars');
+    expect(html).toContain('Adopt Mystery Egg');
   });
 
   it('renders ExamIntegrityPetHatchery', () => {
