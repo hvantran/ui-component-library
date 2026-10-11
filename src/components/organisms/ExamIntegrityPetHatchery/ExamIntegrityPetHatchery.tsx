@@ -42,6 +42,7 @@ import {
   createChronoDracoPet,
   createAegisPaladinPet,
   rollMysteryPet,
+  PET_IMAGE_MAP,
 } from './petsData';
 
 export interface IncubatingEgg {
@@ -699,7 +700,16 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
             const displayedStage = hasStages
               ? pet.evolutionStages?.[activeStageNum - 1]
               : undefined;
-            const displayedImageUrl = displayedStage?.imageUrl || pet.imageUrl;
+
+            // Resolve image URL (prefer PET_IMAGE_MAP lookup by imageName, fallback to imageUrl)
+            const resolvePetImage = (imgName?: string, imgUrl?: string): string | undefined => {
+              if (imgName && PET_IMAGE_MAP[imgName]) return PET_IMAGE_MAP[imgName];
+              return imgUrl;
+            };
+
+            const displayedImageUrl =
+              resolvePetImage(displayedStage?.imageName, displayedStage?.imageUrl) ||
+              resolvePetImage(pet.imageName, pet.imageUrl);
             const displayedStageName = displayedStage?.name || pet.stageName;
             const isDisplayedStageLocked = Boolean(
               hasStages && displayedStage && pet.level < displayedStage.minLevel

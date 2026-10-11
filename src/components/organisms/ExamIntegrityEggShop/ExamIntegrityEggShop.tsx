@@ -25,9 +25,18 @@ export interface EggShopItem {
   hatchDurationHours?: number;
 }
 
+export interface EggShopCategory {
+  id: string;
+  title: string;
+  description?: string;
+  icon?: React.ReactNode;
+  items: EggShopItem[];
+}
+
 export interface ExamIntegrityEggShopProps {
   starBalance?: number;
   items?: EggShopItem[];
+  categories?: EggShopCategory[];
   onPurchaseEgg?: (item: EggShopItem) => void;
   onOpenHatchery?: () => void;
   className?: string;
@@ -90,6 +99,7 @@ export const RARITY_DROP_RATES_SHOP = [
 export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
   starBalance = 650,
   items = DEFAULT_SHOP_EGGS,
+  categories,
   onPurchaseEgg,
   onOpenHatchery,
   className,
@@ -98,9 +108,33 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
   const [confirmModalItem, setConfirmModalItem] = useState<EggShopItem | null>(null);
   const [purchasedSuccess, setPurchasedSuccess] = useState<EggShopItem | null>(null);
 
-  // The shop showcases the single mystery egg
-  const featuredEgg: EggShopItem = items[0] || DEFAULT_MYSTERY_EGG;
-  const canAfford = starBalance >= featuredEgg.price;
+  const resolvedCategories: EggShopCategory[] = React.useMemo(() => {
+    if (categories && categories.length > 0) {
+      return categories;
+    }
+    const safeItems = items && items.length > 0 ? items : DEFAULT_SHOP_EGGS;
+    const groupMap = new Map<string, { title: string; description?: string; icon?: React.ReactNode; items: EggShopItem[] }>();
+    for (const item of safeItems) {
+      const catKey = (item as any).category || 'eggs';
+      const catTitle = (item as any).categoryTitle || (catKey === 'eggs' ? 'Companion Eggs' : catKey);
+      if (!groupMap.has(catKey)) {
+        groupMap.set(catKey, {
+          title: catTitle,
+          description: catKey === 'eggs' ? 'Mystery and elemental eggs to hatch companion pets' : undefined,
+          icon: catKey === 'eggs' ? '🥚' : undefined,
+          items: [],
+        });
+      }
+      groupMap.get(catKey)!.items.push(item);
+    }
+    return Array.from(groupMap.entries()).map(([id, grp]) => ({
+      id,
+      title: grp.title,
+      description: grp.description,
+      icon: grp.icon,
+      items: grp.items,
+    }));
+  }, [categories, items]);
 
   const handleBuyClick = (item: EggShopItem) => {
     setConfirmModalItem(item);
@@ -119,114 +153,188 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
 
   return (
     <div className={cn('w-full max-w-7xl mx-auto space-y-8', className)} data-testid="exam-integrity-egg-shop">
-      {/* Featured Mystery Egg Showcase Card (Single Egg) */}
-      <div
-        data-testid={`egg-card-${featuredEgg.id}`}
-        className="rounded-3xl bg-white dark:bg-stone-900 border-2 border-amber-300 dark:border-amber-700/60 shadow-xl overflow-hidden"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-          {/* 3D Canvas Viewport */}
-          <div className="lg:col-span-6 relative min-h-[380px] sm:min-h-[460px] bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-[#050201] flex items-center justify-center p-6 overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none" />
-
-            {/* Badges on 3D Canvas */}
-            <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
-              <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-950/80 border border-amber-500 text-amber-300 shadow-sm backdrop-blur-md">
-                ✨ Mystery Egg
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-stone-950/80 border border-stone-700 text-stone-200 shadow-sm backdrop-blur-md">
-                ⏳ 8 Hours Hatching Time
-              </span>
-            </div>
-
-            <button
-              type="button"
-              title="Inspect Egg"
-              onClick={() => setInspectEgg(featuredEgg)}
-              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-stone-900/80 hover:bg-stone-800 text-amber-300 border border-amber-500/40 backdrop-blur-sm shadow-md"
-            >
-              <Info className="w-4 h-4" />
-            </button>
-
-            <div className="w-full h-80 sm:h-96">
-              <ThreeEggViewer
-                eggTier={featuredEgg.tier}
-                width="100%"
-                height="100%"
-                autoRotate
-                interactive
-                showDais
-              />
-            </div>
-
-            <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-amber-200/70 font-medium">
-              Interactive 3D Model · Drag to rotate shell · Click to examine
-            </div>
+      {/* Wallet / Shop Summary Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-3xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-stone-900 dark:to-stone-800/80 border border-amber-200/70 dark:border-stone-700 shadow-sm">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-xl shadow-md shadow-amber-500/25">
+            🛒
           </div>
+          <div>
+            <h1 className="text-lg font-extrabold text-stone-900 dark:text-white">
+              Student Rewards Shop
+            </h1>
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Redeem stars earned from exams for companion eggs, treats, and supplies.
+            </p>
+          </div>
+        </div>
 
-          {/* Details & Drop Rates Panel */}
-          <div className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
-                  <Sparkles className="w-4 h-4" />
-                  Veiled Companion Relic
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white">
-                  {featuredEgg.name}
-                </h2>
-                <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-                  {featuredEgg.description}
-                </p>
-              </div>
-
-              {/* Incubation time & features highlight */}
-              <div className="grid grid-cols-2 gap-3 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-xs">
-                <div>
-                  <div className="text-stone-500 dark:text-stone-400 font-medium">Incubation Time</div>
-                  <div className="font-bold text-amber-700 dark:text-amber-300 text-sm flex items-center gap-1 mt-0.5">
-                    <span>⏳ 8 Hours (28,800s)</span>
-                  </div>
-                </div>
-                <div>
-                  <div className="text-stone-500 dark:text-stone-400 font-medium">True Rarity & Species</div>
-                  <div className="font-bold text-stone-900 dark:text-stone-100 text-sm flex items-center gap-1 mt-0.5">
-                    <span>🎲 100% Luck-Based</span>
-                  </div>
-                </div>
-              </div>
+        <div className="flex items-center gap-3 self-start sm:self-auto px-4 py-2.5 rounded-2xl bg-white dark:bg-stone-950 border border-amber-300 dark:border-amber-700/60 shadow-sm">
+          <span className="text-2xl">⭐</span>
+          <div>
+            <div className="text-[10px] font-extrabold uppercase text-stone-500 tracking-wider">
+              Star Balance
             </div>
-
-            {/* Price & Purchase CTA */}
-            <div className="pt-4 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-3xl">⭐</span>
-                <div>
-                  <div className="text-[10px] uppercase font-bold text-stone-500 tracking-wider">
-                    Adoption Price
-                  </div>
-                  <div className="text-2xl font-extrabold text-amber-500 dark:text-amber-400">
-                    {featuredEgg.price} Stars
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleBuyClick(featuredEgg)}
-                disabled={!canAfford}
-                className={cn(
-                  'w-full sm:w-auto px-8 py-3.5 rounded-2xl text-sm font-extrabold uppercase tracking-wide transition-all shadow-md active:translate-y-[2px]',
-                  canAfford
-                    ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/30'
-                    : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-600 cursor-not-allowed'
-                )}
-              >
-                {canAfford ? `Adopt Mystery Egg (${featuredEgg.price} ⭐)` : 'Need Stars'}
-              </button>
+            <div className="text-base font-extrabold text-amber-500 dark:text-amber-400">
+              {starBalance} Stars
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Categories & Product Cards */}
+      <div className="space-y-10">
+        {resolvedCategories.map((category, catIdx) => (
+          <div key={category.id} className="space-y-6" data-testid={`shop-category-${category.id}`}>
+            {/* Category Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
+              <div className="flex items-center gap-2.5">
+                {category.icon ? (
+                  <span className="text-2xl">{category.icon}</span>
+                ) : (
+                  <span className="text-2xl">📦</span>
+                )}
+                <div>
+                  <h2 className="text-xl font-extrabold text-stone-900 dark:text-white flex items-center gap-2">
+                    {category.title}
+                  </h2>
+                  {category.description && (
+                    <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                      {category.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300">
+                {category.items.length} {category.items.length === 1 ? 'item' : 'items'}
+              </span>
+            </div>
+
+            {/* Category Items Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {category.items.map((item) => {
+                const canAfford = starBalance >= item.price;
+                return (
+                  <div
+                    key={item.id}
+                    data-testid={`egg-card-${item.id}`}
+                    className="rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-md hover:shadow-lg transition-all flex flex-col justify-between overflow-hidden"
+                  >
+                    {/* 3D Egg Canvas Viewport */}
+                    <div className="relative h-60 sm:h-64 bg-gradient-to-b from-[#1c0e07] via-[#0d0604] to-[#050201] flex items-center justify-center p-3 overflow-hidden">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none" />
+
+                      {/* Badges on 3D Canvas */}
+                      <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-amber-950/80 border border-amber-500 text-amber-300 shadow-sm backdrop-blur-md">
+                          ✨ {item.rarity}
+                        </span>
+                        {item.hatchDurationHours && (
+                          <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-stone-950/80 border border-stone-700 text-stone-200 shadow-sm backdrop-blur-md">
+                            {`⏳ ${item.hatchDurationHours} Hours Hatching Time`}
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        title="Inspect Egg"
+                        onClick={() => setInspectEgg(item)}
+                        className="absolute top-3 right-3 z-10 p-2 rounded-full bg-stone-900/80 hover:bg-stone-800 text-amber-300 border border-amber-500/40 backdrop-blur-sm shadow-md transition-colors"
+                      >
+                        <Info className="w-4 h-4" />
+                      </button>
+
+                      <div className="w-full h-full">
+                        <ThreeEggViewer
+                          eggTier={item.tier}
+                          width="100%"
+                          height="100%"
+                          autoRotate
+                          interactive
+                          showDais
+                        />
+                      </div>
+                    </div>
+
+                    {/* Card Content & Stats */}
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          Companion Egg
+                        </div>
+                        <h3 className="text-lg font-extrabold text-stone-900 dark:text-white line-clamp-1">
+                          {item.name}
+                        </h3>
+                        <p className="text-xs text-stone-600 dark:text-stone-300 line-clamp-2 leading-relaxed">
+                          {item.description}
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-2 p-2.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-800/30 text-[11px]">
+                          <div>
+                            <div className="text-stone-500 dark:text-stone-400 font-medium">Hatch Time</div>
+                            <div className="font-bold text-amber-700 dark:text-amber-300">
+                              {`⏳ ${item.hatchDurationHours ?? 8} Hours`}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-stone-500 dark:text-stone-400 font-medium">Drop Odds</div>
+                            <div className="font-bold text-stone-800 dark:text-stone-200">
+                              🎲 Luck-Based
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Price & Adopt CTA */}
+                      <div className="pt-3 border-t border-stone-200 dark:border-stone-800 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-2xl">⭐</span>
+                          <div>
+                            <div className="text-[10px] uppercase font-bold text-stone-500 tracking-wider">
+                              Price
+                            </div>
+                            <div className="text-base font-extrabold text-amber-500 dark:text-amber-400">
+                              {`${item.price} Stars`}
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          data-testid={`buy-egg-btn-${item.id}`}
+                          onClick={() => handleBuyClick(item)}
+                          disabled={!canAfford}
+                          className={cn(
+                            'px-5 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wide transition-all shadow-md active:translate-y-[1px]',
+                            canAfford
+                              ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/30'
+                              : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-600 cursor-not-allowed'
+                          )}
+                        >
+                          {canAfford
+                            ? item.name.toLowerCase().includes('myster')
+                              ? 'Adopt Mystery Egg'
+                              : `Adopt (${item.price} ⭐)`
+                            : 'Need Stars'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Category Divider */}
+            {catIdx < resolvedCategories.length - 1 && (
+              <div
+                data-testid="shop-category-divider"
+                className="pt-6 border-b-2 border-dashed border-stone-200 dark:border-stone-800"
+              />
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Inspect Egg Modal */}

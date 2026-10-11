@@ -65,5 +65,73 @@ describe('ExamIntegrityEggShop', () => {
     expect(mythic?.percent).toBe(2);
     expect(mythic?.stages).toBe(8);
   });
+
+  it('renders category headers and dividers between multiple categories', () => {
+    const testCategories = [
+      {
+        id: 'eggs',
+        title: 'Companion Eggs',
+        description: 'Eggs ready to hatch',
+        items: [DEFAULT_SHOP_EGGS[0]],
+      },
+      {
+        id: 'treats',
+        title: 'Pet Treats & Snacks',
+        description: 'Delicious food for EXP',
+        items: [
+          {
+            id: 'berry-treat',
+            name: 'Star Berry Treat',
+            tier: 'dragon' as const,
+            rarity: 'Common' as const,
+            price: 50,
+            description: 'Yummy berry treat',
+            hatchedPetName: '',
+            petElement: 'Nature',
+          },
+        ],
+      },
+    ];
+
+    const html = renderToString(
+      <ExamIntegrityEggShop starBalance={1000} categories={testCategories} />
+    );
+
+    expect(html).toContain('Companion Eggs');
+    expect(html).toContain('Pet Treats &amp; Snacks');
+    expect(html).toContain('Star Berry Treat');
+    expect(html).toContain('shop-category-divider');
+  });
+
+  it('auto-groups flat items by category with dividers', () => {
+    const items = [
+      {
+        ...DEFAULT_SHOP_EGGS[0],
+        category: 'eggs',
+        categoryTitle: 'Companion Eggs',
+      },
+      {
+        id: 'potion-1',
+        name: 'Exp Boost Potion',
+        tier: 'dragon' as const,
+        rarity: 'Rare' as const,
+        price: 150,
+        description: 'Increases pet exp',
+        hatchedPetName: '',
+        petElement: 'Arcane',
+        category: 'potions',
+        categoryTitle: 'Magic Potions',
+      },
+    ];
+
+    const html = renderToString(
+      <ExamIntegrityEggShop starBalance={1000} items={items} />
+    );
+
+    expect(html).toContain('Companion Eggs');
+    expect(html).toContain('Magic Potions');
+    expect(html).toContain('Exp Boost Potion');
+    expect(html).toContain('shop-category-divider');
+  });
 });
 

@@ -354,12 +354,14 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
           <div className="max-w-7xl mx-auto space-y-6">
             {bannerSlot}
 
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
-              {pageSubtitle && (
-                <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">{pageSubtitle}</p>
-              )}
-            </div>
+            {pageTitle && (
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{pageTitle}</h1>
+                {pageSubtitle && (
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">{pageSubtitle}</p>
+                )}
+              </div>
+            )}
 
             {filters.length > 0 && (
               <div className="flex flex-wrap gap-2">

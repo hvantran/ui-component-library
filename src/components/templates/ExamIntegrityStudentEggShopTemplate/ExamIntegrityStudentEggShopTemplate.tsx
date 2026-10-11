@@ -45,8 +45,8 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
   studentName = 'Student',
   starCount = 0,
   isElementary: _isElementary = false,
-  pageTitle,
-  pageSubtitle,
+  pageTitle = '',
+  pageSubtitle = '',
   activeSection = 'shop',
   activeTab = 'shop',
   onTabChange,
@@ -63,19 +63,13 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
   onDockModeChange,
   className,
 }) => {
-  const resolvedTitle = pageTitle ?? '3D Pet Egg Shop';
-
-  const resolvedSubtitle =
-    pageSubtitle ??
-    'Purchase 3D mystery eggs using stars earned from exams and manage companion pets.';
-
   return (
     <ExamIntegrityStudentLandingTemplate
       studentName={studentName}
       starCount={starCount}
       activeSection={activeSection}
-      pageTitle={resolvedTitle}
-      pageSubtitle={resolvedSubtitle}
+      pageTitle={pageTitle}
+      pageSubtitle={pageSubtitle}
       onNavigate={onNavigate}
       onLogout={onLogout}
       dockMode={dockMode}
@@ -94,7 +88,7 @@ export const ExamIntegrityStudentEggShopTemplate: React.FC<
                 : 'bg-white dark:bg-stone-800 text-slate-700 dark:text-stone-300 hover:bg-amber-50 hover:text-amber-800 border border-slate-200 dark:border-stone-700'
             }`}
           >
-            🛒 3D Egg Shop
+            🛒 Egg Shop
           </button>
           <button
             type="button"
