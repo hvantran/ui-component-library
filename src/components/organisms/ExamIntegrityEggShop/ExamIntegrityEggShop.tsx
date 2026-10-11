@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Sparkles,
-  ShoppingBag,
   Info,
   CheckCircle2,
   X,
@@ -120,55 +119,6 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
 
   return (
     <div className={cn('w-full max-w-7xl mx-auto space-y-8', className)} data-testid="exam-integrity-egg-shop">
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-6 sm:p-8 text-white shadow-xl">
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none flex items-center justify-center">
-          <Sparkles className="w-80 h-80" />
-        </div>
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold uppercase tracking-wider text-amber-100">
-              <ShoppingBag className="w-3.5 h-3.5" />
-              Egg & Companion Emporium
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              3D Pet Egg Shop
-            </h1>
-            <p className="text-sm sm:text-base text-amber-100 max-w-xl">
-              Buy mysterious 3D eggs with stars earned from exams. All eggs appear identical — true species and rarity are purely luck-based and reveal after 8 hours of incubation!
-            </p>
-          </div>
-
-          {/* Star Balance & Actions Pill */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div
-              data-testid="star-balance-pill"
-              className="flex items-center gap-2 px-5 py-3 rounded-full bg-slate-900/80 backdrop-blur-md border-2 border-amber-300 shadow-lg"
-            >
-              <span className="text-2xl animate-pulse">⭐</span>
-              <div>
-                <div className="text-[10px] uppercase font-bold text-amber-300 tracking-wider">
-                  Star Balance
-                </div>
-                <div className="text-xl font-extrabold text-amber-400">
-                  {starBalance.toLocaleString()} Stars
-                </div>
-              </div>
-            </div>
-
-            {onOpenHatchery && (
-              <Button
-                variant="secondary"
-                onClick={onOpenHatchery}
-                className="rounded-full px-5 py-3 bg-white text-amber-900 hover:bg-amber-50 font-bold shadow-md hover:shadow-lg transition-all"
-              >
-                Go to Hatchery 🐣
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Featured Mystery Egg Showcase Card (Single Egg) */}
       <div
         data-testid={`egg-card-${featuredEgg.id}`}
@@ -243,40 +193,6 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
                   <div className="font-bold text-stone-900 dark:text-stone-100 text-sm flex items-center gap-1 mt-0.5">
                     <span>🎲 100% Luck-Based</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Luck Odds Breakdown Table */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">
-                  <span>Rarity Drop Rates (Luck Chance)</span>
-                  <span className="text-amber-600 dark:text-amber-400">Total: 100%</span>
-                </div>
-
-                <div className="space-y-2">
-                  {RARITY_DROP_RATES_SHOP.map((rate) => (
-                    <div
-                      key={rate.rarity}
-                      className="p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 flex items-center justify-between gap-3 text-xs"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            'px-2 py-0.5 rounded-full text-[10px] font-extrabold border',
-                            rate.badgeClass
-                          )}
-                        >
-                          {rate.rarity}
-                        </span>
-                        <span className="text-stone-600 dark:text-stone-300 font-medium">
-                          {rate.stages} Stages
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 font-mono font-extrabold text-stone-900 dark:text-white">
-                        <span>{`${rate.percent}%`}</span>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>

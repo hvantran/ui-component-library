@@ -47,24 +47,17 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('No Eggs in Incubator');
   });
 
-  it('renders Phoenix Codex tab with all 5 evolution levels and Stitch lore', () => {
+  it('verifies Phoenix Codex tab is removed from pet hatchery header', () => {
     const html = renderToString(
       <ExamIntegrityPetHatchery
         starBalance={800}
-        defaultTab="codex"
         incubatingEggs={DEFAULT_INCUBATING_EGGS}
         pets={DEFAULT_STUDENT_PETS}
       />
     );
 
-    expect(html).toContain('Phoenix Codex (All 5 Levels)');
-    expect(html).toContain('Total Evolution Stages');
-    expect(html).toContain('5 Solar Tiers');
-    expect(html).toContain('Sun Ember Fledgling');
-    expect(html).toContain('Ignited Pyrepaw');
-    expect(html).toContain('Solar Firebird');
-    expect(html).toContain('Pyre Sovereign');
-    expect(html).toContain('Primordial Solar Emperor');
+    expect(html).not.toContain('Phoenix Codex (All 5 Levels)');
+    expect(html).not.toContain('codex-tab-btn');
   });
 
   it('renders My Pets sanctuary with equipped Phoenix and evolution switcher buttons', () => {
@@ -185,24 +178,7 @@ describe('ExamIntegrityPetHatchery', () => {
     });
   });
 
-  it('renders Codex view with rarity filters and multi-pet bestiary selector', () => {
-    const html = renderToString(
-      <ExamIntegrityPetHatchery
-        starBalance={1000}
-        defaultTab="codex"
-        incubatingEggs={DEFAULT_INCUBATING_EGGS}
-        pets={DEFAULT_STUDENT_PETS}
-      />
-    );
 
-    expect(html).toContain('Filter Rarity:');
-    expect(html).toContain('Common');
-    expect(html).toContain('Rare');
-    expect(html).toContain('Epic');
-    expect(html).toContain('Legendary');
-    expect(html).toContain('Mythic');
-    expect(html).toContain('Select Bestiary:');
-  });
 
   it('renders incubator view displaying 8-hour hatching timer for mystery egg', () => {
     const html = renderToString(
@@ -250,6 +226,41 @@ describe('ExamIntegrityPetHatchery', () => {
     const mythicPet = rollMysteryPet(99);
     expect(mythicPet.rarity).toBe('Mythic');
     expect(mythicPet.evolutionStages).toHaveLength(8);
+  });
+
+  it('renders strike button with star cost and disables when star balance is insufficient', () => {
+    const htmlWithStars = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={100}
+        crackCostInStars={25}
+        incubatingEggs={DEFAULT_INCUBATING_EGGS}
+        pets={DEFAULT_STUDENT_PETS}
+      />
+    );
+    expect(htmlWithStars).toContain('STRIKE &amp; CRACK (+25% • 25 ⭐)');
+
+    const htmlWithoutStars = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={10}
+        crackCostInStars={25}
+        incubatingEggs={DEFAULT_INCUBATING_EGGS}
+        pets={DEFAULT_STUDENT_PETS}
+      />
+    );
+    expect(htmlWithoutStars).toContain('disabled=""');
+  });
+
+  it('displays lock indicator for locked next level pet evolution stages', () => {
+    const sproutPet = createSproutlingPet(1, false);
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={100}
+        defaultTab="pets"
+        pets={[sproutPet]}
+      />
+    );
+    // Locked higher stages should display lock indicator
+    expect(html).toContain('🔒');
   });
 });
 

@@ -17,7 +17,7 @@ describe('ExamIntegrityStudentEggShopTemplate', () => {
     expect(html).toContain('Pet Hatchery &amp; Sanctuary');
   });
 
-  it('renders elementary title when isElementary is true', () => {
+  it('renders default title when isElementary is true without legacy text', () => {
     const html = renderToString(
       <ExamIntegrityStudentEggShopTemplate
         studentName="Lily"
@@ -25,7 +25,8 @@ describe('ExamIntegrityStudentEggShopTemplate', () => {
         isElementary={true}
       />
     );
-    expect(html).toContain('Pet Egg Emporium &amp; Hatchery');
+    expect(html).toContain('3D Pet Egg Shop');
+    expect(html).not.toContain('Pet Egg Emporium &amp; Hatchery');
   });
 });
 

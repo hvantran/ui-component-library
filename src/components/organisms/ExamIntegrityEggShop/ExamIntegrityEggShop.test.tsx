@@ -4,35 +4,25 @@ import { renderToString } from 'react-dom/server';
 import { ExamIntegrityEggShop, DEFAULT_SHOP_EGGS, DEFAULT_MYSTERY_EGG, RARITY_DROP_RATES_SHOP } from './ExamIntegrityEggShop';
 
 describe('ExamIntegrityEggShop', () => {
-  it('renders shop featuring single mystery egg with 8-hour incubation time and star balance', () => {
+  it('renders shop featuring single mystery egg with 8-hour incubation time and price', () => {
     const html = renderToString(
       <ExamIntegrityEggShop starBalance={850} items={DEFAULT_SHOP_EGGS} />
     );
 
-    expect(html).toContain('3D Pet Egg Shop');
-    expect(html).toContain('850');
-    expect(html).toContain('Stars');
     expect(html).toContain('Ancient Mysterious Egg');
     expect(html).toContain('8 Hours Hatching Time');
+    expect(html).toContain('250');
+    expect(html).toContain('Stars');
     expect(html).toContain('Adopt Mystery Egg');
+    expect(html).not.toContain('Egg &amp; Companion Emporium');
   });
 
-  it('renders all rarity drop rates showing luck percentage probabilities', () => {
+  it('verifies rarity drop rates table is removed from shop showcase card', () => {
     const html = renderToString(
       <ExamIntegrityEggShop starBalance={850} items={DEFAULT_SHOP_EGGS} />
     );
 
-    expect(html).toContain('Rarity Drop Rates (Luck Chance)');
-    expect(html).toContain('50%');
-    expect(html).toContain('28%');
-    expect(html).toContain('14%');
-    expect(html).toContain('6%');
-    expect(html).toContain('2%');
-    expect(html).toContain('Common');
-    expect(html).toContain('Rare');
-    expect(html).toContain('Epic');
-    expect(html).toContain('Legendary');
-    expect(html).toContain('Mythic');
+    expect(html).not.toContain('Rarity Drop Rates (Luck Chance)');
   });
 
   it('renders disabled state when student cannot afford mystery egg', () => {
