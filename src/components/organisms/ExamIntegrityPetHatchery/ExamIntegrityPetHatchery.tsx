@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
   Heart,
@@ -13,6 +13,7 @@ import {
   Gavel,
   RefreshCw,
   Lock,
+  Clock,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
@@ -87,7 +88,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
     equipCostInStars: 25,
     isMystery: true,
     hatchDurationHours: 8,
-    remainingSeconds: 25920,
+    remainingSeconds: 0,
   },
   {
     id: 'inc-egg-phoenix',
@@ -200,10 +201,44 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   const [inspectingEvolutionPet, setInspectingEvolutionPet] = useState<StudentPet | null>(null);
   const [previewStages, setPreviewStages] = useState<Record<string, number>>({});
 
+  useEffect(() => {
+    setCurrentEggs(incubatingEggs);
+    setSelectedEggIndex((prev) =>
+      incubatingEggs.length === 0 ? 0 : Math.min(prev, incubatingEggs.length - 1)
+    );
+  }, [incubatingEggs]);
+
+  useEffect(() => {
+    setCurrentPets(pets);
+  }, [pets]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentEggs((prev) => {
+        let hasHatching = false;
+        const next = prev.map((egg) => {
+          if ((egg.remainingSeconds ?? 0) > 0) {
+            hasHatching = true;
+            return {
+              ...egg,
+              remainingSeconds: Math.max(0, (egg.remainingSeconds ?? 0) - 1),
+            };
+          }
+          return egg;
+        });
+        return hasHatching ? next : prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const activeEgg = currentEggs[selectedEggIndex];
+  const isHatching = Boolean(activeEgg && (activeEgg.remainingSeconds ?? 0) > 0);
 
   const handleStrikeCrack = (amount: number = 0.25) => {
     if (!activeEgg) return;
+    if (isHatching) return;
     if (activeEgg.crackProgress < 1.0 && starBalance < crackCostInStars) return;
 
     const newProgress = Math.min(1.0, activeEgg.crackProgress + amount);
@@ -536,7 +571,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                   <ThreeEggViewer
                     eggTier={activeEgg.tier}
                     crackProgress={activeEgg.crackProgress}
-                    onTap={() => handleStrikeCrack(0.25)}
+                    onTap={isHatching ? undefined : () => handleStrikeCrack(0.25)}
                     interactive
                     autoRotate
                     width="100%"
@@ -566,10 +601,12 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
 
                     <div className="flex items-center justify-between text-[11px] text-stone-400 pt-0.5">
                       <span className="text-amber-200/90 font-medium">
-                        {getEggCrackStatusText(activeEgg.crackProgress, activeEgg.crackProgress >= 1)}
+                        {isHatching
+                          ? '⏳ Hatching in progress. Cracking locked until incubation completes.'
+                          : getEggCrackStatusText(activeEgg.crackProgress, activeEgg.crackProgress >= 1)}
                       </span>
                       <span className="text-amber-300/80 italic font-medium">
-                        Click 3D Model or Strike Button
+                        {isHatching ? 'Wait for incubation timer' : 'Click 3D Model or Strike Button'}
                       </span>
                     </div>
                   </div>
@@ -579,22 +616,34 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     <button
                       type="button"
                       onClick={() => handleStrikeCrack(0.25)}
-                      disabled={activeEgg.crackProgress < 1 && starBalance < crackCostInStars}
+                      disabled={isHatching || (activeEgg.crackProgress < 1 && starBalance < crackCostInStars)}
                       className={cn(
                         'flex-1 py-3 px-6 rounded-xl border font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg active:scale-[0.98]',
-                        activeEgg.crackProgress >= 1
+                        isHatching
+                          ? 'bg-stone-900/90 text-stone-400 border-stone-700/60 cursor-not-allowed opacity-80'
+                          : activeEgg.crackProgress >= 1
                           ? 'bg-gradient-to-r from-orange-700 via-red-600 to-orange-800 text-white border-orange-400'
                           : starBalance < crackCostInStars
                           ? 'bg-stone-800 text-stone-500 border-stone-700 cursor-not-allowed opacity-60'
                           : 'bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 hover:from-amber-600 hover:to-amber-700 text-amber-50 border-amber-500/60'
                       )}
                     >
-                      <Gavel className="w-4 h-4" />
-                      <span>
-                        {activeEgg.crackProgress >= 1
-                          ? 'READY TO HATCH! (+25%)'
-                          : `STRIKE & CRACK (+25% • ${crackCostInStars} ⭐)`}
-                      </span>
+                      {isHatching ? (
+                        <>
+                          <Lock className="w-4 h-4 text-amber-500" />
+                          <span>{`HATCHING IN PROGRESS (${formatHatchTime(activeEgg.remainingSeconds ?? 0)} LEFT)`}</span>
+                        </>
+                      ) : activeEgg.crackProgress >= 1 ? (
+                        <>
+                          <Sparkles className="w-4 h-4" />
+                          <span>READY TO HATCH! (+25%)</span>
+                        </>
+                      ) : (
+                        <>
+                          <Gavel className="w-4 h-4" />
+                          <span>{`STRIKE & CRACK (+25% • ${crackCostInStars} ⭐)`}</span>
+                        </>
+                      )}
                     </button>
 
                     <button
@@ -623,42 +672,61 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
           {/* Egg Queue List */}
           <div className="lg:col-span-4 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-6 space-y-4 shadow-sm">
             <h4 className="font-extrabold text-stone-900 dark:text-stone-100 text-sm uppercase tracking-wider">
-              Incubator Queue ({currentEggs.length})
+              {`Incubator Queue (${currentEggs.length})`}
             </h4>
-            <div className="space-y-3">
-              {currentEggs.map((egg, idx) => (
-                <div
-                  key={egg.id}
-                  onClick={() => setSelectedEggIndex(idx)}
-                  className={cn(
-                    'p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between',
-                    selectedEggIndex === idx
-                      ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 shadow-md'
-                      : 'border-stone-200 dark:border-stone-800 hover:border-stone-300'
-                  )}
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5">
-                      <div className="font-bold text-sm text-stone-900 dark:text-white">
-                        {egg.name}
+            {currentEggs.length === 0 ? (
+              <div className="p-6 rounded-2xl border border-dashed border-stone-200 dark:border-stone-800 text-center space-y-1">
+                <div className="text-2xl">🥚</div>
+                <div className="text-xs font-bold text-stone-500">Queue is empty</div>
+                <div className="text-[11px] text-stone-400">Adopt eggs in the shop to start incubating.</div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {currentEggs.map((egg, idx) => (
+                  <div
+                    key={egg.id}
+                    onClick={() => setSelectedEggIndex(idx)}
+                    className={cn(
+                      'p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between',
+                      selectedEggIndex === idx
+                        ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 shadow-md'
+                        : 'border-stone-200 dark:border-stone-800 hover:border-stone-300'
+                    )}
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5">
+                        <div className="font-bold text-sm text-stone-900 dark:text-white">
+                          {egg.name}
+                        </div>
+                        {egg.isEquipped && (
+                          <span title="Equipped">
+                            <Crown className="w-3.5 h-3.5 text-amber-500" />
+                          </span>
+                        )}
                       </div>
-                      {egg.isEquipped && (
-                        <span title="Equipped">
-                          <Crown className="w-3.5 h-3.5 text-amber-500" />
-                        </span>
+                      <div className="text-xs text-stone-500">
+                        Hatches into: {egg.hatchedPetName}
+                      </div>
+                      {(egg.remainingSeconds ?? 0) > 0 ? (
+                        <div className="text-[11px] font-extrabold text-amber-500 flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5" />
+                          <span>{`${formatHatchTime(egg.remainingSeconds ?? 0)} left`}</span>
+                        </div>
+                      ) : (
+                        <div className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Ready to Crack & Hatch!</span>
+                        </div>
                       )}
+                      <div className="text-[11px] font-bold text-stone-400">
+                        {Math.round(egg.crackProgress * 100)}% Fissure Progress
+                      </div>
                     </div>
-                    <div className="text-xs text-stone-500">
-                      Hatches into: {egg.hatchedPetName}
-                    </div>
-                    <div className="text-[11px] font-extrabold text-amber-600">
-                      {Math.round(egg.crackProgress * 100)}% Hatched
-                    </div>
+                    <ChevronRight className="w-4 h-4 text-stone-400" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-stone-400" />
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
