@@ -28,7 +28,10 @@ export interface ExamIntegrityStudentEggShopTemplateProps {
   incubatingEggs?: IncubatingEgg[];
   pets?: StudentPet[];
   onPurchaseEgg?: (item: EggShopItem) => void;
-  onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
+  onEggHatched?: (
+    eggId: string,
+    hatchedPet?: StudentPet
+  ) => Promise<StudentPet | void> | StudentPet | void;
   onGrowPet?: (petId: string, starsSpent: number) => void;
   onStrikeCrack?: (eggId: string, starsSpent: number) => void;
   crackCostInStars?: number;

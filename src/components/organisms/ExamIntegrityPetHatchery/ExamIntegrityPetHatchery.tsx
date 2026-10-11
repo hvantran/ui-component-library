@@ -70,7 +70,10 @@ export interface ExamIntegrityPetHatcheryProps {
   pets?: StudentPet[];
   defaultTab?: 'incubator' | 'pets';
   onGrowPet?: (petId: string, starsSpent: number) => void;
-  onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
+  onEggHatched?: (
+    eggId: string,
+    hatchedPet?: StudentPet
+  ) => Promise<StudentPet | void> | StudentPet | void;
   onStrikeCrack?: (eggId: string, starsSpent: number) => void;
   onEquipEgg?: (eggId: string, starCost: number) => void;
   onEquipPet?: (petId: string) => void;
@@ -175,6 +178,13 @@ export function formatHatchTime(totalSeconds: number): string {
   return `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
 }
 
+export function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined {
+  if (imageName && PET_IMAGE_MAP[imageName]) {
+    return PET_IMAGE_MAP[imageName];
+  }
+  return imageUrl;
+}
+
 export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> = ({
   starBalance = 450,
   crackCostInStars = 25,
@@ -276,7 +286,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   const activeEgg = currentEggs[selectedEggIndex];
   const isHatching = Boolean(activeEgg && (activeEgg.remainingSeconds ?? 0) > 0);
 
-  const handleStrikeCrack = (amount: number = 0.25) => {
+  const handleStrikeCrack = async (amount: number = 0.25) => {
     if (!activeEgg) return;
     if (isHatching) return;
     if (activeEgg.crackProgress < 1.0 && starBalance < crackCostInStars) return;
@@ -301,6 +311,26 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     }
 
     if (newProgress >= 1.0) {
+      const finishHatching = (petToCelebrate: StudentPet) => {
+        setHatchedCelebration(petToCelebrate);
+        setCurrentPets((prev) => [
+          petToCelebrate,
+          ...prev.filter((p) => p.id !== petToCelebrate.id),
+        ]);
+      };
+
+      if (onEggHatched) {
+        try {
+          const result = await Promise.resolve(onEggHatched(activeEgg.id));
+          if (result && result.name) {
+            finishHatching(result);
+            return;
+          }
+        } catch {
+          // fallback to client-side roll if server hatch fails
+        }
+      }
+
       let newPet: StudentPet;
       const eggName = (activeEgg.name || '').toLowerCase();
       const petName = (activeEgg.hatchedPetName || '').toLowerCase();
@@ -374,11 +404,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
           isEquipped: false,
         };
       }
-      setHatchedCelebration(newPet);
-      setCurrentPets((prev) => [newPet, ...prev]);
-      if (onEggHatched) {
-        onEggHatched(activeEgg.id, newPet);
-      }
+      finishHatching(newPet);
     }
   };
 
@@ -1175,15 +1201,21 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-stone-900 border-2 border-amber-400 shadow-2xl p-6 text-center space-y-4">
             <div className="w-32 h-32 mx-auto rounded-3xl bg-gradient-to-b from-[#1c0e07] to-stone-950 flex items-center justify-center border-2 border-amber-400 overflow-hidden shadow-2xl animate-bounce">
-              {hatchedCelebration.imageUrl ? (
-                <img
-                  src={hatchedCelebration.imageUrl}
-                  alt={hatchedCelebration.name}
-                  className="w-full h-full object-contain p-2"
-                />
-              ) : (
-                <span className="text-6xl">{hatchedCelebration.avatarEmoji}</span>
-              )}
+              {(() => {
+                const celebrationImg = resolvePetImageUrl(
+                  hatchedCelebration.imageName,
+                  hatchedCelebration.imageUrl
+                );
+                return celebrationImg ? (
+                  <img
+                    src={celebrationImg}
+                    alt={hatchedCelebration.name}
+                    className="w-full h-full object-contain p-2"
+                  />
+                ) : (
+                  <span className="text-6xl">{hatchedCelebration.avatarEmoji}</span>
+                );
+              })()}
             </div>
             <div className="space-y-1">
               <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-amber-100 text-amber-800 border border-amber-300">
