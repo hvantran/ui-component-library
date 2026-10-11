@@ -1,6 +1,6 @@
 import { default as React } from '../../../../node_modules/react';
 import { AnswerPart, QuestionOption, QuestionPart, QuestionType } from '../../../types/examIntegrity';
-export declare function parseComparison(prompt: string): {
+export declare function parseComparison(prompt: string, _contextText?: string): {
     left: string;
     right: string;
 } | null;
