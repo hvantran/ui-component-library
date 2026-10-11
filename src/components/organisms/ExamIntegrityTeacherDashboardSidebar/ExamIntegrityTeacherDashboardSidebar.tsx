@@ -8,7 +8,6 @@ import {
   BarChart2,
   Settings,
   LogOut,
-  PlusCircle,
   Pin,
   PanelLeftClose,
   ChevronRight,
@@ -53,7 +52,6 @@ export const ExamIntegrityTeacherDashboardSidebar: React.FC<
   userName,
   userRole,
   onNavigate,
-  onCreateExam,
   onSettings,
   onLogout,
   className,
@@ -132,27 +130,6 @@ export const ExamIntegrityTeacherDashboardSidebar: React.FC<
             </div>
           )}
         </div>
-
-        {/* Create Exam CTA (if handler provided) */}
-        {onCreateExam && (
-          <div className={cn('mb-4', isDocked && !isAutoHide ? 'w-full px-1' : 'px-4')}>
-            <Button
-              variant="primary"
-              size="sm"
-              textJustify={isExpanded ? 'left' : 'center'}
-              className={cn(
-                'w-full flex items-center',
-                isDocked && !isAutoHide ? 'justify-center p-2' : 'justify-center gap-2'
-              )}
-              onClick={onCreateExam}
-              title="Create Exam"
-              aria-label="Create Exam"
-              icon={<PlusCircle size={16} />}
-            >
-              {isExpanded && <span>Create Exam</span>}
-            </Button>
-          </div>
-        )}
 
         {/* Navigation items */}
         <div className={cn('flex-1 flex flex-col gap-1', isDocked && !isAutoHide ? 'w-full' : 'mr-2')}>
