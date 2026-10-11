@@ -25,4 +25,5 @@ export * from './ExamIntegrityQuestionPanel';
 export * from './ExamIntegrityResultsCelebration';
 export * from './ExamIntegrityQuestionDisplay';
 export * from './ExamIntegrityQuestionPickerModal';
+export * from './ExamIntegrityTeacherSettings';
 

@@ -43,6 +43,7 @@ const navItems: { section: ExamIntegrityDashboardSection; icon: React.ReactNode;
   { section: 'scoring', icon: <CheckSquare size={18} />, label: 'Scoring' },
   { section: 'question-bank', icon: <BookOpen size={18} />, label: 'Question Bank' },
   { section: 'reports', icon: <BarChart2 size={18} />, label: 'Reports' },
+  { section: 'settings', icon: <Settings size={18} />, label: 'Settings' },
 ];
 
 export const ExamIntegrityTeacherDashboardSidebar: React.FC<
