@@ -24,7 +24,7 @@ export interface ExamIntegrityPetHatcheryProps {
     pets?: StudentPet[];
     defaultTab?: 'incubator' | 'pets';
     onGrowPet?: (petId: string, starsSpent: number) => void;
-    onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
+    onEggHatched?: (eggId: string, hatchedPet?: StudentPet) => Promise<StudentPet | void> | StudentPet | void;
     onStrikeCrack?: (eggId: string, starsSpent: number) => void;
     onEquipEgg?: (eggId: string, starCost: number) => void;
     onEquipPet?: (petId: string) => void;
@@ -33,4 +33,5 @@ export interface ExamIntegrityPetHatcheryProps {
 export declare const DEFAULT_INCUBATING_EGGS: IncubatingEgg[];
 export declare const DEFAULT_STUDENT_PETS: StudentPet[];
 export declare function formatHatchTime(totalSeconds: number): string;
+export declare function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined;
 export declare const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps>;
