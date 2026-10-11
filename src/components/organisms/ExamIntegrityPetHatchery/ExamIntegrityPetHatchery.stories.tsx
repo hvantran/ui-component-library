@@ -265,4 +265,22 @@ export const MythicAegisPaladinAll8Stages: Story = {
   },
 };
 
+export const MaxLevelCompanionPet: Story = {
+  args: {
+    starBalance: 3500,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: [
+      {
+        ...createFirePhoenixPet(10, true),
+        level: 10,
+        maxLevel: 10,
+        currentExp: 500,
+        expNeeded: 500,
+      },
+    ],
+  },
+};
+
+
 

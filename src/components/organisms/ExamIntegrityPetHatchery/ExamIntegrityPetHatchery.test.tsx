@@ -320,6 +320,44 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Incubator Queue (0)');
     expect(html).toContain('Queue is empty');
   });
+
+  it('disables Grow button and displays MAX LEVEL when pet reaches maxLevel', () => {
+    const maxLevelPet = {
+      ...createFirePhoenixPet(10, true),
+      level: 10,
+      maxLevel: 10,
+      currentExp: 500,
+      expNeeded: 500,
+    };
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={5000}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[maxLevelPet]}
+      />
+    );
+
+    expect(html).toContain('MAX LEVEL');
+    expect(html).toContain('data-testid="grow-pet-btn-');
+    expect(html).toContain('Max Level');
+    expect(html).not.toContain('Grow (25 ⭐)');
+  });
+
+  it('includes floating and ambient glow animation classes on pet card image', () => {
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={1000}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[createSproutlingPet(1, false)]}
+      />
+    );
+
+    expect(html).toContain('animate-pet-float');
+    expect(html).toContain('animate-pet-glow');
+  });
 });
+
 
 

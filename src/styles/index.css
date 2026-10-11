@@ -24,3 +24,84 @@
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pet-float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+
+@keyframes pet-float-slow {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.03);
+  }
+}
+
+@keyframes pet-wobble {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-5deg) scale(1.08);
+  }
+  75% {
+    transform: rotate(5deg) scale(1.08);
+  }
+}
+
+@keyframes pet-glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 10px 20px rgba(245, 158, 11, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 16px 28px rgba(245, 158, 11, 0.6));
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pet-float {
+  animation: pet-float 3.2s ease-in-out infinite;
+}
+
+.animate-pet-float-slow {
+  animation: pet-float-slow 4.2s ease-in-out infinite;
+}
+
+.animate-pet-wobble {
+  animation: pet-wobble 0.5s ease-in-out;
+}
+
+.animate-pet-glow {
+  animation: pet-glow-pulse 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn,
+  .animate-pet-float,
+  .animate-pet-float-slow,
+  .animate-pet-wobble,
+  .animate-pet-glow {
+    animation: none !important;
+  }
+}
+
+
