@@ -150,30 +150,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
 ];
 
 export const DEFAULT_STUDENT_PETS: StudentPet[] = [
-  createFirePhoenixPet(1, true),
-  {
-    id: 'pet-1',
-    name: 'Emberwing',
-    species: 'Pyroling Dragon',
-    rarity: 'Legendary',
-    tier: 'dragon',
-    element: 'Fire / Flame',
-    level: 3,
-    maxLevel: 10,
-    currentExp: 140,
-    expNeeded: 250,
-    growthCostInStars: 50,
-    isEquipped: false,
-    stageLevel: 2,
-    stageName: 'Adolescent',
-    stats: {
-      vitality: 78,
-      wisdom: 64,
-      integrityBond: 92,
-      solarRadiance: 50,
-    },
-    avatarEmoji: '🐲',
-  },
+  createFirePhoenixPet(1, true)
 ];
 
 function getEggCrackStatusText(progress: number, isHatched: boolean): string {
