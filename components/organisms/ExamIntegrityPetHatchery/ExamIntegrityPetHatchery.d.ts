@@ -19,11 +19,13 @@ export interface IncubatingEgg {
 }
 export interface ExamIntegrityPetHatcheryProps {
     starBalance?: number;
+    crackCostInStars?: number;
     incubatingEggs?: IncubatingEgg[];
     pets?: StudentPet[];
-    defaultTab?: 'incubator' | 'pets' | 'codex';
+    defaultTab?: 'incubator' | 'pets';
     onGrowPet?: (petId: string, starsSpent: number) => void;
     onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
+    onStrikeCrack?: (eggId: string, starsSpent: number) => void;
     onEquipEgg?: (eggId: string, starCost: number) => void;
     onEquipPet?: (petId: string) => void;
     className?: string;

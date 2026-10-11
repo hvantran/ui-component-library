@@ -18,6 +18,8 @@ export interface ExamIntegrityStudentEggShopTemplateProps {
     onPurchaseEgg?: (item: EggShopItem) => void;
     onEggHatched?: (eggId: string, hatchedPet: StudentPet) => void;
     onGrowPet?: (petId: string, starsSpent: number) => void;
+    onStrikeCrack?: (eggId: string, starsSpent: number) => void;
+    crackCostInStars?: number;
     onNavigate?: (section: StudentPortalSection) => void;
     onLogout?: () => void;
     dockMode?: ExamIntegrityNavDockMode;

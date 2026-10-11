@@ -4,6 +4,8 @@ export * from './WizardCreationTemplate';
 export * from './DashboardTemplate';
 export * from './ErrorPageTemplate';
 export * from './ExamIntegrityStudentEggShopTemplate';
+export * from './ExamIntegrityStudentShopTemplate';
+export * from './ExamIntegrityStudentCollectionTemplate';
 export * from './ExamIntegrityStudentExamFooterTemplate';
 export * from './ExamIntegrityStudentExamTemplate';
 export * from './ExamIntegrityStudentLandingTemplate';
