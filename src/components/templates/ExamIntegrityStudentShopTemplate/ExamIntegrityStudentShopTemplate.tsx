@@ -18,6 +18,7 @@ export interface ExamIntegrityStudentShopTemplateProps {
   pageSubtitle?: string;
   items?: EggShopItem[];
   categories?: EggShopCategory[];
+  dropRates?: Record<string, number>;
   onPurchaseEgg?: (item: EggShopItem) => void;
   onNavigate?: (section: StudentPortalSection) => void;
   onLogout?: () => void;
@@ -35,6 +36,7 @@ export const ExamIntegrityStudentShopTemplate: React.FC<
   pageSubtitle = '',
   items,
   categories,
+  dropRates,
   onPurchaseEgg,
   onNavigate,
   onLogout,
@@ -59,6 +61,7 @@ export const ExamIntegrityStudentShopTemplate: React.FC<
         starBalance={starCount}
         items={items}
         categories={categories}
+        dropRates={dropRates}
         onPurchaseEgg={onPurchaseEgg}
       />
     </ExamIntegrityStudentLandingTemplate>

@@ -32,6 +32,12 @@ describe('ExamIntegrityTeacherSettings', () => {
 
     expect(html).toContain('System &amp; Gameplay Settings');
     expect(html).toContain('Egg Shop &amp; Incubation Chamber');
+    expect(html).toContain('Egg Rarity Drop Rates (% Chance)');
+    expect(html).toContain('Common (%)');
+    expect(html).toContain('Rare (%)');
+    expect(html).toContain('Epic (%)');
+    expect(html).toContain('Legendary (%)');
+    expect(html).toContain('Mythic (%)');
     expect(html).toContain('Companion Pet Growth &amp; Progression');
     expect(html).toContain('Star Rewards &amp; Gamification Economy');
     expect(html).toContain('Egg Shop Price (Stars)');
