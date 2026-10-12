@@ -8,6 +8,7 @@ export interface QuestionOption {
   key?: string;
   label?: string;
   text: string;
+  imageBase64?: string;
 }
 
 export interface QuestionPart {

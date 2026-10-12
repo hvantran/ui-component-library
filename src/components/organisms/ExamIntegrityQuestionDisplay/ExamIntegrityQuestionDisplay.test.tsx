@@ -46,5 +46,28 @@ describe('ExamIntegrityQuestionDisplay organism', () => {
 
     expect(html).toContain('animate-pulse');
   });
+
+  it('renders MCQ option image when option contains base64 image data', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionDisplay
+        index={1}
+        question={{
+          id: 'q-2',
+          questionNumber: 2,
+          content: 'Choose the matching symbol',
+          type: 'MCQ',
+          points: 1,
+          options: ['Circle data:image/png;base64,circleData', 'Square'],
+          correctAnswer: 'A',
+          parserConfidence: 0.99,
+          truncated: false,
+        }}
+      />,
+    );
+
+    expect(html).toContain('Circle');
+    expect(html).toContain('src="data:image/png;base64,circleData"');
+    expect(html).toContain('alt="Option A"');
+  });
 });
 
