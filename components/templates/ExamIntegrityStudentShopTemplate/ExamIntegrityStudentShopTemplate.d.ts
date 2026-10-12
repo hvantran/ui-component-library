@@ -10,6 +10,7 @@ export interface ExamIntegrityStudentShopTemplateProps {
     pageSubtitle?: string;
     items?: EggShopItem[];
     categories?: EggShopCategory[];
+    dropRates?: Record<string, number>;
     onPurchaseEgg?: (item: EggShopItem) => void;
     onNavigate?: (section: StudentPortalSection) => void;
     onLogout?: () => void;

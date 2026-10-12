@@ -13,6 +13,7 @@ export interface EggShopItem {
     petTypeIcon?: React.ReactNode;
     totalStages?: number;
     hatchDurationHours?: number;
+    dropRates?: Record<string, number>;
 }
 export interface EggShopCategory {
     id: string;
@@ -25,12 +26,15 @@ export interface ExamIntegrityEggShopProps {
     starBalance?: number;
     items?: EggShopItem[];
     categories?: EggShopCategory[];
+    dropRates?: Record<string, number>;
     onPurchaseEgg?: (item: EggShopItem) => void;
     onOpenHatchery?: () => void;
     className?: string;
 }
 export declare const DEFAULT_MYSTERY_EGG: EggShopItem;
+export declare const createMysteryEggItem: (overrides?: Partial<EggShopItem>) => EggShopItem;
 export declare const DEFAULT_SHOP_EGGS: EggShopItem[];
+export declare const DEFAULT_DROP_RATES: Record<string, number>;
 export declare const RARITY_DROP_RATES_SHOP: ({
     rarity: "Common";
     percent: number;
