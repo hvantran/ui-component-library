@@ -158,6 +158,48 @@ describe('ExamIntegrityQuestionPanel organism', () => {
     expect(html).toContain('Final Answer');
     expect(html).toContain('flex-1 min-w-0 max-w-full');
   });
+
+  it('renders MCQ choice option image in standard view', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionPanel
+        questionNumber={6}
+        questionText="Which animal is shown below?"
+        questionType="MCQ"
+        options={[
+          { key: 'A', text: 'Cat', imageBase64: 'data:image/png;base64,sampleCatBase64' },
+          { key: 'B', text: 'Dog' },
+        ]}
+        selectedAnswer=""
+        onAnswerChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data:image/png;base64,sampleCatBase64');
+    expect(html).toContain('alt="Option A"');
+    expect(html).toContain('Cat');
+    expect(html).toContain('Dog');
+  });
+
+  it('renders MCQ choice option image in elementary view', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionPanel
+        questionNumber={7}
+        gradeLevel="Grade 2"
+        questionText="Chọn hình đúng"
+        questionType="MCQ"
+        options={[
+          { key: 'A', text: 'Hình tròn', imageBase64: 'data:image/png;base64,circleImage' },
+          { key: 'B', text: 'Hình vuông' },
+        ]}
+        selectedAnswer="A"
+        onAnswerChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data:image/png;base64,circleImage');
+    expect(html).toContain('alt="Option A"');
+    expect(html).toContain('Hình tròn');
+  });
 });
 
 

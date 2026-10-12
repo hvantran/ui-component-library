@@ -59,6 +59,21 @@ function McqQuestion({
             q.correctAnswer === label ||
             q.correctAnswer === opt ||
             (q.correctAnswer ?? '').toUpperCase().startsWith(label);
+
+          const isDataImage = opt.startsWith('data:image/');
+          const hasImageDelimiter = opt.includes('data:image/');
+          let displayText = opt;
+          let imageSrc: string | null = null;
+
+          if (isDataImage) {
+            displayText = '';
+            imageSrc = opt;
+          } else if (hasImageDelimiter) {
+            const imgIdx = opt.indexOf('data:image/');
+            displayText = opt.substring(0, imgIdx).trim();
+            imageSrc = opt.substring(imgIdx).trim();
+          }
+
           return (
             <div
               key={i}
@@ -78,9 +93,22 @@ function McqQuestion({
               >
                 <span className="text-[0.72rem] font-bold">{label}</span>
               </div>
-              <span className="text-[0.9rem] leading-relaxed pt-0.5">
-                {renderWithBlanks(opt)}
-              </span>
+              <div className="flex-1 flex flex-col gap-1.5 pt-0.5">
+                {displayText ? (
+                  <span className="text-[0.9rem] leading-relaxed">
+                    {renderWithBlanks(displayText)}
+                  </span>
+                ) : null}
+                {imageSrc ? (
+                  <div className="rounded border border-slate-200 overflow-hidden bg-white max-h-36 max-w-xs flex items-center justify-center p-1">
+                    <img
+                      src={imageSrc}
+                      alt={`Option ${label}`}
+                      className="max-h-32 object-contain"
+                    />
+                  </div>
+                ) : null}
+              </div>
             </div>
           );
         })}

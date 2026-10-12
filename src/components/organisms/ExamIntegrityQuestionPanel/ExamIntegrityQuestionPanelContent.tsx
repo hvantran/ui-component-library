@@ -249,7 +249,7 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
 
       {isMcq && options ? (
         (() => {
-          const visibleOptions = options.filter((opt) => opt.text.trim() !== '');
+          const visibleOptions = options.filter((opt) => opt.text.trim() !== '' || Boolean(opt.imageBase64));
           const gridCols =
             visibleOptions.length === 3
               ? 'grid-cols-3'
@@ -272,24 +272,44 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
                       key={optKey}
                       disabled={disabled}
                       onClick={() => onAnswerChange(optKey)}
-                      className={`flex items-center gap-4 p-4 rounded-2xl border-2 text-left transition-all duration-150 min-h-[64px] select-none ${
+                      className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4 p-4 rounded-2xl border-2 text-left transition-all duration-150 min-h-[64px] select-none ${
                         isSelected
                           ? 'border-emerald-500 bg-emerald-50 text-emerald-950 shadow-[0_4px_0_#059669] ring-2 ring-emerald-200 -translate-y-0.5'
                           : 'border-amber-200/90 bg-white hover:border-amber-400 hover:bg-amber-50/50 shadow-[0_4px_0_#e2e8f0] active:translate-y-1 active:shadow-none'
                       } ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
                     >
-                      <div
-                        className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-base flex-shrink-0 shadow-sm ${
-                          isSelected
-                            ? 'bg-emerald-600 text-white border-emerald-700'
-                            : `${badge.bg} ${badge.text} ${badge.border}`
-                        }`}
-                      >
-                        {isSelected ? '✓' : optKey}
+                      <div className="flex items-center gap-3 w-full sm:w-auto">
+                        <div
+                          className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-base flex-shrink-0 shadow-sm ${
+                            isSelected
+                              ? 'bg-emerald-600 text-white border-emerald-700'
+                              : `${badge.bg} ${badge.text} ${badge.border}`
+                          }`}
+                        >
+                          {isSelected ? '✓' : optKey}
+                        </div>
+                        {opt.text && (
+                          <span className="text-base font-semibold leading-relaxed text-slate-900 flex-1 sm:hidden">
+                            {opt.text}
+                          </span>
+                        )}
                       </div>
-                      <span className="text-base font-semibold leading-relaxed text-slate-900 flex-1">
-                        {opt.text}
-                      </span>
+                      <div className="flex-1 flex flex-col gap-2 w-full">
+                        {opt.text && (
+                          <span className="text-base font-semibold leading-relaxed text-slate-900 hidden sm:inline">
+                            {opt.text}
+                          </span>
+                        )}
+                        {opt.imageBase64 && (
+                          <div className="rounded-xl overflow-hidden bg-slate-50 border border-slate-200 max-h-40 flex items-center justify-center p-1">
+                            <img
+                              src={opt.imageBase64}
+                              alt={`Option ${optKey}`}
+                              className="max-h-36 max-w-full object-contain rounded-lg"
+                            />
+                          </div>
+                        )}
+                      </div>
                     </button>
                   );
                 }
@@ -312,9 +332,20 @@ export const ExamIntegrityQuestionPanelContent: React.FC<
                       onChange={() => onAnswerChange(optKey)}
                       className="mt-1 accent-sky-600 flex-shrink-0"
                     />
-                    <span className="text-sm leading-6 text-slate-900">
-                      <strong>{optKey}.</strong>&nbsp;{opt.text}
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm leading-6 text-slate-900 block">
+                        <strong>{optKey}.</strong>{opt.text ? <>&nbsp;{opt.text}</> : null}
+                      </span>
+                      {opt.imageBase64 && (
+                        <div className="mt-2 rounded-lg overflow-hidden bg-slate-50 border border-slate-200 max-h-40 flex items-center justify-center p-1">
+                          <img
+                            src={opt.imageBase64}
+                            alt={`Option ${optKey}`}
+                            className="max-h-36 max-w-full object-contain rounded"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </label>
                 );
               })}

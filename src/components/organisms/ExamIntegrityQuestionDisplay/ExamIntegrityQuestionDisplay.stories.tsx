@@ -68,3 +68,25 @@ export const EssayWithRubric: Story = {
   },
 };
 
+export const MultipleChoiceWithOptionsImages: Story = {
+  args: {
+    index: 3,
+    question: {
+      id: 'q-4',
+      questionNumber: 4,
+      content: 'Chọn biển báo chỉ dẫn hướng đi bắt buộc:',
+      type: 'MCQ',
+      points: 1,
+      options: [
+        'Biển 1 data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="%232563eb"/><path d="M25 40h30M45 30l10 10-10 10" stroke="%23ffffff" stroke-width="6" fill="none"/></svg>',
+        'Biển 2 data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="35" fill="%23dc2626"/><path d="M25 25l30 30M55 25l-30 30" stroke="%23ffffff" stroke-width="6"/></svg>',
+      ],
+      correctAnswer: 'A',
+      parserConfidence: 0.99,
+      truncated: false,
+    },
+    questionScore: 1,
+    selectedCorrectAnswer: 'A',
+  },
+};
+

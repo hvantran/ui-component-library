@@ -97,3 +97,52 @@ export const Grade1MultiPartMathQuestion: Story = {
   },
 };
 
+const SAMPLE_GEOMETRY_CIRCLE =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="%2338bdf8" stroke="%230284c7" stroke-width="4"/></svg>';
+
+const SAMPLE_GEOMETRY_SQUARE =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect x="15" y="15" width="90" height="90" fill="%23f472b6" stroke="%23db2777" stroke-width="4" rx="8"/></svg>';
+
+const SAMPLE_GEOMETRY_TRIANGLE =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><polygon points="60,15 105,105 15,105" fill="%23facc15" stroke="%23ca8a04" stroke-width="4"/></svg>';
+
+const SAMPLE_GEOMETRY_STAR =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><polygon points="60,10 75,45 112,48 83,72 92,108 60,88 28,108 37,72 8,48 45,45" fill="%234ade80" stroke="%2316a34a" stroke-width="3"/></svg>';
+
+export const MultipleChoiceWithOptionsImagesStandard: Story = {
+  args: {
+    questionNumber: 4,
+    subject: 'Geometry',
+    gradeLevel: 'Grade 7',
+    questionText: 'Which shape represents a regular hexagon with equal sides and angles?',
+    questionType: 'MCQ',
+    options: [
+      { key: 'A', text: 'Circle', imageBase64: SAMPLE_GEOMETRY_CIRCLE },
+      { key: 'B', text: 'Square', imageBase64: SAMPLE_GEOMETRY_SQUARE },
+      { key: 'C', text: 'Triangle', imageBase64: SAMPLE_GEOMETRY_TRIANGLE },
+      { key: 'D', text: 'Star polygon', imageBase64: SAMPLE_GEOMETRY_STAR },
+    ],
+    selectedAnswer: 'B',
+    onAnswerChange: () => {},
+    onFlag: () => {},
+  },
+};
+
+export const MultipleChoiceWithOptionsImagesElementary: Story = {
+  args: {
+    questionNumber: 3,
+    subject: 'Toán',
+    gradeLevel: 'Grade 2',
+    questionText: 'Hình nào dưới đây là hình tròn?',
+    questionType: 'MCQ',
+    options: [
+      { key: 'A', text: 'Hình tròn', imageBase64: SAMPLE_GEOMETRY_CIRCLE },
+      { key: 'B', text: 'Hình vuông', imageBase64: SAMPLE_GEOMETRY_SQUARE },
+      { key: 'C', text: 'Hình tam giác', imageBase64: SAMPLE_GEOMETRY_TRIANGLE },
+    ],
+    selectedAnswer: 'A',
+    onAnswerChange: () => {},
+    onFlag: () => {},
+  },
+};
+
