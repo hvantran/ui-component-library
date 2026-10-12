@@ -14,6 +14,11 @@ import { cn } from '../../../utils/cn';
 export interface SystemSettingsData {
   egg_shop_price_stars?: number;
   egg_hatch_duration_hours?: number;
+  egg_drop_rate_common?: number;
+  egg_drop_rate_rare?: number;
+  egg_drop_rate_epic?: number;
+  egg_drop_rate_legendary?: number;
+  egg_drop_rate_mythic?: number;
   strike_crack_star_cost?: number;
   equip_egg_star_cost?: number;
   pet_grow_star_cost?: number;
@@ -143,6 +148,73 @@ export const ExamIntegrityTeacherSettings: React.FC<ExamIntegrityTeacherSettings
               helperText="Stars to equip an incubating egg companion."
               required
             />
+            <div className="col-span-full pt-3 border-t border-gray-100 dark:border-gray-700">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+                Egg Rarity Drop Rates (% Chance)
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <Input
+                  label="Common (%)"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={settings.egg_drop_rate_common ?? 50}
+                  onChange={(e) =>
+                    onSettingsChange('egg_drop_rate_common', Number(e.target.value))
+                  }
+                  helperText="Default: 50%"
+                  required
+                />
+                <Input
+                  label="Rare (%)"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={settings.egg_drop_rate_rare ?? 28}
+                  onChange={(e) =>
+                    onSettingsChange('egg_drop_rate_rare', Number(e.target.value))
+                  }
+                  helperText="Default: 28%"
+                  required
+                />
+                <Input
+                  label="Epic (%)"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={settings.egg_drop_rate_epic ?? 14}
+                  onChange={(e) =>
+                    onSettingsChange('egg_drop_rate_epic', Number(e.target.value))
+                  }
+                  helperText="Default: 14%"
+                  required
+                />
+                <Input
+                  label="Legendary (%)"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={settings.egg_drop_rate_legendary ?? 6}
+                  onChange={(e) =>
+                    onSettingsChange('egg_drop_rate_legendary', Number(e.target.value))
+                  }
+                  helperText="Default: 6%"
+                  required
+                />
+                <Input
+                  label="Mythic (%)"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={settings.egg_drop_rate_mythic ?? 2}
+                  onChange={(e) =>
+                    onSettingsChange('egg_drop_rate_mythic', Number(e.target.value))
+                  }
+                  helperText="Default: 2%"
+                  required
+                />
+              </div>
+            </div>
           </div>
         </div>
 

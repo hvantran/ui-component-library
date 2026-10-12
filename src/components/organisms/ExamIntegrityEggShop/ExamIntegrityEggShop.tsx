@@ -23,6 +23,7 @@ export interface EggShopItem {
   petTypeIcon?: React.ReactNode;
   totalStages?: number;
   hatchDurationHours?: number;
+  dropRates?: Record<string, number>;
 }
 
 export interface EggShopCategory {
@@ -37,6 +38,7 @@ export interface ExamIntegrityEggShopProps {
   starBalance?: number;
   items?: EggShopItem[];
   categories?: EggShopCategory[];
+  dropRates?: Record<string, number>;
   onPurchaseEgg?: (item: EggShopItem) => void;
   onOpenHatchery?: () => void;
   className?: string;
@@ -56,7 +58,20 @@ export const DEFAULT_MYSTERY_EGG: EggShopItem = {
   hatchDurationHours: 8,
 };
 
+export const createMysteryEggItem = (overrides?: Partial<EggShopItem>): EggShopItem => ({
+  ...DEFAULT_MYSTERY_EGG,
+  ...overrides,
+});
+
 export const DEFAULT_SHOP_EGGS: EggShopItem[] = [DEFAULT_MYSTERY_EGG];
+
+export const DEFAULT_DROP_RATES: Record<string, number> = {
+  Common: 50,
+  Rare: 28,
+  Epic: 14,
+  Legendary: 6,
+  Mythic: 2,
+};
 
 export const RARITY_DROP_RATES_SHOP = [
   {
@@ -100,6 +115,7 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
   starBalance = 650,
   items = DEFAULT_SHOP_EGGS,
   categories,
+  dropRates: customDropRates,
   onPurchaseEgg,
   onOpenHatchery,
   className,
@@ -107,6 +123,19 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
   const [inspectEgg, setInspectEgg] = useState<EggShopItem | null>(null);
   const [confirmModalItem, setConfirmModalItem] = useState<EggShopItem | null>(null);
   const [purchasedSuccess, setPurchasedSuccess] = useState<EggShopItem | null>(null);
+
+  const getOddsBreakdown = (itemRates?: Record<string, number>) => {
+    const rates: Record<string, number> = {
+      ...DEFAULT_DROP_RATES,
+      ...(customDropRates || {}),
+      ...(itemRates || {}),
+    };
+    return {
+      rates,
+      shortText: `${rates.Common ?? 50}% C / ${rates.Rare ?? 28}% R / ${rates.Epic ?? 14}% E / ${rates.Legendary ?? 6}% L / ${rates.Mythic ?? 2}% M`,
+      longText: `${rates.Common ?? 50}% Common · ${rates.Rare ?? 28}% Rare · ${rates.Epic ?? 14}% Epic · ${rates.Legendary ?? 6}% Legendary · ${rates.Mythic ?? 2}% Mythic`,
+    };
+  };
 
   const resolvedCategories: EggShopCategory[] = React.useMemo(() => {
     if (categories && categories.length > 0) {
@@ -388,7 +417,9 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
                 </div>
                 <div>
                   <div className="text-stone-500">Drop Odds</div>
-                  <div className="font-bold text-stone-800 dark:text-stone-200">50% C / 28% R / 14% E / 6% L / 2% M</div>
+                  <div className="font-bold text-stone-800 dark:text-stone-200">
+                    {getOddsBreakdown(inspectEgg.dropRates).shortText}
+                  </div>
                 </div>
               </div>
 
@@ -428,8 +459,8 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
               Your new star balance will be <strong className="text-amber-600">{starBalance - confirmModalItem.price} Stars</strong>.
             </p>
             <div className="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 text-xs text-stone-600 dark:text-stone-300 space-y-1">
-              <div>⏳ <strong>Incubation time:</strong> 8 hours in Hatchery</div>
-              <div>🎲 <strong>Odds:</strong> 50% Common · 28% Rare · 14% Epic · 6% Legendary · 2% Mythic</div>
+              <div>⏳ <strong>Incubation time:</strong> {confirmModalItem.hatchDurationHours ?? 8} hours in Hatchery</div>
+              <div>🎲 <strong>Odds:</strong> {getOddsBreakdown(confirmModalItem.dropRates).longText}</div>
             </div>
             <div className="flex gap-3 justify-center pt-2">
               <Button variant="secondary" onClick={() => setConfirmModalItem(null)}>
@@ -458,7 +489,7 @@ export const ExamIntegrityEggShop: React.FC<ExamIntegrityEggShopProps> = ({
               Mystery Egg Delivered to Hatchery!
             </h3>
             <p className="text-sm text-stone-600 dark:text-stone-400">
-              Your <strong>{purchasedSuccess.name}</strong> has been transferred to your incubator. It requires <strong>8 hours of incubation</strong>. Head to the Hatchery to start cracking it!
+              Your <strong>{purchasedSuccess.name}</strong> has been transferred to your incubator. It requires <strong>{purchasedSuccess.hatchDurationHours ?? 8} hours of incubation</strong>. Head to the Hatchery to start cracking it!
             </p>
             <div className="flex gap-3 justify-center pt-2">
               <Button variant="secondary" onClick={() => setPurchasedSuccess(null)}>

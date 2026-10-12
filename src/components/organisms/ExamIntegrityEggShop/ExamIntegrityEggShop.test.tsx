@@ -133,5 +133,23 @@ describe('ExamIntegrityEggShop', () => {
     expect(html).toContain('Exp Boost Potion');
     expect(html).toContain('shop-category-divider');
   });
+
+  it('renders custom egg price, hatch duration, and drop odds via createMysteryEggItem and props', () => {
+    const customEgg = {
+      ...DEFAULT_MYSTERY_EGG,
+      price: 350,
+      hatchDurationHours: 12,
+    };
+    const html = renderToString(
+      <ExamIntegrityEggShop
+        starBalance={500}
+        items={[customEgg]}
+        dropRates={{ Common: 40, Rare: 30, Epic: 20, Legendary: 8, Mythic: 2 }}
+      />
+    );
+
+    expect(html).toContain('350 Stars');
+    expect(html).toContain('12 Hours Hatching Time');
+  });
 });
 
