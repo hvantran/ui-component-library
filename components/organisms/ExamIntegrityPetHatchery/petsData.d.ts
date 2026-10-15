@@ -1,4 +1,5 @@
 import { EggTier } from '../../molecules/ThreeEggViewer';
+import { PetSkill } from '../ExamIntegrityPetSkill';
 export interface EvolutionStageInfo {
     stage: number;
     minLevel: number;
@@ -34,8 +35,11 @@ export interface StudentPet {
     stageName: string;
     stageLevel: number;
     evolutionStages?: EvolutionStageInfo[];
+    skills?: PetSkill[];
     isEquipped?: boolean;
 }
+export declare const VOID_SINGULARITY_SKILL: PetSkill;
+export declare const COSMIC_RIFT_BREATH_SKILL: PetSkill;
 export interface PetCodexEntry {
     key: string;
     name: string;
