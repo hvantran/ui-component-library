@@ -15,6 +15,17 @@ import {
   Lock,
   Clock,
   Maximize2,
+  Leaf,
+  Droplets,
+  Wind,
+  Snowflake,
+  Mountain,
+  Moon,
+  Eye,
+  Shield,
+  PawPrint,
+  Bird,
+  Fish,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
@@ -26,6 +37,9 @@ export * from './petsData';
 import {
   type EvolutionStageInfo,
   type StudentPet,
+  getPetElementMetadata,
+  getPetSpeciesTypeMetadata,
+  normalizePetSpeciesType,
   createSproutlingPet,
   createPipflickPet,
   createEmbersqueakPet,
@@ -48,6 +62,35 @@ import {
   PET_IMAGE_MAP,
   enrichStudentPet,
 } from './petsData';
+
+export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Leaf,
+  Droplets,
+  Flame,
+  Wind,
+  Snowflake,
+  Mountain,
+  Zap,
+  Sparkles,
+  Moon,
+  Sun,
+  Eye,
+  Clock,
+  Shield,
+};
+
+export const PET_SPECIES_TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Leaf,
+  Fish,
+  PawPrint,
+  Bird,
+  Sparkles,
+  Flame,
+  Sun,
+  Eye,
+  Clock,
+  Shield,
+};
 
 export interface IncubatingEgg {
   id: string;
@@ -79,6 +122,7 @@ export interface ExamIntegrityPetHatcheryProps {
   onStrikeCrack?: (eggId: string, starsSpent: number) => void;
   onEquipEgg?: (eggId: string, starCost: number) => void;
   onEquipPet?: (petId: string) => void;
+  initialPreviewPet?: StudentPet | null;
   className?: string;
 }
 
@@ -198,6 +242,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   onStrikeCrack,
   onEquipEgg,
   onEquipPet,
+  initialPreviewPet,
   className,
 }) => {
   const [activeTab, setActiveTab] = useState<'incubator' | 'pets'>(
@@ -220,8 +265,24 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     stageName: string;
     imageUrl: string;
     element?: string;
+    elements?: string[];
+    speciesTypes?: string[];
     rarity?: string;
-  } | null>(null);
+    species?: string;
+  } | null>(() => {
+    if (!initialPreviewPet) return null;
+    const enriched = enrichStudentPet(initialPreviewPet);
+    return {
+      name: enriched.name,
+      stageName: enriched.stageName || enriched.name,
+      imageUrl: resolvePetImageUrl(enriched.imageName, enriched.imageUrl) || enriched.imageUrl || '',
+      element: enriched.element,
+      elements: enriched.elements,
+      speciesTypes: enriched.speciesTypes,
+      rarity: enriched.rarity,
+      species: enriched.species,
+    };
+  });
   const [wobblingPetId, setWobblingPetId] = useState<string | null>(null);
   const [isModalPetWobbling, setIsModalPetWobbling] = useState(false);
   const [activePetSkill, setActivePetSkill] = useState<{
@@ -905,24 +966,85 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     </div>
                   )}
 
-                  {/* Level & Equipped Badges on Character Canvas */}
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-md">
-                      Lvl {pet.level}
-                    </span>
-                    {pet.rarity && (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40 backdrop-blur-sm">
-                        {pet.rarity}
+                  {/* Level, Rarity, and Vertical Species Type Badges on Character Canvas */}
+                  <div className="absolute top-3 left-3 flex flex-col items-start gap-2 z-10">
+                    <div className="flex items-center gap-1.5">
+                      <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-md">
+                        Lvl {pet.level}
                       </span>
+                      {pet.rarity && (
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40 backdrop-blur-sm">
+                          {pet.rarity}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Second row under level: Pet Species Types in vertical column */}
+                    {pet.speciesTypes && pet.speciesTypes.length > 0 && (
+                      <div
+                        data-testid={`pet-species-types-vertical-${pet.id}`}
+                        className="flex flex-col items-start gap-1.5 pt-0.5"
+                      >
+                        {pet.speciesTypes.map((st) => {
+                          const meta = getPetSpeciesTypeMetadata(st);
+                          const SpeciesIcon =
+                            PET_SPECIES_TYPE_ICONS[meta.iconName] ||
+                            PET_ELEMENT_ICONS[meta.iconName] ||
+                            PawPrint;
+                          return (
+                            <div
+                              key={st}
+                              data-testid={`pet-species-type-${pet.id}-${st.toLowerCase()}`}
+                              className={cn(
+                                'p-1.5 rounded-full backdrop-blur-md border shadow-md flex items-center justify-center transition-transform hover:scale-110 group-hover:scale-105',
+                                meta.badgeClass
+                              )}
+                              title={`Species Type: ${meta.label}`}
+                              aria-label={`Species Type: ${meta.label}`}
+                            >
+                              <SpeciesIcon className="w-3.5 h-3.5" />
+                            </div>
+                          );
+                        })}
+                      </div>
                     )}
                   </div>
 
-                  {pet.isEquipped && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm flex items-center gap-1">
-                      <Crown className="w-3 h-3 text-amber-400" />
-                      Active Companion
+                  {/* Right side: Equipped Companion & Vertical Element Badges */}
+                  <div className="absolute top-3 right-3 flex flex-col items-end gap-2 z-10">
+                    {pet.isEquipped && (
+                      <div className="px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm flex items-center gap-1 shadow-sm">
+                        <Crown className="w-3 h-3 text-amber-400" />
+                        Active Companion
+                      </div>
+                    )}
+
+                    {/* Vertical Element Badges on the right side */}
+                    <div
+                      data-testid={`pet-elements-vertical-${pet.id}`}
+                      className="flex flex-col items-end gap-1.5"
+                    >
+                      {(pet.elements && pet.elements.length > 0 ? pet.elements : [pet.element]).map((el, idx) => {
+                        const elementMeta = getPetElementMetadata(el);
+                        const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
+                        return (
+                          <div
+                            key={`${el}-${idx}`}
+                            data-testid={idx === 0 ? `pet-element-${pet.id}` : `pet-element-${pet.id}-${idx}`}
+                            className={cn(
+                              'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 backdrop-blur-md border shadow-md transition-transform hover:scale-105',
+                              elementMeta.badgeClass
+                            )}
+                            title={`Element: ${elementMeta.label}`}
+                            aria-label={`Element: ${elementMeta.label}`}
+                          >
+                            <ElementIcon className="w-3.5 h-3.5" />
+                            <span>{elementMeta.label}</span>
+                          </div>
+                        );
+                      })}
                     </div>
-                  )}
+                  </div>
 
                   {displayedImageUrl && !isDisplayedStageLocked && (
                     <button
@@ -937,7 +1059,10 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                           stageName: displayedStageName,
                           imageUrl: displayedImageUrl,
                           element: pet.element,
+                          elements: pet.elements,
+                          speciesTypes: pet.speciesTypes,
                           rarity: pet.rarity,
+                          species: pet.species,
                         });
                       }}
                       className="absolute bottom-3 right-3 p-1.5 rounded-xl bg-stone-950/80 hover:bg-stone-900 text-stone-300 hover:text-white border border-stone-700/60 transition-all hover:scale-110 shadow-md cursor-pointer z-10"
@@ -954,9 +1079,6 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                       <h3 className="font-extrabold text-xl text-stone-900 dark:text-white">
                         {pet.name}
                       </h3>
-                      <div className="text-xs text-stone-500 font-medium">
-                        {pet.species} • <span className="text-amber-600 font-bold">{pet.element}</span>
-                      </div>
                     </div>
 
                     {/* Stage Badge & Evolution Inspection Link */}
@@ -1162,9 +1284,20 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               </button>
 
               <div>
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-500">
-                  <Flame className="w-4 h-4" />
-                  Stitch 3D Creature Codex
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider flex-wrap">
+                  {(() => {
+                    const meta = getPetElementMetadata(inspectingPet.element);
+                    const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                    return (
+                      <span className={cn('px-2.5 py-0.5 rounded-full flex items-center gap-1 border shadow-xs', meta.badgeClass)}>
+                        <Icon className="w-3.5 h-3.5" />
+                        {meta.label} Element
+                      </span>
+                    );
+                  })()}
+                  <span className="text-amber-600 dark:text-amber-400 font-extrabold flex items-center gap-1">
+                    <Flame className="w-3.5 h-3.5" /> Stitch 3D Creature Codex
+                  </span>
                 </div>
                 <h3 className="text-2xl font-extrabold text-stone-900 dark:text-white mt-1">
                   {inspectingPet.species} Evolution Tree
@@ -1333,9 +1466,48 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               <h3 className="text-2xl font-extrabold text-stone-900 dark:text-white pt-1">
                 {hatchedCelebration.name}
               </h3>
-              <p className="text-xs text-stone-500">
-                {hatchedCelebration.species} • {hatchedCelebration.element}
-              </p>
+              {(() => {
+                const elements = (hatchedCelebration.elements && hatchedCelebration.elements.length > 0)
+                  ? hatchedCelebration.elements
+                  : [hatchedCelebration.element];
+                return (
+                  <div className="flex items-center justify-center gap-2 pt-1 flex-wrap">
+                    {elements.map((el, idx) => {
+                      const meta = getPetElementMetadata(el);
+                      const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                      return (
+                        <span
+                          key={`${el}-${idx}`}
+                          className={cn(
+                            'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
+                            meta.badgeClass
+                          )}
+                        >
+                          <Icon className="w-3 h-3" />
+                          {meta.label}
+                        </span>
+                      );
+                    })}
+                    {hatchedCelebration.speciesTypes?.map((st) => {
+                      const meta = getPetSpeciesTypeMetadata(st);
+                      const SpeciesIcon = PET_SPECIES_TYPE_ICONS[meta.iconName] || PET_ELEMENT_ICONS[meta.iconName] || PawPrint;
+                      return (
+                        <span
+                          key={st}
+                          className={cn(
+                            'p-1 rounded-full border shadow-xs flex items-center justify-center',
+                            meta.badgeClass
+                          )}
+                          title={`Species Type: ${meta.label}`}
+                          aria-label={`Species Type: ${meta.label}`}
+                        >
+                          <SpeciesIcon className="w-3 h-3" />
+                        </span>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
             </div>
             <p className="text-sm text-stone-600 dark:text-stone-400">
               Congratulations! Your care and exam integrity brought this mystical creature to life. Nurture it with stars in your sanctuary!
@@ -1381,24 +1553,91 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="flex flex-col items-center gap-1 mt-2 z-10">
-              <h3 className="text-2xl font-black text-amber-200 font-serif tracking-wide">
-                {fullImageModalData.name}
-              </h3>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-stone-400">
-                  {fullImageModalData.stageName}
-                </span>
-                {fullImageModalData.element && (
-                  <span className="text-xs text-amber-500 font-bold">
-                    • {fullImageModalData.element}
-                  </span>
-                )}
+            <div className="flex flex-col items-center gap-2 mt-2 z-10 w-full max-w-lg">
+              <div className="flex items-center gap-2.5 flex-wrap justify-center">
+                <h3 className="text-2xl font-black text-amber-200 font-serif tracking-wide">
+                  {fullImageModalData.name}
+                </h3>
                 {fullImageModalData.rarity && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40 shadow-xs">
                     {fullImageModalData.rarity}
                   </span>
                 )}
+                {fullImageModalData.stageName && (
+                  <span className="text-xs font-bold text-stone-400">
+                    • {fullImageModalData.stageName}
+                  </span>
+                )}
+              </div>
+
+              {/* Organized Elements & Species Section */}
+              <div className="w-full bg-stone-950/60 border border-stone-800/80 rounded-2xl px-4 py-2.5 flex flex-col gap-2 mt-1 shadow-inner text-left">
+                {/* Elements */}
+                <div
+                  data-testid="pet-preview-elements-row"
+                  className="flex items-center gap-2.5 flex-wrap"
+                >
+                  <span className="text-xs font-bold text-stone-400 min-w-[64px]">
+                    Elements:
+                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {(fullImageModalData.elements && fullImageModalData.elements.length > 0
+                      ? fullImageModalData.elements
+                      : fullImageModalData.element
+                      ? [fullImageModalData.element]
+                      : []
+                    ).map((el, idx) => {
+                      const meta = getPetElementMetadata(el);
+                      const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                      return (
+                        <span
+                          key={`${el}-${idx}`}
+                          className={cn(
+                            'px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
+                            meta.badgeClass
+                          )}
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          {meta.label}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Species */}
+                <div
+                  data-testid="pet-preview-species-row"
+                  className="flex items-center gap-2.5 flex-wrap"
+                >
+                  <span className="text-xs font-bold text-stone-400 min-w-[64px]">
+                    Species:
+                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {(fullImageModalData.speciesTypes && fullImageModalData.speciesTypes.length > 0
+                      ? fullImageModalData.speciesTypes
+                      : [normalizePetSpeciesType(fullImageModalData.species || fullImageModalData.stageName)]
+                    ).map((st) => {
+                      const meta = getPetSpeciesTypeMetadata(st);
+                      const SpeciesIcon =
+                        PET_SPECIES_TYPE_ICONS[meta.iconName] ||
+                        PET_ELEMENT_ICONS[meta.iconName] ||
+                        PawPrint;
+                      return (
+                        <span
+                          key={st}
+                          className={cn(
+                            'px-2.5 py-0.5 rounded-full text-[11px] font-extrabold flex items-center gap-1 border shadow-xs',
+                            meta.badgeClass
+                          )}
+                        >
+                          <SpeciesIcon className="w-3.5 h-3.5" />
+                          {meta.label}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="w-full max-h-[70vh] flex items-center justify-center p-4 z-10">

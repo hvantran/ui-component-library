@@ -332,6 +332,27 @@ export const UmbraServerDTOWithoutStages: Story = {
   },
 };
 
+export const StandardizedElementsSanctuary: Story = {
+  args: {
+    starBalance: 1500,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: ALL_ROSTER_STARTER_PETS,
+  },
+};
 
-
+export const MultiElementAndSpeciesTypeSanctuary: Story = {
+  args: {
+    starBalance: 2500,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: [
+      createSproutlingPet(1, false),
+      createFrostpawPet(1, false),
+      createFirePhoenixPet(1, true),
+      createAstralDragonPet(1, false),
+      createVoidDragonPet(1, false),
+    ],
+  },
+};
 
