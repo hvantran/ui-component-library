@@ -949,15 +949,47 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     </div>
                   )}
 
-                  {/* Level & Equipped Badges on Character Canvas */}
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-md">
-                      Lvl {pet.level}
-                    </span>
-                    {pet.rarity && (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40 backdrop-blur-sm">
-                        {pet.rarity}
+                  {/* Level, Rarity, and Vertical Species Type Badges on Character Canvas */}
+                  <div className="absolute top-3 left-3 flex flex-col items-start gap-2 z-10">
+                    <div className="flex items-center gap-1.5">
+                      <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white shadow-md">
+                        Lvl {pet.level}
                       </span>
+                      {pet.rarity && (
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40 backdrop-blur-sm">
+                          {pet.rarity}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Second row under level: Pet Species Types in vertical column */}
+                    {pet.speciesTypes && pet.speciesTypes.length > 0 && (
+                      <div
+                        data-testid={`pet-species-types-vertical-${pet.id}`}
+                        className="flex flex-col items-start gap-1.5 pt-0.5"
+                      >
+                        {pet.speciesTypes.map((st) => {
+                          const meta = getPetSpeciesTypeMetadata(st);
+                          const SpeciesIcon =
+                            PET_SPECIES_TYPE_ICONS[meta.iconName] ||
+                            PET_ELEMENT_ICONS[meta.iconName] ||
+                            PawPrint;
+                          return (
+                            <div
+                              key={st}
+                              data-testid={`pet-species-type-${pet.id}-${st.toLowerCase()}`}
+                              className={cn(
+                                'p-1.5 rounded-full backdrop-blur-md border shadow-md flex items-center justify-center transition-transform hover:scale-110 group-hover:scale-105',
+                                meta.badgeClass
+                              )}
+                              title={`Species Type: ${meta.label}`}
+                              aria-label={`Species Type: ${meta.label}`}
+                            >
+                              <SpeciesIcon className="w-3.5 h-3.5" />
+                            </div>
+                          );
+                        })}
+                      </div>
                     )}
                   </div>
 
@@ -968,7 +1000,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     </div>
                   )}
 
-                  {/* Element & Species Type Badges inside Character Canvas */}
+                  {/* Element Badges inside Character Canvas */}
                   <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10 flex-wrap max-w-[85%]">
                     {(pet.elements && pet.elements.length > 0 ? pet.elements : [pet.element]).map((el, idx) => {
                       const elementMeta = getPetElementMetadata(el);
@@ -986,24 +1018,6 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                         >
                           <ElementIcon className="w-3.5 h-3.5" />
                           <span>{elementMeta.label}</span>
-                        </div>
-                      );
-                    })}
-                    {pet.speciesTypes?.map((st) => {
-                      const meta = getPetSpeciesTypeMetadata(st);
-                      const SpeciesIcon = PET_SPECIES_TYPE_ICONS[meta.iconName] || PET_ELEMENT_ICONS[meta.iconName] || PawPrint;
-                      return (
-                        <div
-                          key={st}
-                          data-testid={`pet-species-type-${pet.id}-${st.toLowerCase()}`}
-                          className={cn(
-                            'p-1 sm:p-1.5 rounded-full backdrop-blur-md border shadow-md flex items-center justify-center transition-transform group-hover:scale-105',
-                            meta.badgeClass
-                          )}
-                          title={`Species Type: ${meta.label}`}
-                          aria-label={`Species Type: ${meta.label}`}
-                        >
-                          <SpeciesIcon className="w-3.5 h-3.5" />
                         </div>
                       );
                     })}

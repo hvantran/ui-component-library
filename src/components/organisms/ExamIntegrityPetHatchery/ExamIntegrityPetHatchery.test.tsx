@@ -456,7 +456,8 @@ describe('ExamIntegrityPetHatchery', () => {
     // Verify element badge exists on pet image canvas
     expect(html).toContain(`data-testid="pet-element-${sproutPet.id}"`);
     expect(html).toContain('Flora');
-    // Verify species type icon exists on canvas instead of raw species name
+    // Verify species type icon exists in vertical column under level
+    expect(html).toContain(`data-testid="pet-species-types-vertical-${sproutPet.id}"`);
     expect(html).toContain(`data-testid="pet-species-type-${sproutPet.id}-plant"`);
     expect(html).toContain('title="Species Type: Plant"');
     // Verify raw species text is not displayed on the card
