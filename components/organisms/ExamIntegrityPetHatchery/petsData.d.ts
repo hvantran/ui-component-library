@@ -34,6 +34,7 @@ export interface StudentPet {
     petLibraryId?: string;
     stageName: string;
     stageLevel: number;
+    totalStages?: number;
     evolutionStages?: EvolutionStageInfo[];
     skills?: PetSkill[];
     isEquipped?: boolean;
@@ -71,6 +72,7 @@ export declare const SOLAR_WYVERN_EVOLUTIONS: EvolutionStageInfo[];
 export declare const VOID_DRAGON_EVOLUTIONS: EvolutionStageInfo[];
 export declare const CHRONO_DRACO_EVOLUTIONS: EvolutionStageInfo[];
 export declare const AEGIS_PALADIN_EVOLUTIONS: EvolutionStageInfo[];
+export declare function createEvolutionSkills(petKey: string, evolutionStages: EvolutionStageInfo[], stageSkillOverrides?: Partial<Record<number, PetSkill>>): PetSkill[];
 export declare function createSproutlingPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
 export declare function createPipflickPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
 export declare function createEmbersqueakPet(stageLevel?: number, isEquipped?: boolean): StudentPet;
@@ -133,3 +135,5 @@ export interface SyncPetLibraryItemDTO {
     stages: SyncPetLibraryStageDTO[];
 }
 export declare function getExportedPetLibrary(): SyncPetLibraryItemDTO[];
+export declare function findPetCodexEntry(pet?: Partial<StudentPet> | null): PetCodexEntry | undefined;
+export declare function enrichStudentPet(pet: StudentPet): StudentPet;
