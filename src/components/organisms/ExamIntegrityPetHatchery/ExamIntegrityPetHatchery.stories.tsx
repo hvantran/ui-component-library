@@ -5,18 +5,25 @@ import {
   DEFAULT_STUDENT_PETS,
   createSproutlingPet,
   createPipflickPet,
+  createEmbersqueakPet,
+  createZephyrpuffPet,
   createFrostpawPet,
   createMagmafangPet,
+  createVoltwingPet,
+  createThundercatPet,
   createFirePhoenixPet,
   createChronoChimeraPet,
+  createShadowpantherPet,
+  createStormstagPet,
   createAstralDragonPet,
   createAstralLeviathanPet,
+  createSolarWyvernPet,
   createVoidDragonPet,
   createChronoDracoPet,
   createAegisPaladinPet,
-  ALL_FIRE_PHOENIX_LEVELS,
   ALL_SHOP_STARTER_PETS,
   ALL_ROSTER_STARTER_PETS,
+  type StudentPet,
 } from './ExamIntegrityPetHatchery';
 
 const meta: Meta<typeof ExamIntegrityPetHatchery> = {
@@ -31,74 +38,58 @@ const meta: Meta<typeof ExamIntegrityPetHatchery> = {
 export default meta;
 type Story = StoryObj<typeof ExamIntegrityPetHatchery>;
 
+// 90 pets covering all evolution stages for all 18 species
+export const ALL_PETS_ALL_STAGES: StudentPet[] = [
+  // Common (3 stages each)
+  ...[1, 2, 3].map((lvl) => createSproutlingPet(lvl, lvl === 1)),
+  ...[1, 2, 3].map((lvl) => createPipflickPet(lvl, false)),
+  ...[1, 2, 3].map((lvl) => createEmbersqueakPet(lvl, false)),
+  ...[1, 2, 3].map((lvl) => createZephyrpuffPet(lvl, false)),
+  // Rare (4 stages each)
+  ...[1, 2, 3, 4].map((lvl) => createFrostpawPet(lvl, false)),
+  ...[1, 2, 3, 4].map((lvl) => createMagmafangPet(lvl, false)),
+  ...[1, 2, 3, 4].map((lvl) => createVoltwingPet(lvl, false)),
+  ...[1, 2, 3, 4].map((lvl) => createThundercatPet(lvl, false)),
+  // Epic (5 stages each)
+  ...[1, 2, 3, 4, 5].map((lvl) => createFirePhoenixPet(lvl, false)),
+  ...[1, 2, 3, 4, 5].map((lvl) => createChronoChimeraPet(lvl, false)),
+  ...[1, 2, 3, 4, 5].map((lvl) => createShadowpantherPet(lvl, false)),
+  ...[1, 2, 3, 4, 5].map((lvl) => createStormstagPet(lvl, false)),
+  // Legendary (6 stages each)
+  ...[1, 2, 3, 4, 5, 6].map((lvl) => createAstralDragonPet(lvl, false)),
+  ...[1, 2, 3, 4, 5, 6].map((lvl) => createAstralLeviathanPet(lvl, false)),
+  ...[1, 2, 3, 4, 5, 6].map((lvl) => createSolarWyvernPet(lvl, false)),
+  // Mythic (8 stages each)
+  ...[1, 2, 3, 4, 5, 6, 7, 8].map((lvl) => createVoidDragonPet(lvl, false)),
+  ...[1, 2, 3, 4, 5, 6, 7, 8].map((lvl) => createChronoDracoPet(lvl, false)),
+  ...[1, 2, 3, 4, 5, 6, 7, 8].map((lvl) => createAegisPaladinPet(lvl, false)),
+];
+
+export const AllPetsAllStagesSanctuary: Story = {
+  name: 'All Pets - All Stages (Sanctuary)',
+  args: {
+    starBalance: 9999,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: ALL_PETS_ALL_STAGES,
+  },
+};
+
+export const AllPetsAllStagesCodex: Story = {
+  name: 'All Pets - All Stages (Codex)',
+  args: {
+    starBalance: 9999,
+    defaultTab: 'codex',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: ALL_PETS_ALL_STAGES,
+  },
+};
+
 export const Default: Story = {
   args: {
     starBalance: 450,
     incubatingEggs: DEFAULT_INCUBATING_EGGS,
     pets: DEFAULT_STUDENT_PETS,
-  },
-};
-
-export const FirePhoenixLevel1Fledgling: Story = {
-  args: {
-    starBalance: 450,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [createFirePhoenixPet(1, true)],
-  },
-};
-
-export const FirePhoenixLevel2Pyrepaw: Story = {
-  args: {
-    starBalance: 600,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [createFirePhoenixPet(2, true)],
-  },
-};
-
-export const FirePhoenixLevel3Firebird: Story = {
-  args: {
-    starBalance: 750,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [createFirePhoenixPet(3, true)],
-  },
-};
-
-export const FirePhoenixLevel4Sovereign: Story = {
-  args: {
-    starBalance: 900,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [createFirePhoenixPet(4, true)],
-  },
-};
-
-export const FirePhoenixLevel5ApexEmperor: Story = {
-  args: {
-    starBalance: 1500,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [createFirePhoenixPet(5, true)],
-  },
-};
-
-export const FirePhoenixCodexAll5Levels: Story = {
-  args: {
-    starBalance: 1000,
-    defaultTab: 'codex',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: ALL_FIRE_PHOENIX_LEVELS,
-  },
-};
-
-export const FirePhoenixSanctuaryAll5Levels: Story = {
-  args: {
-    starBalance: 1200,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: ALL_FIRE_PHOENIX_LEVELS,
   },
 };
 
@@ -144,46 +135,6 @@ export const HighStagePets: Story = {
   },
 };
 
-export const CommonSproutlingAll3Stages: Story = {
-  args: {
-    starBalance: 500,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3].map((stage) => createSproutlingPet(stage, stage === 1)),
-  },
-};
-
-export const RareFrostpawAll4Stages: Story = {
-  args: {
-    starBalance: 750,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4].map((stage) => createFrostpawPet(stage, stage === 1)),
-  },
-};
-
-export const LegendaryAstralDragonAll6Stages: Story = {
-  args: {
-    starBalance: 1500,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4, 5, 6].map((stage) =>
-      createAstralDragonPet(stage, stage === 1)
-    ),
-  },
-};
-
-export const MythicVoidDragonAll8Stages: Story = {
-  args: {
-    starBalance: 3000,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4, 5, 6, 7, 8].map((stage) =>
-      createVoidDragonPet(stage, stage === 1)
-    ),
-  },
-};
-
 export const VoidDragonAbilities: Story = {
   args: {
     starBalance: 3000,
@@ -211,75 +162,12 @@ export const AllShopPetsSanctuary: Story = {
   },
 };
 
-export const MultiRarityCodexView: Story = {
-  args: {
-    starBalance: 2000,
-    defaultTab: 'codex',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: ALL_SHOP_STARTER_PETS,
-  },
-};
-
 export const Full18PetRosterSanctuary: Story = {
   args: {
     starBalance: 5000,
     defaultTab: 'pets',
     incubatingEggs: DEFAULT_INCUBATING_EGGS,
     pets: ALL_ROSTER_STARTER_PETS,
-  },
-};
-
-export const CommonPipflickAll3Stages: Story = {
-  args: {
-    starBalance: 500,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3].map((lvl) => createPipflickPet(lvl, lvl === 1)),
-  },
-};
-
-export const RareMagmafangAll4Stages: Story = {
-  args: {
-    starBalance: 800,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4].map((lvl) => createMagmafangPet(lvl, lvl === 1)),
-  },
-};
-
-export const EpicChronoChimeraAll5Stages: Story = {
-  args: {
-    starBalance: 1200,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4, 5].map((lvl) => createChronoChimeraPet(lvl, lvl === 1)),
-  },
-};
-
-export const LegendaryAstralLeviathanAll6Stages: Story = {
-  args: {
-    starBalance: 2000,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4, 5, 6].map((lvl) => createAstralLeviathanPet(lvl, lvl === 1)),
-  },
-};
-
-export const MythicChronoDracoAll8Stages: Story = {
-  args: {
-    starBalance: 3500,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4, 5, 6, 7, 8].map((lvl) => createChronoDracoPet(lvl, lvl === 1)),
-  },
-};
-
-export const MythicAegisPaladinAll8Stages: Story = {
-  args: {
-    starBalance: 3500,
-    defaultTab: 'pets',
-    incubatingEggs: DEFAULT_INCUBATING_EGGS,
-    pets: [1, 2, 3, 4, 5, 6, 7, 8].map((lvl) => createAegisPaladinPet(lvl, lvl === 1)),
   },
 };
 

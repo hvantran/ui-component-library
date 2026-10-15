@@ -93,6 +93,12 @@ import aegispaladinStage5Img from '../../../assets/pets/aegispaladin-stage-5.png
 import aegispaladinStage6Img from '../../../assets/pets/aegispaladin-stage-6.png';
 import aegispaladinStage7Img from '../../../assets/pets/aegispaladin-stage-7.png';
 import aegispaladinStage8Img from '../../../assets/pets/aegispaladin-stage-8.png';
+import { PET_STAGE_ABILITIES } from './petStageAbilities';
+
+const SKILL_VIDEOS: Record<string, string> = import.meta.glob(
+  '../../../assets/skills/*.mp4',
+  { eager: true, query: '?url', import: 'default' }
+);
 
 export interface EvolutionStageInfo {
   stage: number;
@@ -1110,16 +1116,6 @@ export const ASTRAL_LEVIATHAN_EVOLUTIONS: EvolutionStageInfo[] = [
   },
   {
     stage: 5,
-    minLevel: 10,
-    name: 'Primordial Astral Leviathan Overlord',
-    title: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord',
-    description: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord. Titanic god-whale carrying a miniature radiant galaxy vortex and swirling celestial astrolabe halo along its spine, six ethereal stardust wings, blinding cosmic singularity heart, commanding universe sovereign pose above.',
-    avatarEmoji: '👑',
-    imageName: 'astralleviathan-stage-6.png',
-    imageUrl: astralleviathanStage6Img,
-  },
-  {
-    stage: 6,
     minLevel: 8,
     name: 'Cosmos Emperor Leviathan',
     title: 'Elder galactic sovereign whale named Cosmos Emperor Leviathan',
@@ -1127,6 +1123,16 @@ export const ASTRAL_LEVIATHAN_EVOLUTIONS: EvolutionStageInfo[] = [
     avatarEmoji: '🪐',
     imageName: 'astralleviathan-stage-5.png',
     imageUrl: astralleviathanStage5Img,
+  },
+  {
+    stage: 6,
+    minLevel: 10,
+    name: 'Primordial Astral Leviathan Overlord',
+    title: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord',
+    description: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord. Titanic god-whale carrying a miniature radiant galaxy vortex and swirling celestial astrolabe halo along its spine, six ethereal stardust wings, blinding cosmic singularity heart, commanding universe sovereign pose above.',
+    avatarEmoji: '👑',
+    imageName: 'astralleviathan-stage-6.png',
+    imageUrl: astralleviathanStage6Img,
   },
 ];
 
@@ -1447,15 +1453,25 @@ export function createEvolutionSkills(
   evolutionStages: EvolutionStageInfo[],
   stageSkillOverrides: Partial<Record<number, PetSkill>> = {}
 ): PetSkill[] {
-  return evolutionStages.map((stage) =>
-    stageSkillOverrides[stage.stage] ?? {
+  return evolutionStages.map((stage) => {
+    if (stageSkillOverrides[stage.stage]) {
+      return stageSkillOverrides[stage.stage] as PetSkill;
+    }
+
+    const abilityMeta = PET_STAGE_ABILITIES[`${petKey}-stage-${stage.stage}`];
+    const videoUrl = abilityMeta?.videoFile
+      ? SKILL_VIDEOS[`../../../assets/skills/${abilityMeta.videoFile}`]
+      : undefined;
+
+    return {
       id: `${petKey}-stage-${stage.stage}-skill`,
-      name: `${stage.name} Technique`,
-      description: `Channel the power of ${stage.name}.`,
+      name: abilityMeta?.name ?? `${stage.name} Technique`,
+      description: abilityMeta?.description ?? `Channel the power of ${stage.name}.`,
       requiredLevel: stage.minLevel,
       icon: 'Sparkles',
-    }
-  );
+      ...(videoUrl ? { videoSources: { mp4: videoUrl } } : {}),
+    };
+  });
 }
 
 export function createSproutlingPet(
