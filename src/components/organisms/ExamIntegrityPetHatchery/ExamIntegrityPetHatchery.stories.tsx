@@ -300,5 +300,38 @@ export const MaxLevelCompanionPet: Story = {
   },
 };
 
+export const UmbraServerDTOWithoutStages: Story = {
+  args: {
+    starBalance: 500,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: [
+      {
+        id: 'pet-shadowpanther-server',
+        name: 'Umbra (Umbral Eclipse Panther)',
+        species: 'Umbral Eclipse Panther',
+        rarity: 'Epic',
+        tier: 'dragon',
+        element: 'Shadow / Cosmic',
+        level: 6,
+        maxLevel: 10,
+        currentExp: 385,
+        expNeeded: 448,
+        growthCostInStars: 25,
+        stageLevel: 3,
+        stageName: 'Eclipsefang',
+        avatarEmoji: '🐆',
+        stats: {
+          vitality: 85,
+          wisdom: 85,
+          integrityBond: 90,
+          solarRadiance: 80,
+        },
+      },
+    ],
+  },
+};
+
+
 
 

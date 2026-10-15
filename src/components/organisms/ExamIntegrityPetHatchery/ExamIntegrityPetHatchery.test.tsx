@@ -393,6 +393,52 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('animate-pet-float');
     expect(html).toContain('animate-pet-glow');
   });
+
+  it('automatically enriches pet missing evolutionStages and renders stage buttons and Codex', () => {
+    const rawPet: StudentPet = {
+      id: 'pet-umbra-server',
+      name: 'Umbra (Umbral Eclipse Panther)',
+      species: 'Umbral Eclipse Panther',
+      rarity: 'Epic',
+      tier: 'dragon',
+      element: 'Shadow / Cosmic',
+      level: 6,
+      maxLevel: 10,
+      currentExp: 385,
+      expNeeded: 448,
+      growthCostInStars: 25,
+      stageLevel: 3,
+      stageName: 'Eclipsefang',
+      avatarEmoji: '🐆',
+      stats: {
+        vitality: 85,
+        wisdom: 85,
+        integrityBond: 90,
+        solarRadiance: 80,
+      },
+      // Note: evolutionStages and skills are intentionally omitted (e.g. from server API)
+    };
+
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={500}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[rawPet]}
+      />
+    );
+
+    expect(html).toContain('Inspect Evolution Forms');
+    expect(html).toContain('Levels in Stitch');
+    expect(html).toContain('Codex');
+    expect(html).toContain('Eclipsefang');
+    expect(html).toContain('Eclipsefang Technique');
+    expect(html).toContain('Lvl <!-- -->1');
+    expect(html).toContain('Lvl <!-- -->4');
+    expect(html).toContain('Lvl <!-- -->6');
+    expect(html).toContain('Lvl <!-- -->8');
+    expect(html).toContain('Lvl <!-- -->10');
+  });
 });
 
 

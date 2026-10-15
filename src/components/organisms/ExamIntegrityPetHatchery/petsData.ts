@@ -129,6 +129,7 @@ export interface StudentPet {
   petLibraryId?: string;
   stageName: string;
   stageLevel: number;
+  totalStages?: number;
   evolutionStages?: EvolutionStageInfo[];
   skills?: PetSkill[];
   isEquipped?: boolean;
@@ -1124,7 +1125,7 @@ export const AEGIS_PALADIN_EVOLUTIONS: EvolutionStageInfo[] = [
   },
 ];
 
-function createEvolutionSkills(
+export function createEvolutionSkills(
   petKey: string,
   evolutionStages: EvolutionStageInfo[],
   stageSkillOverrides: Partial<Record<number, PetSkill>> = {}
@@ -2253,3 +2254,94 @@ export function getExportedPetLibrary(): SyncPetLibraryItemDTO[] {
     })),
   }));
 }
+
+export function findPetCodexEntry(
+  pet?: Partial<StudentPet> | null
+): PetCodexEntry | undefined {
+  if (!pet) return undefined;
+
+  // 1. Direct match by petLibraryId
+  if (pet.petLibraryId && ALL_PET_CODEX_REGISTRY[pet.petLibraryId]) {
+    return ALL_PET_CODEX_REGISTRY[pet.petLibraryId];
+  }
+
+  const entries = Object.values(ALL_PET_CODEX_REGISTRY);
+
+  const cleanPetName = (pet.name || '').toLowerCase().trim();
+  const cleanSpecies = (pet.species || '').toLowerCase().trim();
+  const cleanStageName = (pet.stageName || '').toLowerCase().trim();
+  const cleanId = (pet.id || '').toLowerCase().trim();
+  const cleanImageName = (pet.imageName || '').toLowerCase().trim();
+
+  // 2. Exact match on species or name
+  const exact = entries.find((e) => {
+    const entrySpecies = e.species.toLowerCase();
+    const entryName = e.name.toLowerCase();
+    return (
+      (cleanSpecies && entrySpecies === cleanSpecies) ||
+      (cleanPetName && (entryName === cleanPetName || entryName.startsWith(cleanPetName)))
+    );
+  });
+  if (exact) return exact;
+
+  // 3. Substring match on species, name, id, or imageName
+  const fuzzy = entries.find((e) => {
+    const entryKey = e.key.toLowerCase();
+    const entrySpecies = e.species.toLowerCase();
+    const entryName = e.name.toLowerCase();
+
+    return (
+      (cleanSpecies && (cleanSpecies.includes(entrySpecies) || entrySpecies.includes(cleanSpecies))) ||
+      (cleanPetName && (cleanPetName.includes(entryName) || entryName.includes(cleanPetName))) ||
+      (cleanId && cleanId.includes(entryKey)) ||
+      (cleanImageName && cleanImageName.includes(entryKey))
+    );
+  });
+  if (fuzzy) return fuzzy;
+
+  // 4. Match by stageName across evolution stages
+  if (cleanStageName) {
+    const stageMatch = entries.find((e) =>
+      e.stages.some((s) => s.name.toLowerCase() === cleanStageName)
+    );
+    if (stageMatch) return stageMatch;
+  }
+
+  return undefined;
+}
+
+export function enrichStudentPet(pet: StudentPet): StudentPet {
+  const hasStages = Boolean(pet.evolutionStages && pet.evolutionStages.length > 0);
+  const hasSkills = Boolean(pet.skills && pet.skills.length > 0);
+
+  if (hasStages && hasSkills && pet.totalStages) {
+    return pet;
+  }
+
+  const codexEntry = findPetCodexEntry(pet);
+  if (!codexEntry) {
+    return pet;
+  }
+
+  const evolutionStages = hasStages ? pet.evolutionStages : codexEntry.stages;
+  let skills = pet.skills;
+  if (!hasSkills && evolutionStages) {
+    if (codexEntry.key === 'voiddragon') {
+      skills = createEvolutionSkills('voiddragon', evolutionStages, {
+        7: COSMIC_RIFT_BREATH_SKILL,
+        8: VOID_SINGULARITY_SKILL,
+      });
+    } else {
+      skills = createEvolutionSkills(codexEntry.key, evolutionStages);
+    }
+  }
+
+  return {
+    ...pet,
+    petLibraryId: pet.petLibraryId || codexEntry.key,
+    evolutionStages,
+    skills,
+    totalStages: pet.totalStages || evolutionStages?.length || codexEntry.totalStages,
+  };
+}
+
