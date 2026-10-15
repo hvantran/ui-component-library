@@ -531,11 +531,13 @@ describe('ExamIntegrityPetHatchery', () => {
       />
     );
 
-    // Rare 2 elements
+    // Rare 2 elements in vertical column on right side
+    expect(html).toContain(`data-testid="pet-elements-vertical-${rarePet.id}"`);
     expect(html).toContain(`data-testid="pet-element-${rarePet.id}"`);
     expect(html).toContain(`data-testid="pet-element-${rarePet.id}-1"`);
 
     // Legendary 3 elements
+    expect(html).toContain(`data-testid="pet-elements-vertical-${legendaryPet.id}"`);
     expect(html).toContain(`data-testid="pet-element-${legendaryPet.id}"`);
     expect(html).toContain(`data-testid="pet-element-${legendaryPet.id}-1"`);
     expect(html).toContain(`data-testid="pet-element-${legendaryPet.id}-2"`);
@@ -543,6 +545,7 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain(`data-testid="pet-species-type-${legendaryPet.id}-celestial"`);
 
     // Mythic 4 elements
+    expect(html).toContain(`data-testid="pet-elements-vertical-${mythicPet.id}"`);
     expect(html).toContain(`data-testid="pet-element-${mythicPet.id}"`);
     expect(html).toContain(`data-testid="pet-element-${mythicPet.id}-1"`);
     expect(html).toContain(`data-testid="pet-element-${mythicPet.id}-2"`);

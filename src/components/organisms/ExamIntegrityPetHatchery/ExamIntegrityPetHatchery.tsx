@@ -993,34 +993,40 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     )}
                   </div>
 
-                  {pet.isEquipped && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm flex items-center gap-1 z-10">
-                      <Crown className="w-3 h-3 text-amber-400" />
-                      Active Companion
-                    </div>
-                  )}
+                  {/* Right side: Equipped Companion & Vertical Element Badges */}
+                  <div className="absolute top-3 right-3 flex flex-col items-end gap-2 z-10">
+                    {pet.isEquipped && (
+                      <div className="px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm flex items-center gap-1 shadow-sm">
+                        <Crown className="w-3 h-3 text-amber-400" />
+                        Active Companion
+                      </div>
+                    )}
 
-                  {/* Element Badges inside Character Canvas */}
-                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10 flex-wrap max-w-[85%]">
-                    {(pet.elements && pet.elements.length > 0 ? pet.elements : [pet.element]).map((el, idx) => {
-                      const elementMeta = getPetElementMetadata(el);
-                      const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
-                      return (
-                        <div
-                          key={`${el}-${idx}`}
-                          data-testid={idx === 0 ? `pet-element-${pet.id}` : `pet-element-${pet.id}-${idx}`}
-                          className={cn(
-                            'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md border shadow-md transition-transform group-hover:scale-105',
-                            elementMeta.badgeClass
-                          )}
-                          title={`Element: ${elementMeta.label}`}
-                          aria-label={`Element: ${elementMeta.label}`}
-                        >
-                          <ElementIcon className="w-3.5 h-3.5" />
-                          <span>{elementMeta.label}</span>
-                        </div>
-                      );
-                    })}
+                    {/* Vertical Element Badges on the right side */}
+                    <div
+                      data-testid={`pet-elements-vertical-${pet.id}`}
+                      className="flex flex-col items-end gap-1.5"
+                    >
+                      {(pet.elements && pet.elements.length > 0 ? pet.elements : [pet.element]).map((el, idx) => {
+                        const elementMeta = getPetElementMetadata(el);
+                        const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
+                        return (
+                          <div
+                            key={`${el}-${idx}`}
+                            data-testid={idx === 0 ? `pet-element-${pet.id}` : `pet-element-${pet.id}-${idx}`}
+                            className={cn(
+                              'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 backdrop-blur-md border shadow-md transition-transform hover:scale-105',
+                              elementMeta.badgeClass
+                            )}
+                            title={`Element: ${elementMeta.label}`}
+                            aria-label={`Element: ${elementMeta.label}`}
+                          >
+                            <ElementIcon className="w-3.5 h-3.5" />
+                            <span>{elementMeta.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   {displayedImageUrl && !isDisplayedStageLocked && (
