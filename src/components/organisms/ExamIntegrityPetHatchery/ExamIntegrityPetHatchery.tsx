@@ -21,6 +21,7 @@ import { ProgressBar } from '../../atoms/ProgressBar';
 import { ThreeEggViewer, EggTier } from '../../molecules/ThreeEggViewer';
 import { cn } from '../../../utils/cn';
 import phoenixEggImg from '../../../assets/pets/phoenix-egg.png';
+import { ExamIntegrityPetSkill } from '../ExamIntegrityPetSkill';
 export * from './petsData';
 import {
   type EvolutionStageInfo,
@@ -220,6 +221,10 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   } | null>(null);
   const [wobblingPetId, setWobblingPetId] = useState<string | null>(null);
   const [isModalPetWobbling, setIsModalPetWobbling] = useState(false);
+  const [activePetSkill, setActivePetSkill] = useState<{
+    petId: string;
+    skillId: string;
+  } | null>(null);
 
   useEffect(() => {
     setCurrentEggs(incubatingEggs);
@@ -831,6 +836,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
             const isDisplayedStageLocked = Boolean(
               hasStages && displayedStage && pet.level < displayedStage.minLevel
             );
+            const unlockedSkills = pet.skills?.filter((skill) => pet.level >= skill.requiredLevel) ?? [];
+            const latestUnlockedSkill = unlockedSkills[unlockedSkills.length - 1];
 
             return (
               <div
@@ -964,6 +971,42 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                         </button>
                       )}
                     </div>
+
+                    {pet.skills && pet.skills.length > 0 && (
+                      <section className="space-y-2" aria-label={`${pet.name} abilities`}>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wide text-stone-500">
+                            Abilities
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setInspectingEvolutionPet(pet)}
+                            className="flex items-center gap-1 text-[10px] font-bold text-violet-600 hover:text-violet-500 dark:text-violet-300 dark:hover:text-violet-200"
+                          >
+                            {pet.skills.length} skills <Info className="h-3 w-3" aria-hidden="true" />
+                          </button>
+                        </div>
+                        {latestUnlockedSkill ? (
+                          <ExamIntegrityPetSkill
+                            skill={latestUnlockedSkill}
+                            posterUrl={displayedImageUrl}
+                            open={
+                              activePetSkill?.petId === pet.id &&
+                              activePetSkill.skillId === latestUnlockedSkill.id
+                            }
+                            onOpenChange={(open) =>
+                              setActivePetSkill(
+                                open ? { petId: pet.id, skillId: latestUnlockedSkill.id } : null
+                              )
+                            }
+                          />
+                        ) : (
+                          <p className="text-xs font-medium text-stone-500">
+                            Your first ability unlocks at level {pet.skills[0].requiredLevel}.
+                          </p>
+                        )}
+                      </section>
+                    )}
 
                     {/* Interactive Multi-Stage Preview Buttons */}
                     {hasStages && (
@@ -1127,6 +1170,9 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               {inspectingEvolutionPet.evolutionStages?.map((stage) => {
                 const isReached = inspectingEvolutionPet.stageLevel >= stage.stage;
                 const isCurrent = inspectingEvolutionPet.stageLevel === stage.stage;
+                const stageSkill = inspectingEvolutionPet.skills?.find(
+                  (skill) => skill.requiredLevel === stage.minLevel
+                );
 
                 return (
                   <div
@@ -1171,6 +1217,30 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                       <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
                         {stage.description}
                       </p>
+                      {stageSkill && (
+                        <div className="pt-2 text-left">
+                          <span className="mb-1 block text-[10px] font-extrabold uppercase tracking-wide text-violet-600 dark:text-violet-300">
+                            Stage Ability
+                          </span>
+                          <ExamIntegrityPetSkill
+                            skill={stageSkill}
+                            posterUrl={stage.imageUrl}
+                            locked={inspectingEvolutionPet.level < stageSkill.requiredLevel}
+                            open={
+                              activePetSkill?.petId === inspectingEvolutionPet.id &&
+                              activePetSkill.skillId === stageSkill.id
+                            }
+                            onOpenChange={(open) => {
+                              if (open && inspectingEvolutionPet.level < stageSkill.requiredLevel) return;
+                              setActivePetSkill(
+                                open
+                                  ? { petId: inspectingEvolutionPet.id, skillId: stageSkill.id }
+                                  : null
+                              );
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

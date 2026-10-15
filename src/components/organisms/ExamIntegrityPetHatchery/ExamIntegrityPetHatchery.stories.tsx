@@ -184,6 +184,24 @@ export const MythicVoidDragonAll8Stages: Story = {
   },
 };
 
+export const VoidDragonAbilities: Story = {
+  args: {
+    starBalance: 3000,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: [createVoidDragonPet(8, true)],
+  },
+};
+
+export const VoidDragonLockedAbilities: Story = {
+  args: {
+    starBalance: 3000,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: [createVoidDragonPet(1, true)],
+  },
+};
+
 export const AllShopPetsSanctuary: Story = {
   args: {
     starBalance: 2500,
