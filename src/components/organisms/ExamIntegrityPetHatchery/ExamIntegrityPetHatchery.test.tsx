@@ -9,6 +9,7 @@ import {
   createFrostpawPet,
   createFirePhoenixPet,
   createAstralDragonPet,
+  createAstralLeviathanPet,
   createVoidDragonPet,
   rollMysteryPet,
   formatHatchTime,
@@ -585,5 +586,35 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Dragon');
     expect(html).toContain('Void');
     expect(html).toContain('Mythical');
+  });
+
+  it('renders distinct abilities and correct stage progression for Leviathan stage 5 and stage 6', () => {
+    const leviathanStage5 = createAstralLeviathanPet(5, false);
+    const leviathanStage6 = createAstralLeviathanPet(6, false);
+
+    expect(leviathanStage5.stageLevel).toBe(5);
+    expect(leviathanStage5.level).toBe(8);
+    expect(leviathanStage5.stageName).toBe('Cosmos Emperor Leviathan');
+
+    expect(leviathanStage6.stageLevel).toBe(6);
+    expect(leviathanStage6.level).toBe(10);
+    expect(leviathanStage6.stageName).toBe('Primordial Astral Leviathan Overlord');
+
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={9999}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[leviathanStage5, leviathanStage6]}
+      />
+    );
+
+    // Stage 5 shows Astral Tide Convergence and Cosmos Emperor Leviathan
+    expect(html).toContain('Astral Tide Convergence');
+    expect(html).toContain('Cosmos Emperor Leviathan');
+
+    // Stage 6 shows Primordial Cosmic Oceanic Song and Primordial Astral Leviathan Overlord
+    expect(html).toContain('Primordial Cosmic Oceanic Song');
+    expect(html).toContain('Primordial Astral Leviathan Overlord');
   });
 });

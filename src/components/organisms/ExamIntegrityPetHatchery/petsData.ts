@@ -1116,16 +1116,6 @@ export const ASTRAL_LEVIATHAN_EVOLUTIONS: EvolutionStageInfo[] = [
   },
   {
     stage: 5,
-    minLevel: 10,
-    name: 'Primordial Astral Leviathan Overlord',
-    title: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord',
-    description: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord. Titanic god-whale carrying a miniature radiant galaxy vortex and swirling celestial astrolabe halo along its spine, six ethereal stardust wings, blinding cosmic singularity heart, commanding universe sovereign pose above.',
-    avatarEmoji: '👑',
-    imageName: 'astralleviathan-stage-6.png',
-    imageUrl: astralleviathanStage6Img,
-  },
-  {
-    stage: 6,
     minLevel: 8,
     name: 'Cosmos Emperor Leviathan',
     title: 'Elder galactic sovereign whale named Cosmos Emperor Leviathan',
@@ -1133,6 +1123,16 @@ export const ASTRAL_LEVIATHAN_EVOLUTIONS: EvolutionStageInfo[] = [
     avatarEmoji: '🪐',
     imageName: 'astralleviathan-stage-5.png',
     imageUrl: astralleviathanStage5Img,
+  },
+  {
+    stage: 6,
+    minLevel: 10,
+    name: 'Primordial Astral Leviathan Overlord',
+    title: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord',
+    description: 'Colossal supreme mythic deity cosmic whale named Primordial Astral Leviathan Overlord. Titanic god-whale carrying a miniature radiant galaxy vortex and swirling celestial astrolabe halo along its spine, six ethereal stardust wings, blinding cosmic singularity heart, commanding universe sovereign pose above.',
+    avatarEmoji: '👑',
+    imageName: 'astralleviathan-stage-6.png',
+    imageUrl: astralleviathanStage6Img,
   },
 ];
 
