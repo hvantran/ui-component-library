@@ -2,6 +2,12 @@ import { default as React } from '../../../../node_modules/react';
 import { EggTier } from '../../molecules/ThreeEggViewer';
 import { StudentPet } from './petsData';
 export * from './petsData';
+export declare const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{
+    className?: string;
+}>>;
+export declare const PET_SPECIES_TYPE_ICONS: Record<string, React.ComponentType<{
+    className?: string;
+}>>;
 export interface IncubatingEgg {
     id: string;
     name: string;
@@ -28,6 +34,7 @@ export interface ExamIntegrityPetHatcheryProps {
     onStrikeCrack?: (eggId: string, starsSpent: number) => void;
     onEquipEgg?: (eggId: string, starCost: number) => void;
     onEquipPet?: (petId: string) => void;
+    initialPreviewPet?: StudentPet | null;
     className?: string;
 }
 export declare const DEFAULT_INCUBATING_EGGS: IncubatingEgg[];

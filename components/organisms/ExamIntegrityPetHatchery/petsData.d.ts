@@ -10,13 +10,41 @@ export interface EvolutionStageInfo {
     imageUrl: string;
     imageName?: string;
 }
+export type StandardPetElement = 'Flora' | 'Water' | 'Fire' | 'Wind' | 'Ice' | 'Earth' | 'Lightning' | 'Cosmic' | 'Shadow' | 'Astral' | 'Void' | 'Temporal' | 'Divine';
+export type PetElement = StandardPetElement | (string & {});
+export interface PetElementMetadata {
+    label: StandardPetElement;
+    iconName: 'Leaf' | 'Droplets' | 'Flame' | 'Wind' | 'Snowflake' | 'Mountain' | 'Zap' | 'Sparkles' | 'Moon' | 'Sun' | 'Eye' | 'Clock' | 'Shield';
+    badgeClass: string;
+    textClass: string;
+    borderClass: string;
+    glowClass: string;
+}
+export declare const PET_ELEMENT_METADATA: Record<StandardPetElement, PetElementMetadata>;
+export declare function normalizePetElement(element?: string): StandardPetElement;
+export declare function getPetElementMetadata(element?: string): PetElementMetadata;
+export type StandardPetSpeciesType = 'Plant' | 'Aquatic' | 'Beast' | 'Avian' | 'Mythical' | 'Dragon' | 'Celestial' | 'Void' | 'Temporal' | 'Knight';
+export type PetSpeciesType = StandardPetSpeciesType | (string & {});
+export interface PetSpeciesTypeMetadata {
+    label: StandardPetSpeciesType;
+    iconName: 'Leaf' | 'Fish' | 'PawPrint' | 'Bird' | 'Sparkles' | 'Flame' | 'Sun' | 'Eye' | 'Clock' | 'Shield';
+    badgeClass: string;
+    textClass: string;
+}
+export declare const PET_SPECIES_TYPE_METADATA: Record<StandardPetSpeciesType, PetSpeciesTypeMetadata>;
+export declare function normalizePetSpeciesType(st?: string): StandardPetSpeciesType;
+export declare function getPetSpeciesTypeMetadata(speciesType?: string): PetSpeciesTypeMetadata;
+export declare function getRequiredElementCount(rarity?: string): number;
+export declare function getRequiredSpeciesTypeCount(rarity?: string): number;
 export interface StudentPet {
     id: string;
     name: string;
     species: string;
     tier: EggTier;
     rarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
-    element: string;
+    element: PetElement;
+    elements?: PetElement[];
+    speciesTypes?: PetSpeciesType[];
     level: number;
     maxLevel: number;
     currentExp: number;
@@ -46,7 +74,9 @@ export interface PetCodexEntry {
     name: string;
     species: string;
     rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
-    element: string;
+    element: PetElement;
+    elements?: PetElement[];
+    speciesTypes?: PetSpeciesType[];
     avatarEmoji: string;
     tier: EggTier;
     totalStages: number;
@@ -124,7 +154,9 @@ export interface SyncPetLibraryItemDTO {
     species: string;
     rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
     tier: EggTier;
-    element: string;
+    element: PetElement;
+    elements?: PetElement[];
+    speciesTypes?: PetSpeciesType[];
     avatarEmoji: string;
     totalStages: number;
     maxLevel: number;
