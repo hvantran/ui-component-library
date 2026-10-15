@@ -228,6 +228,42 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(mythicPet.evolutionStages).toHaveLength(8);
   });
 
+  it('defines cumulative level-gated skills for the Void Dragon', () => {
+    const voidDragon = createVoidDragonPet(8, false);
+
+    expect(voidDragon.skills).toHaveLength(8);
+    expect(voidDragon.skills).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'void-singularity',
+          name: 'Void Singularity',
+          requiredLevel: 10,
+          videoSources: expect.objectContaining({ mp4: expect.any(String) }),
+        }),
+        expect.objectContaining({
+          id: 'cosmic-rift-breath',
+          name: 'Cosmic Rift Breath',
+          requiredLevel: 9,
+          videoSources: expect.objectContaining({ mp4: expect.any(String) }),
+        }),
+      ])
+    );
+  });
+
+  it('summarizes high-level pet skills on the card instead of rendering every trigger', () => {
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[createVoidDragonPet(8, false), createFirePhoenixPet(5, false)]}
+      />
+    );
+
+    expect(html).toMatch(/8(?:<!-- -->)? skills/);
+    expect(html).toContain('data-testid="pet-skill-trigger-void-singularity"');
+    expect(html).not.toContain('data-testid="pet-skill-trigger-cosmic-rift-breath"');
+  });
+
   it('renders strike button with star cost and disables when star balance is insufficient', () => {
     const htmlWithStars = renderToString(
       <ExamIntegrityPetHatchery

@@ -1,5 +1,6 @@
 // Auto-generated pet definitions matching Stitch Design 16759489585040373143
 import { EggTier } from '../../molecules/ThreeEggViewer';
+import type { PetSkill } from '../ExamIntegrityPetSkill';
 import sproutlingStage1Img from '../../../assets/pets/sproutling-stage-1.png';
 import sproutlingStage2Img from '../../../assets/pets/sproutling-stage-2.png';
 import sproutlingStage3Img from '../../../assets/pets/sproutling-stage-3.png';
@@ -83,6 +84,8 @@ import chronodracoStage6Img from '../../../assets/pets/chronodraco-stage-6.png';
 import chronodracoStage7Img from '../../../assets/pets/chronodraco-stage-7.png';
 import chronodracoStage8Img from '../../../assets/pets/chronodraco-stage-8.png';
 import aegispaladinStage1Img from '../../../assets/pets/aegispaladin-stage-1.png';
+import cosmicRiftBreathVideo from '../../../assets/skills/cosmic-rift-breath.mp4';
+import voidSingularityVideo from '../../../assets/skills/void-singularity.mp4';
 import aegispaladinStage2Img from '../../../assets/pets/aegispaladin-stage-2.png';
 import aegispaladinStage3Img from '../../../assets/pets/aegispaladin-stage-3.png';
 import aegispaladinStage4Img from '../../../assets/pets/aegispaladin-stage-4.png';
@@ -127,8 +130,31 @@ export interface StudentPet {
   stageName: string;
   stageLevel: number;
   evolutionStages?: EvolutionStageInfo[];
+  skills?: PetSkill[];
   isEquipped?: boolean;
 }
+
+export const VOID_SINGULARITY_SKILL: PetSkill = {
+  id: 'void-singularity',
+  name: 'Void Singularity',
+  description: 'Summon a cinematic black hole.',
+  requiredLevel: 10,
+  icon: 'Sparkles',
+  videoSources: {
+    mp4: voidSingularityVideo,
+  },
+};
+
+export const COSMIC_RIFT_BREATH_SKILL: PetSkill = {
+  id: 'cosmic-rift-breath',
+  name: 'Cosmic Rift Breath',
+  description: 'Unleash a rift of cosmic energy.',
+  requiredLevel: 9,
+  icon: 'Sparkles',
+  videoSources: {
+    mp4: cosmicRiftBreathVideo,
+  },
+};
 
 export interface PetCodexEntry {
   key: string;
@@ -1098,6 +1124,22 @@ export const AEGIS_PALADIN_EVOLUTIONS: EvolutionStageInfo[] = [
   },
 ];
 
+function createEvolutionSkills(
+  petKey: string,
+  evolutionStages: EvolutionStageInfo[],
+  stageSkillOverrides: Partial<Record<number, PetSkill>> = {}
+): PetSkill[] {
+  return evolutionStages.map((stage) =>
+    stageSkillOverrides[stage.stage] ?? {
+      id: `${petKey}-stage-${stage.stage}-skill`,
+      name: `${stage.name} Technique`,
+      description: `Channel the power of ${stage.name}.`,
+      requiredLevel: stage.minLevel,
+      icon: 'Sparkles',
+    }
+  );
+}
+
 export function createSproutlingPet(
   stageLevel: number = 1,
   isEquipped: boolean = false
@@ -1121,6 +1163,7 @@ export function createSproutlingPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: SPROUTLING_EVOLUTIONS,
+    skills: createEvolutionSkills('sproutling', SPROUTLING_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1153,6 +1196,7 @@ export function createPipflickPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: PIPFLICK_EVOLUTIONS,
+    skills: createEvolutionSkills('pipflick', PIPFLICK_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1185,6 +1229,7 @@ export function createEmbersqueakPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: EMBERSQUEAK_EVOLUTIONS,
+    skills: createEvolutionSkills('embersqueak', EMBERSQUEAK_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1217,6 +1262,7 @@ export function createZephyrpuffPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: ZEPHYRPUFF_EVOLUTIONS,
+    skills: createEvolutionSkills('zephyrpuff', ZEPHYRPUFF_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1249,6 +1295,7 @@ export function createFrostpawPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: FROSTPAW_EVOLUTIONS,
+    skills: createEvolutionSkills('frostpaw', FROSTPAW_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1281,6 +1328,7 @@ export function createMagmafangPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: MAGMAFANG_EVOLUTIONS,
+    skills: createEvolutionSkills('magmafang', MAGMAFANG_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1313,6 +1361,7 @@ export function createVoltwingPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: VOLTWING_EVOLUTIONS,
+    skills: createEvolutionSkills('voltwing', VOLTWING_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1345,6 +1394,7 @@ export function createThundercatPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: THUNDERCAT_EVOLUTIONS,
+    skills: createEvolutionSkills('thundercat', THUNDERCAT_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1377,6 +1427,7 @@ export function createFirePhoenixPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: FIRE_PHOENIX_EVOLUTIONS,
+    skills: createEvolutionSkills('phoenix', FIRE_PHOENIX_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1409,6 +1460,7 @@ export function createChronoChimeraPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: CHRONO_CHIMERA_EVOLUTIONS,
+    skills: createEvolutionSkills('chronochimera', CHRONO_CHIMERA_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1441,6 +1493,7 @@ export function createShadowpantherPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: SHADOWPANTHER_EVOLUTIONS,
+    skills: createEvolutionSkills('shadowpanther', SHADOWPANTHER_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1473,6 +1526,7 @@ export function createStormstagPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: STORMSTAG_EVOLUTIONS,
+    skills: createEvolutionSkills('stormstag', STORMSTAG_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1505,6 +1559,7 @@ export function createAstralDragonPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: ASTRAL_DRAGON_EVOLUTIONS,
+    skills: createEvolutionSkills('astraldragon', ASTRAL_DRAGON_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1537,6 +1592,7 @@ export function createAstralLeviathanPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: ASTRAL_LEVIATHAN_EVOLUTIONS,
+    skills: createEvolutionSkills('astralleviathan', ASTRAL_LEVIATHAN_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1569,6 +1625,7 @@ export function createSolarWyvernPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: SOLAR_WYVERN_EVOLUTIONS,
+    skills: createEvolutionSkills('solarwyvern', SOLAR_WYVERN_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1601,6 +1658,10 @@ export function createVoidDragonPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: VOID_DRAGON_EVOLUTIONS,
+    skills: createEvolutionSkills('voiddragon', VOID_DRAGON_EVOLUTIONS, {
+      7: COSMIC_RIFT_BREATH_SKILL,
+      8: VOID_SINGULARITY_SKILL,
+    }),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1633,6 +1694,7 @@ export function createChronoDracoPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: CHRONO_DRACO_EVOLUTIONS,
+    skills: createEvolutionSkills('chronodraco', CHRONO_DRACO_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
@@ -1665,6 +1727,7 @@ export function createAegisPaladinPet(
     stageName: stage.name,
     imageUrl: stage.imageUrl,
     evolutionStages: AEGIS_PALADIN_EVOLUTIONS,
+    skills: createEvolutionSkills('aegispaladin', AEGIS_PALADIN_EVOLUTIONS),
     stats: {
       vitality: 60 + stageIndex * 10,
       wisdom: 60 + stageIndex * 10,
