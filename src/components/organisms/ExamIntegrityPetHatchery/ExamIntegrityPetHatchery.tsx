@@ -46,6 +46,7 @@ import {
   createAegisPaladinPet,
   rollMysteryPet,
   PET_IMAGE_MAP,
+  enrichStudentPet,
 } from './petsData';
 
 export interface IncubatingEgg {
@@ -203,7 +204,9 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     defaultTab === 'pets' ? 'pets' : 'incubator'
   );
   const [currentEggs, setCurrentEggs] = useState<IncubatingEgg[]>(incubatingEggs);
-  const [currentPets, setCurrentPets] = useState<StudentPet[]>(pets);
+  const [currentPets, setCurrentPets] = useState<StudentPet[]>(() =>
+    pets.map(enrichStudentPet)
+  );
   const [selectedEggIndex, setSelectedEggIndex] = useState<number>(0);
   const [hatchedCelebration, setHatchedCelebration] = useState<StudentPet | null>(null);
   const [evolvedCelebration, setEvolvedCelebration] = useState<{
@@ -234,7 +237,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   }, [incubatingEggs]);
 
   useEffect(() => {
-    setCurrentPets(pets);
+    setCurrentPets(pets.map(enrichStudentPet));
   }, [pets]);
 
   useEffect(() => {
@@ -319,10 +322,11 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
 
     if (newProgress >= 1.0) {
       const finishHatching = (petToCelebrate: StudentPet) => {
-        setHatchedCelebration(petToCelebrate);
+        const enriched = enrichStudentPet(petToCelebrate);
+        setHatchedCelebration(enriched);
         setCurrentPets((prev) => [
-          petToCelebrate,
-          ...prev.filter((p) => p.id !== petToCelebrate.id),
+          enriched,
+          ...prev.filter((p) => p.id !== enriched.id),
         ]);
       };
 
@@ -453,7 +457,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     }
   };
 
-  const handleGrowPet = (pet: StudentPet) => {
+  const handleGrowPet = (rawPet: StudentPet) => {
+    const pet = enrichStudentPet(rawPet);
     if (pet.level >= (pet.maxLevel || 10)) return;
     if (starBalance < pet.growthCostInStars) return;
 
@@ -808,7 +813,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       {/* Pets Sanctuary Tab */}
       {activeTab === 'pets' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentPets.map((pet) => {
+          {currentPets.map((rawPet) => {
+            const pet = enrichStudentPet(rawPet);
             const isMaxLevel = pet.level >= (pet.maxLevel || 10);
             const expPercent = isMaxLevel
               ? 100
@@ -1142,119 +1148,122 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       )}
 
       {/* Evolution Codex Modal */}
-      {inspectingEvolutionPet && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-3xl rounded-3xl bg-white dark:bg-stone-900 border border-amber-300 dark:border-amber-800 shadow-2xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
-            <button
-              type="button"
-              onClick={() => setInspectingEvolutionPet(null)}
-              className="absolute top-5 right-5 p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      {inspectingEvolutionPet && (() => {
+        const inspectingPet = enrichStudentPet(inspectingEvolutionPet);
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+            <div className="relative w-full max-w-3xl rounded-3xl bg-white dark:bg-stone-900 border border-amber-300 dark:border-amber-800 shadow-2xl p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+              <button
+                type="button"
+                onClick={() => setInspectingEvolutionPet(null)}
+                className="absolute top-5 right-5 p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-            <div>
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-500">
-                <Flame className="w-4 h-4" />
-                Stitch 3D Creature Codex
+              <div>
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-500">
+                  <Flame className="w-4 h-4" />
+                  Stitch 3D Creature Codex
+                </div>
+                <h3 className="text-2xl font-extrabold text-stone-900 dark:text-white mt-1">
+                  {inspectingPet.species} Evolution Tree
+                </h3>
+                <p className="text-xs text-stone-500 mt-1">
+                  Spend stars gained through academic integrity to evolve your companion across all {inspectingPet.totalStages || inspectingPet.evolutionStages?.length || 5} divine solar forms.
+                </p>
               </div>
-              <h3 className="text-2xl font-extrabold text-stone-900 dark:text-white mt-1">
-                {inspectingEvolutionPet.species} Evolution Tree
-              </h3>
-              <p className="text-xs text-stone-500 mt-1">
-                Spend stars gained through academic integrity to evolve your companion across all 5 divine solar forms.
-              </p>
-            </div>
 
-            <div className="space-y-4">
-              {inspectingEvolutionPet.evolutionStages?.map((stage) => {
-                const isReached = inspectingEvolutionPet.stageLevel >= stage.stage;
-                const isCurrent = inspectingEvolutionPet.stageLevel === stage.stage;
-                const stageSkill = inspectingEvolutionPet.skills?.find(
-                  (skill) => skill.requiredLevel === stage.minLevel
-                );
+              <div className="space-y-4">
+                {inspectingPet.evolutionStages?.map((stage) => {
+                  const isReached = inspectingPet.stageLevel >= stage.stage;
+                  const isCurrent = inspectingPet.stageLevel === stage.stage;
+                  const stageSkill = inspectingPet.skills?.find(
+                    (skill) => skill.requiredLevel === stage.minLevel
+                  );
 
-                return (
-                  <div
-                    key={stage.stage}
-                    className={cn(
-                      'p-4 rounded-2xl border-2 transition-all flex flex-col sm:flex-row items-center sm:items-start gap-4',
-                      isCurrent
-                        ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 shadow-md'
-                        : isReached
-                        ? 'border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800/50'
-                        : 'border-dashed border-stone-200 dark:border-stone-800 opacity-60'
-                    )}
-                  >
-                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative">
-                      {stage.imageUrl ? (
-                        <img
-                          src={stage.imageUrl}
-                          alt={stage.name}
-                          className={cn(
-                            'w-full h-full object-contain p-1',
-                            !isReached && 'brightness-0 opacity-40 contrast-200'
-                          )}
-                        />
-                      ) : (
-                        <span className={cn('text-3xl', !isReached && 'opacity-40 grayscale')}>{stage.avatarEmoji}</span>
+                  return (
+                    <div
+                      key={stage.stage}
+                      className={cn(
+                        'p-4 rounded-2xl border-2 transition-all flex flex-col sm:flex-row items-center sm:items-start gap-4',
+                        isCurrent
+                          ? 'border-amber-500 bg-amber-50/50 dark:bg-amber-950/20 shadow-md'
+                          : isReached
+                          ? 'border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-800/50'
+                          : 'border-dashed border-stone-200 dark:border-stone-800 opacity-60'
                       )}
-                      {!isReached && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                          <Lock className="w-5 h-5 text-amber-400" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1 space-y-1.5 text-center sm:text-left">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                        <div className="font-extrabold text-base text-stone-900 dark:text-white">
-                          Stage {stage.stage}: {stage.name}
-                        </div>
-                        <span className="text-xs font-bold text-amber-600 dark:text-amber-400">
-                          {stage.title} (Lvl {stage.minLevel}+)
-                        </span>
-                      </div>
-                      <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                        {stage.description}
-                      </p>
-                      {stageSkill && (
-                        <div className="pt-2 text-left">
-                          <span className="mb-1 block text-[10px] font-extrabold uppercase tracking-wide text-violet-600 dark:text-violet-300">
-                            Stage Ability
-                          </span>
-                          <ExamIntegrityPetSkill
-                            skill={stageSkill}
-                            posterUrl={stage.imageUrl}
-                            locked={inspectingEvolutionPet.level < stageSkill.requiredLevel}
-                            open={
-                              activePetSkill?.petId === inspectingEvolutionPet.id &&
-                              activePetSkill.skillId === stageSkill.id
-                            }
-                            onOpenChange={(open) => {
-                              if (open && inspectingEvolutionPet.level < stageSkill.requiredLevel) return;
-                              setActivePetSkill(
-                                open
-                                  ? { petId: inspectingEvolutionPet.id, skillId: stageSkill.id }
-                                  : null
-                              );
-                            }}
+                    >
+                      <div className="w-24 h-24 rounded-2xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative">
+                        {stage.imageUrl ? (
+                          <img
+                            src={stage.imageUrl}
+                            alt={stage.name}
+                            className={cn(
+                              'w-full h-full object-contain p-1',
+                              !isReached && 'brightness-0 opacity-40 contrast-200'
+                            )}
                           />
+                        ) : (
+                          <span className={cn('text-3xl', !isReached && 'opacity-40 grayscale')}>{stage.avatarEmoji}</span>
+                        )}
+                        {!isReached && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                            <Lock className="w-5 h-5 text-amber-400" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 space-y-1.5 text-center sm:text-left">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                          <div className="font-extrabold text-base text-stone-900 dark:text-white">
+                            Stage {stage.stage}: {stage.name}
+                          </div>
+                          <span className="text-xs font-bold text-amber-600 dark:text-amber-400">
+                            {stage.title} (Lvl {stage.minLevel}+)
+                          </span>
                         </div>
-                      )}
+                        <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
+                          {stage.description}
+                        </p>
+                        {stageSkill && (
+                          <div className="pt-2 text-left">
+                            <span className="mb-1 block text-[10px] font-extrabold uppercase tracking-wide text-violet-600 dark:text-violet-300">
+                              Stage Ability
+                            </span>
+                            <ExamIntegrityPetSkill
+                              skill={stageSkill}
+                              posterUrl={stage.imageUrl}
+                              locked={inspectingPet.level < stageSkill.requiredLevel}
+                              open={
+                                activePetSkill?.petId === inspectingPet.id &&
+                                activePetSkill.skillId === stageSkill.id
+                              }
+                              onOpenChange={(open) => {
+                                if (open && inspectingPet.level < stageSkill.requiredLevel) return;
+                                setActivePetSkill(
+                                  open
+                                    ? { petId: inspectingPet.id, skillId: stageSkill.id }
+                                    : null
+                                );
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
 
-            <div className="flex justify-end pt-2">
-              <Button variant="primary" onClick={() => setInspectingEvolutionPet(null)}>
-                Got it
-              </Button>
+              <div className="flex justify-end pt-2">
+                <Button variant="primary" onClick={() => setInspectingEvolutionPet(null)}>
+                  Got it
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Evolution Celebration Modal */}
       {evolvedCelebration && (
