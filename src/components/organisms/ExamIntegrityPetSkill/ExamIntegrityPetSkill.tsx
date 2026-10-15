@@ -193,7 +193,7 @@ export const ExamIntegrityPetSkill: React.FC<ExamIntegrityPetSkillProps> = ({
                   ref={videoRef}
                   autoPlay={!prefersReducedMotion}
                   playsInline
-                  poster={posterUrl}
+                  preload="auto"
                   onEnded={() => onOpenChange(false)}
                   onError={() => setHasMediaError(true)}
                   className="h-full w-full object-contain"

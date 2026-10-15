@@ -93,6 +93,12 @@ import aegispaladinStage5Img from '../../../assets/pets/aegispaladin-stage-5.png
 import aegispaladinStage6Img from '../../../assets/pets/aegispaladin-stage-6.png';
 import aegispaladinStage7Img from '../../../assets/pets/aegispaladin-stage-7.png';
 import aegispaladinStage8Img from '../../../assets/pets/aegispaladin-stage-8.png';
+import { PET_STAGE_ABILITIES } from './petStageAbilities';
+
+const SKILL_VIDEOS: Record<string, string> = import.meta.glob(
+  '../../../assets/skills/*.mp4',
+  { eager: true, import: 'default' }
+);
 
 export interface EvolutionStageInfo {
   stage: number;
@@ -1447,15 +1453,25 @@ export function createEvolutionSkills(
   evolutionStages: EvolutionStageInfo[],
   stageSkillOverrides: Partial<Record<number, PetSkill>> = {}
 ): PetSkill[] {
-  return evolutionStages.map((stage) =>
-    stageSkillOverrides[stage.stage] ?? {
+  return evolutionStages.map((stage) => {
+    if (stageSkillOverrides[stage.stage]) {
+      return stageSkillOverrides[stage.stage] as PetSkill;
+    }
+
+    const abilityMeta = PET_STAGE_ABILITIES[`${petKey}-stage-${stage.stage}`];
+    const videoUrl = abilityMeta?.videoFile
+      ? SKILL_VIDEOS[`../../../assets/skills/${abilityMeta.videoFile}`]
+      : undefined;
+
+    return {
       id: `${petKey}-stage-${stage.stage}-skill`,
-      name: `${stage.name} Technique`,
-      description: `Channel the power of ${stage.name}.`,
+      name: abilityMeta?.name ?? `${stage.name} Technique`,
+      description: abilityMeta?.description ?? `Channel the power of ${stage.name}.`,
       requiredLevel: stage.minLevel,
       icon: 'Sparkles',
-    }
-  );
+      ...(videoUrl ? { videoSources: { mp4: videoUrl } } : {}),
+    };
+  });
 }
 
 export function createSproutlingPet(

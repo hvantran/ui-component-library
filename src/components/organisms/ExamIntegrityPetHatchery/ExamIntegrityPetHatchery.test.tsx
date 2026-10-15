@@ -434,7 +434,7 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Levels in Stitch');
     expect(html).toContain('Codex');
     expect(html).toContain('Eclipsefang');
-    expect(html).toContain('Eclipsefang Technique');
+    expect(html).toContain('Eclipse Fang');
     expect(html).toContain('Lvl <!-- -->1');
     expect(html).toContain('Lvl <!-- -->4');
     expect(html).toContain('Lvl <!-- -->6');
@@ -587,6 +587,3 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Mythical');
   });
 });
-
-
-
