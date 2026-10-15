@@ -298,7 +298,7 @@ export const PET_STAGE_ABILITIES: Record<string, PetSkillDefinition> = {
   'astralleviathan-stage-5': {
     name: 'Astral Tide Convergence',
     description: 'Merges water and stellar cosmos into an oceanic barrier that absorbs test pressure completely.',
-    videoFile: 'astralleviathan-stage-5-primordial-astral-leviathan-overlord.mp4',
+    videoFile: 'astralleviathan-stage-4-starborne-titan.mp4',
   },
   'astralleviathan-stage-6': {
     name: 'Primordial Cosmic Oceanic Song',
@@ -418,7 +418,7 @@ export const PET_STAGE_ABILITIES: Record<string, PetSkillDefinition> = {
   'aegispaladin-stage-1': {
     name: 'Shield Tap',
     description: 'Taps a miniature divine buckler to banish early nervousness and erect basic focus posture.',
-    videoFile: 'aegispaladin-stage-1-squireling.mp4',
+    videoFile: 'aegispaladin-stage-1-aegis-pip.mp4',
   },
   'aegispaladin-stage-2': {
     name: 'Righteous Glow',

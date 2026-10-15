@@ -97,7 +97,7 @@ import { PET_STAGE_ABILITIES } from './petStageAbilities';
 
 const SKILL_VIDEOS: Record<string, string> = import.meta.glob(
   '../../../assets/skills/*.mp4',
-  { eager: true, import: 'default' }
+  { eager: true, query: '?url', import: 'default' }
 );
 
 export interface EvolutionStageInfo {
