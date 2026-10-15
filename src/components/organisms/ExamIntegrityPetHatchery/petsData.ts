@@ -2094,7 +2094,7 @@ export function createAegisPaladinPet(
 export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   sproutling: {
     key: 'sproutling',
-    name: 'Sprout (Flora Sproutling Seedling)',
+    name: 'Sprout',
     species: 'Flora Sproutling Seedling',
     rarity: 'Common',
     element: 'Flora',
@@ -2109,7 +2109,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   pipflick: {
     key: 'pipflick',
-    name: 'Pip (Aquafinne Water Drake)',
+    name: 'Pip',
     species: 'Aquafinne Water Drake',
     rarity: 'Common',
     element: 'Water',
@@ -2124,7 +2124,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   embersqueak: {
     key: 'embersqueak',
-    name: 'Ember (Solartiger Flame Cub)',
+    name: 'Ember',
     species: 'Solartiger Flame Cub',
     rarity: 'Common',
     element: 'Fire',
@@ -2139,7 +2139,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   zephyrpuff: {
     key: 'zephyrpuff',
-    name: 'Puff (Zephyrhare Cloud Bunny)',
+    name: 'Puff',
     species: 'Zephyrhare Cloud Bunny',
     rarity: 'Common',
     element: 'Wind',
@@ -2154,7 +2154,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   frostpaw: {
     key: 'frostpaw',
-    name: 'Glacia (Arctic Snow Leopard)',
+    name: 'Glacia',
     species: 'Arctic Snow Leopard',
     rarity: 'Rare',
     element: 'Ice',
@@ -2169,7 +2169,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   magmafang: {
     key: 'magmafang',
-    name: 'Cinder (Volcanic Obsidian Boar)',
+    name: 'Cinder',
     species: 'Volcanic Obsidian Boar',
     rarity: 'Rare',
     element: 'Earth',
@@ -2184,7 +2184,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   voltwing: {
     key: 'voltwing',
-    name: 'Volt (Electric Storm Owl)',
+    name: 'Volt',
     species: 'Electric Storm Owl',
     rarity: 'Rare',
     element: 'Lightning',
@@ -2199,7 +2199,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   thundercat: {
     key: 'thundercat',
-    name: 'Sparky (Electric Storm Tiger)',
+    name: 'Sparky',
     species: 'Electric Storm Tiger',
     rarity: 'Rare',
     element: 'Lightning',
@@ -2214,7 +2214,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   phoenix: {
     key: 'phoenix',
-    name: 'Pyra (Primordial Solar Phoenix)',
+    name: 'Pyra',
     species: 'Primordial Solar Phoenix',
     rarity: 'Epic',
     element: 'Fire',
@@ -2229,7 +2229,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   chronochimera: {
     key: 'chronochimera',
-    name: 'Chrono (Chrono Chimera Time Sprite)',
+    name: 'Chrono',
     species: 'Chrono Chimera Time Sprite',
     rarity: 'Epic',
     element: 'Temporal',
@@ -2244,7 +2244,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   shadowpanther: {
     key: 'shadowpanther',
-    name: 'Umbra (Umbral Eclipse Panther)',
+    name: 'Umbra',
     species: 'Umbral Eclipse Panther',
     rarity: 'Epic',
     element: 'Shadow',
@@ -2259,7 +2259,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   stormstag: {
     key: 'stormstag',
-    name: 'Thor (Celestial Thunder Elk)',
+    name: 'Thor',
     species: 'Celestial Thunder Elk',
     rarity: 'Epic',
     element: 'Lightning',
@@ -2274,7 +2274,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   astraldragon: {
     key: 'astraldragon',
-    name: 'Astra (Celestial Astral Dragon)',
+    name: 'Astra',
     species: 'Celestial Astral Dragon',
     rarity: 'Legendary',
     element: 'Astral',
@@ -2289,7 +2289,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   astralleviathan: {
     key: 'astralleviathan',
-    name: 'Leviathan (Starlight Cosmic Whale)',
+    name: 'Leviathan',
     species: 'Starlight Cosmic Whale',
     rarity: 'Legendary',
     element: 'Cosmic',
@@ -2304,7 +2304,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   solarwyvern: {
     key: 'solarwyvern',
-    name: 'Helios (Sunfire Archon Wyvern)',
+    name: 'Helios',
     species: 'Sunfire Archon Wyvern',
     rarity: 'Legendary',
     element: 'Astral',
@@ -2319,7 +2319,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   voiddragon: {
     key: 'voiddragon',
-    name: 'Nihilus (Mythic Void Abyssal Dragon)',
+    name: 'Nihilus',
     species: 'Mythic Void Abyssal Dragon',
     rarity: 'Mythic',
     element: 'Void',
@@ -2334,7 +2334,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   chronodraco: {
     key: 'chronodraco',
-    name: 'Aeon (Chrono-Draco Temporal Dragon)',
+    name: 'Aeon',
     species: 'Chrono-Draco Temporal Dragon',
     rarity: 'Mythic',
     element: 'Temporal',
@@ -2349,7 +2349,7 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   },
   aegispaladin: {
     key: 'aegispaladin',
-    name: 'Paladin (Aegis Paladin Dragon Knight)',
+    name: 'Paladin',
     species: 'Aegis Paladin Dragon Knight',
     rarity: 'Mythic',
     element: 'Divine',
