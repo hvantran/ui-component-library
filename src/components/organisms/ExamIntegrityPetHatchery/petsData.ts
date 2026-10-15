@@ -275,6 +275,149 @@ export function getPetElementMetadata(element?: string): PetElementMetadata {
   return PET_ELEMENT_METADATA[norm];
 }
 
+export type StandardPetSpeciesType =
+  | 'Plant'
+  | 'Aquatic'
+  | 'Beast'
+  | 'Avian'
+  | 'Mythical'
+  | 'Dragon'
+  | 'Celestial'
+  | 'Void'
+  | 'Temporal'
+  | 'Knight';
+
+export type PetSpeciesType = StandardPetSpeciesType | (string & {});
+
+export interface PetSpeciesTypeMetadata {
+  label: StandardPetSpeciesType;
+  iconName:
+    | 'Leaf'
+    | 'Fish'
+    | 'PawPrint'
+    | 'Bird'
+    | 'Sparkles'
+    | 'Flame'
+    | 'Sun'
+    | 'Eye'
+    | 'Clock'
+    | 'Shield';
+  badgeClass: string;
+  textClass: string;
+}
+
+export const PET_SPECIES_TYPE_METADATA: Record<StandardPetSpeciesType, PetSpeciesTypeMetadata> = {
+  Plant: {
+    label: 'Plant',
+    iconName: 'Leaf',
+    badgeClass: 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40',
+    textClass: 'text-emerald-400',
+  },
+  Aquatic: {
+    label: 'Aquatic',
+    iconName: 'Fish',
+    badgeClass: 'bg-sky-950/80 text-sky-300 border-sky-500/40',
+    textClass: 'text-sky-400',
+  },
+  Beast: {
+    label: 'Beast',
+    iconName: 'PawPrint',
+    badgeClass: 'bg-amber-950/80 text-amber-300 border-amber-500/40',
+    textClass: 'text-amber-400',
+  },
+  Avian: {
+    label: 'Avian',
+    iconName: 'Bird',
+    badgeClass: 'bg-teal-950/80 text-teal-300 border-teal-500/40',
+    textClass: 'text-teal-400',
+  },
+  Mythical: {
+    label: 'Mythical',
+    iconName: 'Sparkles',
+    badgeClass: 'bg-purple-950/80 text-purple-300 border-purple-500/40',
+    textClass: 'text-purple-400',
+  },
+  Dragon: {
+    label: 'Dragon',
+    iconName: 'Flame',
+    badgeClass: 'bg-rose-950/80 text-rose-300 border-rose-500/40',
+    textClass: 'text-rose-400',
+  },
+  Celestial: {
+    label: 'Celestial',
+    iconName: 'Sun',
+    badgeClass: 'bg-indigo-950/80 text-indigo-300 border-indigo-500/40',
+    textClass: 'text-indigo-400',
+  },
+  Void: {
+    label: 'Void',
+    iconName: 'Eye',
+    badgeClass: 'bg-fuchsia-950/80 text-fuchsia-300 border-fuchsia-500/40',
+    textClass: 'text-fuchsia-400',
+  },
+  Temporal: {
+    label: 'Temporal',
+    iconName: 'Clock',
+    badgeClass: 'bg-pink-950/80 text-pink-300 border-pink-500/40',
+    textClass: 'text-pink-400',
+  },
+  Knight: {
+    label: 'Knight',
+    iconName: 'Shield',
+    badgeClass: 'bg-yellow-950/80 text-yellow-300 border-yellow-500/40',
+    textClass: 'text-yellow-400',
+  },
+};
+
+export function normalizePetSpeciesType(st?: string): StandardPetSpeciesType {
+  if (!st) return 'Beast';
+  const clean = st.toLowerCase();
+  if (clean.includes('plant') || clean.includes('flora') || clean.includes('sprout')) return 'Plant';
+  if (clean.includes('aquatic') || clean.includes('water') || clean.includes('drake') || clean.includes('whale') || clean.includes('fish') || clean.includes('leviathan')) return 'Aquatic';
+  if (clean.includes('avian') || clean.includes('bird') || clean.includes('owl') || clean.includes('phoenix') || clean.includes('wyvern')) return 'Avian';
+  if (clean.includes('knight') || clean.includes('paladin') || clean.includes('aegis')) return 'Knight';
+  if (clean.includes('dragon') || clean.includes('draco')) return 'Dragon';
+  if (clean.includes('void') || clean.includes('abyss')) return 'Void';
+  if (clean.includes('temporal') || clean.includes('chrono') || clean.includes('time')) return 'Temporal';
+  if (clean.includes('celestial') || clean.includes('astral') || clean.includes('solar') || clean.includes('star')) return 'Celestial';
+  if (clean.includes('mythical') || clean.includes('sprite') || clean.includes('chimera')) return 'Mythical';
+  return 'Beast';
+}
+
+export function getPetSpeciesTypeMetadata(speciesType?: string): PetSpeciesTypeMetadata {
+  const norm = normalizePetSpeciesType(speciesType);
+  return PET_SPECIES_TYPE_METADATA[norm];
+}
+
+export function getRequiredElementCount(rarity?: string): number {
+  switch (rarity) {
+    case 'Rare':
+      return 2;
+    case 'Legendary':
+      return 3;
+    case 'Mythic':
+      return 4;
+    case 'Common':
+    case 'Epic':
+    default:
+      return 1;
+  }
+}
+
+export function getRequiredSpeciesTypeCount(rarity?: string): number {
+  switch (rarity) {
+    case 'Legendary':
+      return 2;
+    case 'Mythic':
+      return 3;
+    case 'Common':
+    case 'Rare':
+    case 'Epic':
+    default:
+      return 1;
+  }
+}
+
 export interface StudentPet {
   id: string;
   name: string;
@@ -282,6 +425,8 @@ export interface StudentPet {
   tier: EggTier;
   rarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
   element: PetElement;
+  elements?: PetElement[];
+  speciesTypes?: PetSpeciesType[];
   level: number;
   maxLevel: number;
   currentExp: number;
@@ -333,6 +478,8 @@ export interface PetCodexEntry {
   species: string;
   rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
   element: PetElement;
+  elements?: PetElement[];
+  speciesTypes?: PetSpeciesType[];
   avatarEmoji: string;
   tier: EggTier;
   totalStages: number;
@@ -1324,6 +1471,8 @@ export function createSproutlingPet(
     rarity: 'Common',
     tier: 'forest',
     element: 'Flora',
+    elements: ['Flora'],
+    speciesTypes: ['Plant'],
     level: stage.minLevel,
     maxLevel: 3,
     currentExp: stageIndex === 2 ? 300 : 30 + stageIndex * 35,
@@ -1357,6 +1506,8 @@ export function createPipflickPet(
     rarity: 'Common',
     tier: 'celestial',
     element: 'Water',
+    elements: ['Water'],
+    speciesTypes: ['Aquatic'],
     level: stage.minLevel,
     maxLevel: 3,
     currentExp: stageIndex === 2 ? 300 : 30 + stageIndex * 35,
@@ -1390,6 +1541,8 @@ export function createEmbersqueakPet(
     rarity: 'Common',
     tier: 'dragon',
     element: 'Fire',
+    elements: ['Fire'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 3,
     currentExp: stageIndex === 2 ? 300 : 30 + stageIndex * 35,
@@ -1423,6 +1576,8 @@ export function createZephyrpuffPet(
     rarity: 'Common',
     tier: 'celestial',
     element: 'Wind',
+    elements: ['Wind'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 3,
     currentExp: stageIndex === 2 ? 300 : 30 + stageIndex * 35,
@@ -1456,6 +1611,8 @@ export function createFrostpawPet(
     rarity: 'Rare',
     tier: 'celestial',
     element: 'Ice',
+    elements: ['Ice', 'Wind'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 4,
     currentExp: stageIndex === 3 ? 400 : 30 + stageIndex * 35,
@@ -1489,6 +1646,8 @@ export function createMagmafangPet(
     rarity: 'Rare',
     tier: 'dragon',
     element: 'Earth',
+    elements: ['Earth', 'Fire'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 4,
     currentExp: stageIndex === 3 ? 400 : 30 + stageIndex * 35,
@@ -1522,6 +1681,8 @@ export function createVoltwingPet(
     rarity: 'Rare',
     tier: 'celestial',
     element: 'Lightning',
+    elements: ['Lightning', 'Wind'],
+    speciesTypes: ['Avian'],
     level: stage.minLevel,
     maxLevel: 4,
     currentExp: stageIndex === 3 ? 400 : 30 + stageIndex * 35,
@@ -1555,6 +1716,8 @@ export function createThundercatPet(
     rarity: 'Rare',
     tier: 'dragon',
     element: 'Lightning',
+    elements: ['Lightning', 'Fire'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 4,
     currentExp: stageIndex === 3 ? 400 : 30 + stageIndex * 35,
@@ -1588,6 +1751,8 @@ export function createFirePhoenixPet(
     rarity: 'Epic',
     tier: 'dragon',
     element: 'Fire',
+    elements: ['Fire'],
+    speciesTypes: ['Avian'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 4 ? 500 : 30 + stageIndex * 35,
@@ -1621,6 +1786,8 @@ export function createChronoChimeraPet(
     rarity: 'Epic',
     tier: 'celestial',
     element: 'Temporal',
+    elements: ['Temporal'],
+    speciesTypes: ['Mythical'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 4 ? 500 : 30 + stageIndex * 35,
@@ -1654,6 +1821,8 @@ export function createShadowpantherPet(
     rarity: 'Epic',
     tier: 'dragon',
     element: 'Shadow',
+    elements: ['Shadow'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 4 ? 500 : 30 + stageIndex * 35,
@@ -1687,6 +1856,8 @@ export function createStormstagPet(
     rarity: 'Epic',
     tier: 'forest',
     element: 'Lightning',
+    elements: ['Lightning'],
+    speciesTypes: ['Beast'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 4 ? 500 : 30 + stageIndex * 35,
@@ -1720,6 +1891,8 @@ export function createAstralDragonPet(
     rarity: 'Legendary',
     tier: 'celestial',
     element: 'Astral',
+    elements: ['Astral', 'Cosmic', 'Fire'],
+    speciesTypes: ['Dragon', 'Celestial'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 5 ? 600 : 30 + stageIndex * 35,
@@ -1753,6 +1926,8 @@ export function createAstralLeviathanPet(
     rarity: 'Legendary',
     tier: 'celestial',
     element: 'Cosmic',
+    elements: ['Cosmic', 'Water', 'Astral'],
+    speciesTypes: ['Aquatic', 'Celestial'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 5 ? 600 : 30 + stageIndex * 35,
@@ -1786,6 +1961,8 @@ export function createSolarWyvernPet(
     rarity: 'Legendary',
     tier: 'dragon',
     element: 'Astral',
+    elements: ['Astral', 'Fire', 'Wind'],
+    speciesTypes: ['Dragon', 'Avian'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 5 ? 600 : 30 + stageIndex * 35,
@@ -1819,6 +1996,8 @@ export function createVoidDragonPet(
     rarity: 'Mythic',
     tier: 'dragon',
     element: 'Void',
+    elements: ['Void', 'Cosmic', 'Shadow', 'Fire'],
+    speciesTypes: ['Dragon', 'Void', 'Mythical'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 7 ? 800 : 30 + stageIndex * 35,
@@ -1855,6 +2034,8 @@ export function createChronoDracoPet(
     rarity: 'Mythic',
     tier: 'celestial',
     element: 'Temporal',
+    elements: ['Temporal', 'Cosmic', 'Astral', 'Lightning'],
+    speciesTypes: ['Dragon', 'Temporal', 'Celestial'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 7 ? 800 : 30 + stageIndex * 35,
@@ -1888,6 +2069,8 @@ export function createAegisPaladinPet(
     rarity: 'Mythic',
     tier: 'dragon',
     element: 'Divine',
+    elements: ['Divine', 'Earth', 'Astral', 'Cosmic'],
+    speciesTypes: ['Knight', 'Dragon', 'Celestial'],
     level: stage.minLevel,
     maxLevel: 10,
     currentExp: stageIndex === 7 ? 800 : 30 + stageIndex * 35,
@@ -1915,6 +2098,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Flora Sproutling Seedling',
     rarity: 'Common',
     element: 'Flora',
+    elements: ['Flora'],
+    speciesTypes: ['Plant'],
     avatarEmoji: '🌱',
     tier: 'forest',
     totalStages: 3,
@@ -1928,6 +2113,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Aquafinne Water Drake',
     rarity: 'Common',
     element: 'Water',
+    elements: ['Water'],
+    speciesTypes: ['Aquatic'],
     avatarEmoji: '💧',
     tier: 'celestial',
     totalStages: 3,
@@ -1941,6 +2128,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Solartiger Flame Cub',
     rarity: 'Common',
     element: 'Fire',
+    elements: ['Fire'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '🔥',
     tier: 'dragon',
     totalStages: 3,
@@ -1954,6 +2143,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Zephyrhare Cloud Bunny',
     rarity: 'Common',
     element: 'Wind',
+    elements: ['Wind'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '🐰',
     tier: 'celestial',
     totalStages: 3,
@@ -1967,6 +2158,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Arctic Snow Leopard',
     rarity: 'Rare',
     element: 'Ice',
+    elements: ['Ice', 'Wind'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '❄️',
     tier: 'celestial',
     totalStages: 4,
@@ -1980,6 +2173,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Volcanic Obsidian Boar',
     rarity: 'Rare',
     element: 'Earth',
+    elements: ['Earth', 'Fire'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '🐗',
     tier: 'dragon',
     totalStages: 4,
@@ -1993,6 +2188,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Electric Storm Owl',
     rarity: 'Rare',
     element: 'Lightning',
+    elements: ['Lightning', 'Wind'],
+    speciesTypes: ['Avian'],
     avatarEmoji: '🦉',
     tier: 'celestial',
     totalStages: 4,
@@ -2006,6 +2203,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Electric Storm Tiger',
     rarity: 'Rare',
     element: 'Lightning',
+    elements: ['Lightning', 'Fire'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '🐯',
     tier: 'dragon',
     totalStages: 4,
@@ -2019,6 +2218,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Primordial Solar Phoenix',
     rarity: 'Epic',
     element: 'Fire',
+    elements: ['Fire'],
+    speciesTypes: ['Avian'],
     avatarEmoji: '🔥',
     tier: 'dragon',
     totalStages: 5,
@@ -2032,6 +2233,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Chrono Chimera Time Sprite',
     rarity: 'Epic',
     element: 'Temporal',
+    elements: ['Temporal'],
+    speciesTypes: ['Mythical'],
     avatarEmoji: '⏳',
     tier: 'celestial',
     totalStages: 5,
@@ -2045,6 +2248,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Umbral Eclipse Panther',
     rarity: 'Epic',
     element: 'Shadow',
+    elements: ['Shadow'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '🐆',
     tier: 'dragon',
     totalStages: 5,
@@ -2058,6 +2263,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Celestial Thunder Elk',
     rarity: 'Epic',
     element: 'Lightning',
+    elements: ['Lightning'],
+    speciesTypes: ['Beast'],
     avatarEmoji: '🦌',
     tier: 'forest',
     totalStages: 5,
@@ -2071,6 +2278,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Celestial Astral Dragon',
     rarity: 'Legendary',
     element: 'Astral',
+    elements: ['Astral', 'Cosmic', 'Fire'],
+    speciesTypes: ['Dragon', 'Celestial'],
     avatarEmoji: '✨',
     tier: 'celestial',
     totalStages: 6,
@@ -2084,6 +2293,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Starlight Cosmic Whale',
     rarity: 'Legendary',
     element: 'Cosmic',
+    elements: ['Cosmic', 'Water', 'Astral'],
+    speciesTypes: ['Aquatic', 'Celestial'],
     avatarEmoji: '🐋',
     tier: 'celestial',
     totalStages: 6,
@@ -2097,6 +2308,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Sunfire Archon Wyvern',
     rarity: 'Legendary',
     element: 'Astral',
+    elements: ['Astral', 'Fire', 'Wind'],
+    speciesTypes: ['Dragon', 'Avian'],
     avatarEmoji: '☀️',
     tier: 'dragon',
     totalStages: 6,
@@ -2110,6 +2323,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Mythic Void Abyssal Dragon',
     rarity: 'Mythic',
     element: 'Void',
+    elements: ['Void', 'Cosmic', 'Shadow', 'Fire'],
+    speciesTypes: ['Dragon', 'Void', 'Mythical'],
     avatarEmoji: '🟣',
     tier: 'dragon',
     totalStages: 8,
@@ -2123,6 +2338,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Chrono-Draco Temporal Dragon',
     rarity: 'Mythic',
     element: 'Temporal',
+    elements: ['Temporal', 'Cosmic', 'Astral', 'Lightning'],
+    speciesTypes: ['Dragon', 'Temporal', 'Celestial'],
     avatarEmoji: '⌛',
     tier: 'celestial',
     totalStages: 8,
@@ -2136,6 +2353,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
     species: 'Aegis Paladin Dragon Knight',
     rarity: 'Mythic',
     element: 'Divine',
+    elements: ['Divine', 'Earth', 'Astral', 'Cosmic'],
+    speciesTypes: ['Knight', 'Dragon', 'Celestial'],
     avatarEmoji: '🛡️',
     tier: 'dragon',
     totalStages: 8,
@@ -2387,6 +2606,8 @@ export interface SyncPetLibraryItemDTO {
   rarity: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
   tier: EggTier;
   element: PetElement;
+  elements?: PetElement[];
+  speciesTypes?: PetSpeciesType[];
   avatarEmoji: string;
   totalStages: number;
   maxLevel: number;
@@ -2406,6 +2627,8 @@ export function getExportedPetLibrary(): SyncPetLibraryItemDTO[] {
     rarity: entry.rarity,
     tier: entry.tier,
     element: entry.element,
+    elements: entry.elements,
+    speciesTypes: entry.speciesTypes,
     avatarEmoji: entry.avatarEmoji,
     totalStages: entry.totalStages,
     maxLevel: 10,
@@ -2488,14 +2711,28 @@ export function enrichStudentPet(pet: StudentPet): StudentPet {
   const rawElement = pet.element || codexEntry?.element || 'Cosmic';
   const element = normalizePetElement(rawElement);
 
-  if (hasStages && hasSkills && pet.totalStages && pet.element === element) {
+  const elements = (pet.elements && pet.elements.length > 0)
+    ? pet.elements.map(normalizePetElement)
+    : codexEntry?.elements && codexEntry.elements.length > 0
+    ? codexEntry.elements.map(normalizePetElement)
+    : [element];
+
+  const speciesTypes = (pet.speciesTypes && pet.speciesTypes.length > 0)
+    ? pet.speciesTypes.map(normalizePetSpeciesType)
+    : codexEntry?.speciesTypes && codexEntry.speciesTypes.length > 0
+    ? codexEntry.speciesTypes.map(normalizePetSpeciesType)
+    : [normalizePetSpeciesType(pet.species || codexEntry?.species)];
+
+  if (hasStages && hasSkills && pet.totalStages && pet.element === element && pet.elements && pet.speciesTypes) {
     return pet;
   }
 
   if (!codexEntry) {
     return {
       ...pet,
-      element,
+      element: elements[0] || element,
+      elements,
+      speciesTypes,
     };
   }
 
@@ -2514,7 +2751,9 @@ export function enrichStudentPet(pet: StudentPet): StudentPet {
 
   return {
     ...pet,
-    element,
+    element: elements[0] || element,
+    elements,
+    speciesTypes,
     petLibraryId: pet.petLibraryId || codexEntry.key,
     evolutionStages,
     skills,

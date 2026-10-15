@@ -71,7 +71,7 @@ describe('ExamIntegrityPetHatchery', () => {
     );
 
     expect(html).toContain('Pyra');
-    expect(html).toContain('Primordial Solar Phoenix');
+    expect(html).toContain('title="Species Type: Avian"');
     expect(html).toContain('Active Companion');
     expect(html).toContain('Inspect Evolution Forms');
     expect(html).toContain('Levels in Stitch');
@@ -95,28 +95,30 @@ describe('ExamIntegrityPetHatchery', () => {
 
     // Common (3 stages)
     expect(html).toContain('Sprout');
-    expect(html).toContain('Flora Sproutling Seedling');
     expect(html).toContain('Common');
+    expect(html).toContain('title="Species Type: Plant"');
 
     // Rare (4 stages)
     expect(html).toContain('Glacia');
-    expect(html).toContain('Arctic Snow Leopard');
     expect(html).toContain('Rare');
+    expect(html).toContain('title="Species Type: Beast"');
 
     // Epic (5 stages)
     expect(html).toContain('Pyra');
-    expect(html).toContain('Primordial Solar Phoenix');
     expect(html).toContain('Epic');
+    expect(html).toContain('title="Species Type: Avian"');
 
     // Legendary (6 stages)
     expect(html).toContain('Astra');
-    expect(html).toContain('Celestial Astral Dragon');
     expect(html).toContain('Legendary');
+    expect(html).toContain('title="Species Type: Dragon"');
+    expect(html).toContain('title="Species Type: Celestial"');
 
     // Mythic (8 stages)
     expect(html).toContain('Nihilus');
-    expect(html).toContain('Mythic Void Abyssal Dragon');
     expect(html).toContain('Mythic');
+    expect(html).toContain('title="Species Type: Void"');
+    expect(html).toContain('title="Species Type: Mythical"');
   });
 
   it('verifies PET_CODEX_REGISTRY defines all 5 rarities with proper stage counts', () => {
@@ -440,7 +442,7 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Lvl <!-- -->10');
   });
 
-  it('renders standardized element icon badge on pet image canvas and removes redundant card body row', () => {
+  it('renders standardized element icon badge and species type icon on pet image canvas without raw species text', () => {
     const sproutPet = createSproutlingPet(1, false);
     const html = renderToString(
       <ExamIntegrityPetHatchery
@@ -454,10 +456,11 @@ describe('ExamIntegrityPetHatchery', () => {
     // Verify element badge exists on pet image canvas
     expect(html).toContain(`data-testid="pet-element-${sproutPet.id}"`);
     expect(html).toContain('Flora');
-    // Verify species badge exists on canvas
-    expect(html).toContain('Flora Sproutling Seedling');
-    // Verify old card body row pattern ({species} • <span ...>{element}</span>) is removed
-    expect(html).not.toContain('Flora Sproutling Seedling •');
+    // Verify species type icon exists on canvas instead of raw species name
+    expect(html).toContain(`data-testid="pet-species-type-${sproutPet.id}-plant"`);
+    expect(html).toContain('title="Species Type: Plant"');
+    // Verify raw species text is not displayed on the card
+    expect(html).not.toContain('Flora Sproutling Seedling');
   });
 
   it('normalizes legacy compound element strings into standard elements', () => {
@@ -478,6 +481,74 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain(`data-testid="pet-element-${legacyPet.id}"`);
     expect(html).toContain('Fire');
     expect(html).not.toContain('Solar Fire / Flame');
+  });
+
+  it('verifies exact element and species type counts per pet rarity formula', () => {
+    const commonPet = createSproutlingPet(1, false);
+    const rarePet = createFrostpawPet(1, false);
+    const epicPet = createFirePhoenixPet(1, false);
+    const legendaryPet = createAstralDragonPet(1, false);
+    const mythicPet = createVoidDragonPet(1, false);
+
+    // Common: 1 element, 1 species type
+    expect(commonPet.elements).toHaveLength(1);
+    expect(commonPet.speciesTypes).toHaveLength(1);
+    expect(commonPet.elements).toEqual(['Flora']);
+    expect(commonPet.speciesTypes).toEqual(['Plant']);
+
+    // Rare: 2 elements, 1 species type
+    expect(rarePet.elements).toHaveLength(2);
+    expect(rarePet.speciesTypes).toHaveLength(1);
+    expect(rarePet.elements).toEqual(['Ice', 'Wind']);
+    expect(rarePet.speciesTypes).toEqual(['Beast']);
+
+    // Epic: 1 element, 1 species type
+    expect(epicPet.elements).toHaveLength(1);
+    expect(epicPet.speciesTypes).toHaveLength(1);
+    expect(epicPet.elements).toEqual(['Fire']);
+    expect(epicPet.speciesTypes).toEqual(['Avian']);
+
+    // Legendary: 3 elements, 2 species types
+    expect(legendaryPet.elements).toHaveLength(3);
+    expect(legendaryPet.speciesTypes).toHaveLength(2);
+    expect(legendaryPet.elements).toEqual(['Astral', 'Cosmic', 'Fire']);
+    expect(legendaryPet.speciesTypes).toEqual(['Dragon', 'Celestial']);
+
+    // Mythic: 4 elements, 3 species types
+    expect(mythicPet.elements).toHaveLength(4);
+    expect(mythicPet.speciesTypes).toHaveLength(3);
+    expect(mythicPet.elements).toEqual(['Void', 'Cosmic', 'Shadow', 'Fire']);
+    expect(mythicPet.speciesTypes).toEqual(['Dragon', 'Void', 'Mythical']);
+
+    // Render HTML and assert multiple element badges on cards
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={1500}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[rarePet, legendaryPet, mythicPet]}
+      />
+    );
+
+    // Rare 2 elements
+    expect(html).toContain(`data-testid="pet-element-${rarePet.id}"`);
+    expect(html).toContain(`data-testid="pet-element-${rarePet.id}-1"`);
+
+    // Legendary 3 elements
+    expect(html).toContain(`data-testid="pet-element-${legendaryPet.id}"`);
+    expect(html).toContain(`data-testid="pet-element-${legendaryPet.id}-1"`);
+    expect(html).toContain(`data-testid="pet-element-${legendaryPet.id}-2"`);
+    expect(html).toContain(`data-testid="pet-species-type-${legendaryPet.id}-dragon"`);
+    expect(html).toContain(`data-testid="pet-species-type-${legendaryPet.id}-celestial"`);
+
+    // Mythic 4 elements
+    expect(html).toContain(`data-testid="pet-element-${mythicPet.id}"`);
+    expect(html).toContain(`data-testid="pet-element-${mythicPet.id}-1"`);
+    expect(html).toContain(`data-testid="pet-element-${mythicPet.id}-2"`);
+    expect(html).toContain(`data-testid="pet-element-${mythicPet.id}-3"`);
+    expect(html).toContain(`data-testid="pet-species-type-${mythicPet.id}-dragon"`);
+    expect(html).toContain(`data-testid="pet-species-type-${mythicPet.id}-void"`);
+    expect(html).toContain(`data-testid="pet-species-type-${mythicPet.id}-mythical"`);
   });
 });
 

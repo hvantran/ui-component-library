@@ -23,6 +23,9 @@ import {
   Moon,
   Eye,
   Shield,
+  PawPrint,
+  Bird,
+  Fish,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
@@ -35,6 +38,7 @@ import {
   type EvolutionStageInfo,
   type StudentPet,
   getPetElementMetadata,
+  getPetSpeciesTypeMetadata,
   createSproutlingPet,
   createPipflickPet,
   createEmbersqueakPet,
@@ -68,6 +72,19 @@ export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?:
   Zap,
   Sparkles,
   Moon,
+  Sun,
+  Eye,
+  Clock,
+  Shield,
+};
+
+export const PET_SPECIES_TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Leaf,
+  Fish,
+  PawPrint,
+  Bird,
+  Sparkles,
+  Flame,
   Sun,
   Eye,
   Clock,
@@ -245,6 +262,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
     stageName: string;
     imageUrl: string;
     element?: string;
+    elements?: string[];
+    speciesTypes?: string[];
     rarity?: string;
   } | null>(null);
   const [wobblingPetId, setWobblingPetId] = useState<string | null>(null);
@@ -949,16 +968,17 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                     </div>
                   )}
 
-                  {/* Element & Species Badges inside Character Canvas */}
-                  {(() => {
-                    const elementMeta = getPetElementMetadata(pet.element);
-                    const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
-                    return (
-                      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
+                  {/* Element & Species Type Badges inside Character Canvas */}
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10 flex-wrap max-w-[85%]">
+                    {(pet.elements && pet.elements.length > 0 ? pet.elements : [pet.element]).map((el, idx) => {
+                      const elementMeta = getPetElementMetadata(el);
+                      const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
+                      return (
                         <div
-                          data-testid={`pet-element-${pet.id}`}
+                          key={`${el}-${idx}`}
+                          data-testid={idx === 0 ? `pet-element-${pet.id}` : `pet-element-${pet.id}-${idx}`}
                           className={cn(
-                            'px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md border shadow-md transition-transform group-hover:scale-105',
+                            'px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md border shadow-md transition-transform group-hover:scale-105',
                             elementMeta.badgeClass
                           )}
                           title={`Element: ${elementMeta.label}`}
@@ -967,17 +987,27 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                           <ElementIcon className="w-3.5 h-3.5" />
                           <span>{elementMeta.label}</span>
                         </div>
-                        {pet.species && (
-                          <span
-                            className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-stone-950/75 text-stone-300 border border-stone-700/50 backdrop-blur-sm max-w-[130px] truncate shadow-sm"
-                            title={pet.species}
-                          >
-                            {pet.species}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })()}
+                      );
+                    })}
+                    {pet.speciesTypes?.map((st) => {
+                      const meta = getPetSpeciesTypeMetadata(st);
+                      const SpeciesIcon = PET_SPECIES_TYPE_ICONS[meta.iconName] || PET_ELEMENT_ICONS[meta.iconName] || PawPrint;
+                      return (
+                        <div
+                          key={st}
+                          data-testid={`pet-species-type-${pet.id}-${st.toLowerCase()}`}
+                          className={cn(
+                            'p-1 sm:p-1.5 rounded-full backdrop-blur-md border shadow-md flex items-center justify-center transition-transform group-hover:scale-105',
+                            meta.badgeClass
+                          )}
+                          title={`Species Type: ${meta.label}`}
+                          aria-label={`Species Type: ${meta.label}`}
+                        >
+                          <SpeciesIcon className="w-3.5 h-3.5" />
+                        </div>
+                      );
+                    })}
+                  </div>
 
                   {displayedImageUrl && !isDisplayedStageLocked && (
                     <button
@@ -992,6 +1022,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                           stageName: displayedStageName,
                           imageUrl: displayedImageUrl,
                           element: pet.element,
+                          elements: pet.elements,
+                          speciesTypes: pet.speciesTypes,
                           rarity: pet.rarity,
                         });
                       }}
@@ -1397,22 +1429,44 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                 {hatchedCelebration.name}
               </h3>
               {(() => {
-                const meta = getPetElementMetadata(hatchedCelebration.element);
-                const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                const elements = (hatchedCelebration.elements && hatchedCelebration.elements.length > 0)
+                  ? hatchedCelebration.elements
+                  : [hatchedCelebration.element];
                 return (
                   <div className="flex items-center justify-center gap-2 pt-1 flex-wrap">
-                    <span className="text-xs font-semibold text-stone-600 dark:text-stone-300">
-                      {hatchedCelebration.species}
-                    </span>
-                    <span
-                      className={cn(
-                        'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
-                        meta.badgeClass
-                      )}
-                    >
-                      <Icon className="w-3 h-3" />
-                      {meta.label}
-                    </span>
+                    {elements.map((el, idx) => {
+                      const meta = getPetElementMetadata(el);
+                      const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                      return (
+                        <span
+                          key={`${el}-${idx}`}
+                          className={cn(
+                            'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
+                            meta.badgeClass
+                          )}
+                        >
+                          <Icon className="w-3 h-3" />
+                          {meta.label}
+                        </span>
+                      );
+                    })}
+                    {hatchedCelebration.speciesTypes?.map((st) => {
+                      const meta = getPetSpeciesTypeMetadata(st);
+                      const SpeciesIcon = PET_SPECIES_TYPE_ICONS[meta.iconName] || PET_ELEMENT_ICONS[meta.iconName] || PawPrint;
+                      return (
+                        <span
+                          key={st}
+                          className={cn(
+                            'p-1 rounded-full border shadow-xs flex items-center justify-center',
+                            meta.badgeClass
+                          )}
+                          title={`Species Type: ${meta.label}`}
+                          aria-label={`Species Type: ${meta.label}`}
+                        >
+                          <SpeciesIcon className="w-3 h-3" />
+                        </span>
+                      );
+                    })}
                   </div>
                 );
               })()}
@@ -1469,11 +1523,15 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                 <span className="text-xs font-bold text-stone-400">
                   {fullImageModalData.stageName}
                 </span>
-                {fullImageModalData.element && (() => {
-                  const meta = getPetElementMetadata(fullImageModalData.element);
+                {(fullImageModalData.elements && fullImageModalData.elements.length > 0
+                  ? fullImageModalData.elements
+                  : fullImageModalData.element ? [fullImageModalData.element] : []
+                ).map((el, idx) => {
+                  const meta = getPetElementMetadata(el);
                   const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
                   return (
                     <span
+                      key={`${el}-${idx}`}
                       className={cn(
                         'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
                         meta.badgeClass
@@ -1483,7 +1541,24 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                       {meta.label}
                     </span>
                   );
-                })()}
+                })}
+                {fullImageModalData.speciesTypes?.map((st) => {
+                  const meta = getPetSpeciesTypeMetadata(st);
+                  const SpeciesIcon = PET_SPECIES_TYPE_ICONS[meta.iconName] || PET_ELEMENT_ICONS[meta.iconName] || PawPrint;
+                  return (
+                    <span
+                      key={st}
+                      className={cn(
+                        'p-1 rounded-full border shadow-xs flex items-center justify-center',
+                        meta.badgeClass
+                      )}
+                      title={`Species Type: ${meta.label}`}
+                      aria-label={`Species Type: ${meta.label}`}
+                    >
+                      <SpeciesIcon className="w-3 h-3" />
+                    </span>
+                  );
+                })}
                 {fullImageModalData.rarity && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40">
                     {fullImageModalData.rarity}
