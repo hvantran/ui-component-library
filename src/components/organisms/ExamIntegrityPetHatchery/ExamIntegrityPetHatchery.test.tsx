@@ -554,6 +554,38 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain(`data-testid="pet-species-type-${mythicPet.id}-void"`);
     expect(html).toContain(`data-testid="pet-species-type-${mythicPet.id}-mythical"`);
   });
+
+  it('renders preview mode modal with organized Elements and Species sections', () => {
+    const mythicPet = createVoidDragonPet(1, false);
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={1500}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[mythicPet]}
+        initialPreviewPet={mythicPet}
+      />
+    );
+
+    // Modal dialog rendered
+    expect(html).toContain('data-testid="pet-full-image-modal"');
+    expect(html).toContain('data-testid="close-full-image-modal"');
+
+    // Organized Elements row
+    expect(html).toContain('data-testid="pet-preview-elements-row"');
+    expect(html).toContain('Elements:');
+    expect(html).toContain('Void');
+    expect(html).toContain('Cosmic');
+    expect(html).toContain('Shadow');
+    expect(html).toContain('Fire');
+
+    // Organized Species row
+    expect(html).toContain('data-testid="pet-preview-species-row"');
+    expect(html).toContain('Species:');
+    expect(html).toContain('Dragon');
+    expect(html).toContain('Void');
+    expect(html).toContain('Mythical');
+  });
 });
 
 
