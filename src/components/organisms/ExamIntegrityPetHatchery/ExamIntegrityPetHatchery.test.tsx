@@ -439,6 +439,46 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Lvl <!-- -->8');
     expect(html).toContain('Lvl <!-- -->10');
   });
+
+  it('renders standardized element icon badge on pet image canvas and removes redundant card body row', () => {
+    const sproutPet = createSproutlingPet(1, false);
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={500}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[sproutPet]}
+      />
+    );
+
+    // Verify element badge exists on pet image canvas
+    expect(html).toContain(`data-testid="pet-element-${sproutPet.id}"`);
+    expect(html).toContain('Flora');
+    // Verify species badge exists on canvas
+    expect(html).toContain('Flora Sproutling Seedling');
+    // Verify old card body row pattern ({species} • <span ...>{element}</span>) is removed
+    expect(html).not.toContain('Flora Sproutling Seedling •');
+  });
+
+  it('normalizes legacy compound element strings into standard elements', () => {
+    const legacyPet: StudentPet = {
+      ...createFirePhoenixPet(1, false),
+      id: 'pet-phoenix-legacy',
+      element: 'Solar Fire / Flame',
+    };
+    const html = renderToString(
+      <ExamIntegrityPetHatchery
+        starBalance={500}
+        defaultTab="pets"
+        incubatingEggs={[]}
+        pets={[legacyPet]}
+      />
+    );
+
+    expect(html).toContain(`data-testid="pet-element-${legacyPet.id}"`);
+    expect(html).toContain('Fire');
+    expect(html).not.toContain('Solar Fire / Flame');
+  });
 });
 
 

@@ -332,6 +332,11 @@ export const UmbraServerDTOWithoutStages: Story = {
   },
 };
 
-
-
-
+export const StandardizedElementsSanctuary: Story = {
+  args: {
+    starBalance: 1500,
+    defaultTab: 'pets',
+    incubatingEggs: DEFAULT_INCUBATING_EGGS,
+    pets: ALL_ROSTER_STARTER_PETS,
+  },
+};

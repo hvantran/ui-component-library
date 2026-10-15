@@ -15,6 +15,14 @@ import {
   Lock,
   Clock,
   Maximize2,
+  Leaf,
+  Droplets,
+  Wind,
+  Snowflake,
+  Mountain,
+  Moon,
+  Eye,
+  Shield,
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
@@ -26,6 +34,7 @@ export * from './petsData';
 import {
   type EvolutionStageInfo,
   type StudentPet,
+  getPetElementMetadata,
   createSproutlingPet,
   createPipflickPet,
   createEmbersqueakPet,
@@ -48,6 +57,22 @@ import {
   PET_IMAGE_MAP,
   enrichStudentPet,
 } from './petsData';
+
+export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Leaf,
+  Droplets,
+  Flame,
+  Wind,
+  Snowflake,
+  Mountain,
+  Zap,
+  Sparkles,
+  Moon,
+  Sun,
+  Eye,
+  Clock,
+  Shield,
+};
 
 export interface IncubatingEgg {
   id: string;
@@ -918,11 +943,41 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                   </div>
 
                   {pet.isEquipped && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm flex items-center gap-1">
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-amber-950/80 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold uppercase tracking-wider backdrop-blur-sm flex items-center gap-1 z-10">
                       <Crown className="w-3 h-3 text-amber-400" />
                       Active Companion
                     </div>
                   )}
+
+                  {/* Element & Species Badges inside Character Canvas */}
+                  {(() => {
+                    const elementMeta = getPetElementMetadata(pet.element);
+                    const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
+                    return (
+                      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
+                        <div
+                          data-testid={`pet-element-${pet.id}`}
+                          className={cn(
+                            'px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md border shadow-md transition-transform group-hover:scale-105',
+                            elementMeta.badgeClass
+                          )}
+                          title={`Element: ${elementMeta.label}`}
+                          aria-label={`Element: ${elementMeta.label}`}
+                        >
+                          <ElementIcon className="w-3.5 h-3.5" />
+                          <span>{elementMeta.label}</span>
+                        </div>
+                        {pet.species && (
+                          <span
+                            className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-stone-950/75 text-stone-300 border border-stone-700/50 backdrop-blur-sm max-w-[130px] truncate shadow-sm"
+                            title={pet.species}
+                          >
+                            {pet.species}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {displayedImageUrl && !isDisplayedStageLocked && (
                     <button
@@ -954,9 +1009,6 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
                       <h3 className="font-extrabold text-xl text-stone-900 dark:text-white">
                         {pet.name}
                       </h3>
-                      <div className="text-xs text-stone-500 font-medium">
-                        {pet.species} • <span className="text-amber-600 font-bold">{pet.element}</span>
-                      </div>
                     </div>
 
                     {/* Stage Badge & Evolution Inspection Link */}
@@ -1162,9 +1214,20 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               </button>
 
               <div>
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-500">
-                  <Flame className="w-4 h-4" />
-                  Stitch 3D Creature Codex
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider flex-wrap">
+                  {(() => {
+                    const meta = getPetElementMetadata(inspectingPet.element);
+                    const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                    return (
+                      <span className={cn('px-2.5 py-0.5 rounded-full flex items-center gap-1 border shadow-xs', meta.badgeClass)}>
+                        <Icon className="w-3.5 h-3.5" />
+                        {meta.label} Element
+                      </span>
+                    );
+                  })()}
+                  <span className="text-amber-600 dark:text-amber-400 font-extrabold flex items-center gap-1">
+                    <Flame className="w-3.5 h-3.5" /> Stitch 3D Creature Codex
+                  </span>
                 </div>
                 <h3 className="text-2xl font-extrabold text-stone-900 dark:text-white mt-1">
                   {inspectingPet.species} Evolution Tree
@@ -1333,9 +1396,26 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               <h3 className="text-2xl font-extrabold text-stone-900 dark:text-white pt-1">
                 {hatchedCelebration.name}
               </h3>
-              <p className="text-xs text-stone-500">
-                {hatchedCelebration.species} • {hatchedCelebration.element}
-              </p>
+              {(() => {
+                const meta = getPetElementMetadata(hatchedCelebration.element);
+                const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                return (
+                  <div className="flex items-center justify-center gap-2 pt-1 flex-wrap">
+                    <span className="text-xs font-semibold text-stone-600 dark:text-stone-300">
+                      {hatchedCelebration.species}
+                    </span>
+                    <span
+                      className={cn(
+                        'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
+                        meta.badgeClass
+                      )}
+                    >
+                      <Icon className="w-3 h-3" />
+                      {meta.label}
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
             <p className="text-sm text-stone-600 dark:text-stone-400">
               Congratulations! Your care and exam integrity brought this mystical creature to life. Nurture it with stars in your sanctuary!
@@ -1385,15 +1465,25 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
               <h3 className="text-2xl font-black text-amber-200 font-serif tracking-wide">
                 {fullImageModalData.name}
               </h3>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap justify-center">
                 <span className="text-xs font-bold text-stone-400">
                   {fullImageModalData.stageName}
                 </span>
-                {fullImageModalData.element && (
-                  <span className="text-xs text-amber-500 font-bold">
-                    • {fullImageModalData.element}
-                  </span>
-                )}
+                {fullImageModalData.element && (() => {
+                  const meta = getPetElementMetadata(fullImageModalData.element);
+                  const Icon = PET_ELEMENT_ICONS[meta.iconName] || Sparkles;
+                  return (
+                    <span
+                      className={cn(
+                        'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase flex items-center gap-1 border shadow-xs',
+                        meta.badgeClass
+                      )}
+                    >
+                      <Icon className="w-3 h-3" />
+                      {meta.label}
+                    </span>
+                  );
+                })()}
                 {fullImageModalData.rarity && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-950/80 text-rose-300 border border-rose-500/40">
                     {fullImageModalData.rarity}
