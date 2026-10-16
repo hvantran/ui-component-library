@@ -18,5 +18,6 @@ export interface ExamIntegrityPetSkillProps {
     locked?: boolean;
     onOpenChange: (open: boolean) => void;
     className?: string;
+    variant?: 'card' | 'compact';
 }
 export declare const ExamIntegrityPetSkill: React.FC<ExamIntegrityPetSkillProps>;

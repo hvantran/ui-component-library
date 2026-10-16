@@ -23,6 +23,16 @@ export interface IncubatingEgg {
     hatchDurationHours?: number;
     remainingSeconds?: number;
 }
+export interface FullImageModalData {
+    name: string;
+    stageName: string;
+    imageUrl: string;
+    element?: string;
+    elements?: string[];
+    speciesTypes?: string[];
+    rarity?: string;
+    species?: string;
+}
 export interface ExamIntegrityPetHatcheryProps {
     starBalance?: number;
     crackCostInStars?: number;
@@ -41,4 +51,38 @@ export declare const DEFAULT_INCUBATING_EGGS: IncubatingEgg[];
 export declare const DEFAULT_STUDENT_PETS: StudentPet[];
 export declare function formatHatchTime(totalSeconds: number): string;
 export declare function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined;
+export interface PetEvolutionModalProps {
+    pet: StudentPet | null;
+    onClose: () => void;
+    activePetSkill?: {
+        petId: string;
+        skillId: string;
+    } | null;
+    onSetActivePetSkill?: (skill: {
+        petId: string;
+        skillId: string;
+    } | null) => void;
+}
+export declare const PetEvolutionModal: React.FC<PetEvolutionModalProps>;
+export interface PetCardProps {
+    pet: StudentPet;
+    starBalance: number;
+    activeStageNum: number;
+    wobblingPetId: string | null;
+    activePetSkill: {
+        petId: string;
+        skillId: string;
+    } | null;
+    onSetPreviewStage: (petId: string, stageNum: number) => void;
+    onSetWobblingPetId: (petId: string | null) => void;
+    onOpenEvolutionModal: (pet: StudentPet) => void;
+    onOpenFullImageModal: (data: FullImageModalData) => void;
+    onSetActivePetSkill: (skill: {
+        petId: string;
+        skillId: string;
+    } | null) => void;
+    onGrowPet: (pet: StudentPet) => void;
+    onEquipPet: (pet: StudentPet) => void;
+}
+export declare const PetCard: React.FC<PetCardProps>;
 export declare const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps>;
