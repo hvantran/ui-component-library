@@ -75,15 +75,17 @@ export const AllPetsAllStagesSanctuary: Story = {
   },
 };
 
-export const AllPetsAllStagesCodex: Story = {
-  name: 'All Pets - All Stages (Codex)',
+export const AllPetsAllStagesEvolutionTree: Story = {
+  name: 'All Pets - All Stages (Evolution Tree)',
   args: {
     starBalance: 9999,
-    defaultTab: 'codex',
+    defaultTab: 'pets',
     incubatingEggs: DEFAULT_INCUBATING_EGGS,
     pets: ALL_PETS_ALL_STAGES,
   },
 };
+
+export const AllPetsAllStagesCodex: Story = AllPetsAllStagesEvolutionTree;
 
 export const Default: Story = {
   args: {
