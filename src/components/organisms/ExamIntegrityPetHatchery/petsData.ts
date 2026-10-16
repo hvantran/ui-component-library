@@ -98,6 +98,38 @@ const SKILL_VIDEOS: Record<string, string> = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
+export const DEFAULT_SKILL_CDN_BASE =
+  'https://github.com/hvantran/ui-component-library/releases/download/skill-assets-v1';
+
+export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): string | undefined {
+  if (!filename) return bundledUrl;
+
+  const globalEnv =
+    typeof globalThis !== 'undefined'
+      ? (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process?.env
+      : undefined;
+
+  const customBase =
+    (typeof window !== 'undefined' &&
+      (window as unknown as { __SKILL_ASSETS_BASE_URL__?: string }).__SKILL_ASSETS_BASE_URL__) ||
+    globalEnv?.REACT_APP_SKILL_ASSETS_BASE_URL;
+
+  if (customBase) {
+    return `${String(customBase).replace(/\/$/, '')}/${filename}`;
+  }
+
+  if (
+    bundledUrl &&
+    !bundledUrl.startsWith('./assets/skills/') &&
+    !bundledUrl.startsWith('/assets/skills/') &&
+    bundledUrl !== filename
+  ) {
+    return bundledUrl;
+  }
+
+  return `${DEFAULT_SKILL_CDN_BASE}/${filename}`;
+}
+
 export interface EvolutionStageInfo {
   stage: number;
   minLevel: number;
@@ -461,9 +493,10 @@ export const VOID_SINGULARITY_SKILL: PetSkill = {
   requiredLevel: 10,
   icon: 'Sparkles',
   videoSources: {
-    mp4:
-      SKILL_VIDEOS['../../../assets/skills/void-singularity.mp4'] ||
-      './assets/skills/void-singularity.mp4',
+    mp4: resolveSkillVideoUrl(
+      'void-singularity.mp4',
+      SKILL_VIDEOS['../../../assets/skills/void-singularity.mp4']
+    ),
   },
 };
 
@@ -474,9 +507,10 @@ export const COSMIC_RIFT_BREATH_SKILL: PetSkill = {
   requiredLevel: 9,
   icon: 'Sparkles',
   videoSources: {
-    mp4:
-      SKILL_VIDEOS['../../../assets/skills/cosmic-rift-breath.mp4'] ||
-      './assets/skills/cosmic-rift-breath.mp4',
+    mp4: resolveSkillVideoUrl(
+      'cosmic-rift-breath.mp4',
+      SKILL_VIDEOS['../../../assets/skills/cosmic-rift-breath.mp4']
+    ),
   },
 };
 
@@ -1461,8 +1495,11 @@ export function createEvolutionSkills(
     }
 
     const abilityMeta = PET_STAGE_ABILITIES[`${petKey}-stage-${stage.stage}`];
-    const videoUrl = abilityMeta?.videoFile
+    const rawVideoUrl = abilityMeta?.videoFile
       ? SKILL_VIDEOS[`../../../assets/skills/${abilityMeta.videoFile}`]
+      : undefined;
+    const videoUrl = abilityMeta?.videoFile
+      ? resolveSkillVideoUrl(abilityMeta.videoFile, rawVideoUrl)
       : undefined;
 
     return {

@@ -20,7 +20,7 @@ export default defineConfig({
       load(id: string) {
         if (id.endsWith('.mp4') || id.includes('.mp4?')) {
           const filename = id.split('/').pop()?.split('?')[0];
-          return `export default ${JSON.stringify('./assets/skills/' + filename)};`;
+          return `export default ${JSON.stringify(filename)};`;
         }
       },
     },
