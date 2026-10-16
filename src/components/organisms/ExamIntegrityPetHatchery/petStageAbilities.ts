@@ -295,14 +295,14 @@ export const PET_STAGE_ABILITIES: Record<string, PetSkillDefinition> = {
     description: 'Spouts a geyser of starlight that showers the workspace with enhanced analytical focus.',
     videoFile: 'astralleviathan-stage-4-starborne-titan.mp4',
   },
-  'astralleviathan-stage-5': {
-    name: 'Astral Tide Convergence',
-    description: 'Merges water and stellar cosmos into an oceanic barrier that absorbs test pressure completely.',
-    videoFile: 'astralleviathan-stage-6-primordial-astral-leviathan-overlord.mp4',
-  },
   'astralleviathan-stage-6': {
     name: 'Primordial Cosmic Oceanic Song',
     description: 'Sings the song of ancient celestial seas, bestowing boundless stamina and divine exam harmony.',
+    videoFile: 'astralleviathan-stage-6-primordial-astral-leviathan-overlord.mp4',
+  },
+  'astralleviathan-stage-5': {
+    name: 'Astral Tide Convergence',
+    description: 'Merges water and stellar cosmos into an oceanic barrier that absorbs test pressure completely.',
     videoFile: 'astralleviathan-stage-5-cosmos-emperor-leviathan.mp4',
   },
   'solarwyvern-stage-1': {

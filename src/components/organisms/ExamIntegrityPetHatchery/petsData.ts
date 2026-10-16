@@ -59,8 +59,8 @@ import astralleviathanStage1Img from '../../../assets/pets/astralleviathan-stage
 import astralleviathanStage2Img from '../../../assets/pets/astralleviathan-stage-2.png';
 import astralleviathanStage3Img from '../../../assets/pets/astralleviathan-stage-3.png';
 import astralleviathanStage4Img from '../../../assets/pets/astralleviathan-stage-4.png';
-import astralleviathanStage5Img from '../../../assets/pets/astralleviathan-stage-5.png';
-import astralleviathanStage6Img from '../../../assets/pets/astralleviathan-stage-6.png';
+import astralleviathanStage6Img from '../../../assets/pets/astralleviathan-stage-5.png';
+import astralleviathanStage5Img from '../../../assets/pets/astralleviathan-stage-6.png';
 import solarwyvernStage1Img from '../../../assets/pets/solarwyvern-stage-1.png';
 import solarwyvernStage2Img from '../../../assets/pets/solarwyvern-stage-2.png';
 import solarwyvernStage3Img from '../../../assets/pets/solarwyvern-stage-3.png';
