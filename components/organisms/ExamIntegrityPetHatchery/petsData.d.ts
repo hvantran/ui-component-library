@@ -1,5 +1,7 @@
 import { EggTier } from '../../molecules/ThreeEggViewer';
 import { PetSkill } from '../ExamIntegrityPetSkill';
+export declare const DEFAULT_SKILL_CDN_BASE = "https://github.com/hvantran/ui-component-library/releases/download/skill-assets-v1";
+export declare function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): string | undefined;
 export interface EvolutionStageInfo {
     stage: number;
     minLevel: number;
