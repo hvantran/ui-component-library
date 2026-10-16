@@ -494,7 +494,7 @@ export const VOID_SINGULARITY_SKILL: PetSkill = {
   icon: 'Sparkles',
   videoSources: {
     mp4: resolveSkillVideoUrl(
-      'void-singularity.mp4',
+      './assets/skills/void-singularity.mp4',
       SKILL_VIDEOS['../../../assets/skills/void-singularity.mp4']
     ),
   },
