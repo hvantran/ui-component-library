@@ -84,8 +84,6 @@ import chronodracoStage6Img from '../../../assets/pets/chronodraco-stage-6.png';
 import chronodracoStage7Img from '../../../assets/pets/chronodraco-stage-7.png';
 import chronodracoStage8Img from '../../../assets/pets/chronodraco-stage-8.png';
 import aegispaladinStage1Img from '../../../assets/pets/aegispaladin-stage-1.png';
-import cosmicRiftBreathVideo from '../../../assets/skills/cosmic-rift-breath.mp4';
-import voidSingularityVideo from '../../../assets/skills/void-singularity.mp4';
 import aegispaladinStage2Img from '../../../assets/pets/aegispaladin-stage-2.png';
 import aegispaladinStage3Img from '../../../assets/pets/aegispaladin-stage-3.png';
 import aegispaladinStage4Img from '../../../assets/pets/aegispaladin-stage-4.png';
@@ -463,7 +461,9 @@ export const VOID_SINGULARITY_SKILL: PetSkill = {
   requiredLevel: 10,
   icon: 'Sparkles',
   videoSources: {
-    mp4: voidSingularityVideo,
+    mp4:
+      SKILL_VIDEOS['../../../assets/skills/void-singularity.mp4'] ||
+      './assets/skills/void-singularity.mp4',
   },
 };
 
@@ -474,7 +474,9 @@ export const COSMIC_RIFT_BREATH_SKILL: PetSkill = {
   requiredLevel: 9,
   icon: 'Sparkles',
   videoSources: {
-    mp4: cosmicRiftBreathVideo,
+    mp4:
+      SKILL_VIDEOS['../../../assets/skills/cosmic-rift-breath.mp4'] ||
+      './assets/skills/cosmic-rift-breath.mp4',
   },
 };
 
