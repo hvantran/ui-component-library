@@ -335,7 +335,7 @@ const PetEvolutionStageNode: React.FC<PetEvolutionStageNodeProps> = ({
   return (
     <div
       className={cn(
-        'relative flex flex-col gap-3 p-3.5 sm:p-4 rounded-2xl border-2 transition-all',
+        'relative flex items-center gap-3 sm:gap-4 p-3 sm:p-3.5 rounded-2xl border-2 transition-all',
         isCurrent
           ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-md ring-2 ring-amber-500/20'
           : isReached
@@ -343,107 +343,91 @@ const PetEvolutionStageNode: React.FC<PetEvolutionStageNodeProps> = ({
           : 'border-dashed border-stone-200 dark:border-stone-800 bg-stone-50/20 dark:bg-stone-900/20 opacity-60'
       )}
     >
-      <div className="flex items-center gap-3.5 sm:gap-4">
-        {/* Stage Number Badge */}
-        <div
-          className={cn(
-            'w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 border shadow-xs',
-            isCurrent
-              ? 'bg-amber-500 text-white border-amber-400'
-              : isReached
-              ? 'bg-emerald-500 text-white border-emerald-400'
-              : 'bg-stone-200 dark:bg-stone-800 text-stone-500 border-stone-300 dark:border-stone-700'
-          )}
-        >
-          {stage.stage}
-        </div>
+      {/* Stage Number Badge */}
+      <div
+        className={cn(
+          'w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 border shadow-xs',
+          isCurrent
+            ? 'bg-amber-500 text-white border-amber-400'
+            : isReached
+            ? 'bg-emerald-500 text-white border-emerald-400'
+            : 'bg-stone-200 dark:bg-stone-800 text-stone-500 border-stone-300 dark:border-stone-700'
+        )}
+      >
+        {stage.stage}
+      </div>
 
-        {/* Stage Visual Thumbnail */}
-        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative shadow-sm">
-          {stage.imageUrl ? (
-            <img
-              src={stage.imageUrl}
-              alt={stage.name}
-              className={cn(
-                'w-full h-full object-contain p-1 select-none',
-                !isReached && 'brightness-0 opacity-40 contrast-200'
-              )}
-            />
-          ) : (
-            <span className={cn('text-2xl sm:text-3xl select-none', !isReached && 'opacity-40 grayscale')}>
-              {stage.avatarEmoji}
-            </span>
-          )}
-          {!isReached && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-              <Lock className="w-4 h-4 text-amber-400" />
-            </div>
-          )}
-        </div>
-
-        {/* Stage Essential Details */}
-        <div className="flex-1 min-w-0 space-y-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white truncate">
-              {`Stage ${stage.stage}: ${stage.name}`}
-            </div>
-            {stage.title && (
-              <span className="text-xs text-stone-500 dark:text-stone-400 hidden sm:inline">
-                {`• ${stage.title}`}
-              </span>
+      {/* Stage Visual Thumbnail */}
+      <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative shadow-sm">
+        {stage.imageUrl ? (
+          <img
+            src={stage.imageUrl}
+            alt={stage.name}
+            className={cn(
+              'w-full h-full object-contain p-1 select-none',
+              !isReached && 'brightness-0 opacity-40 contrast-200'
             )}
+          />
+        ) : (
+          <span className={cn('text-2xl select-none', !isReached && 'opacity-40 grayscale')}>
+            {stage.avatarEmoji}
+          </span>
+        )}
+        {!isReached && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+            <Lock className="w-4 h-4 text-amber-400" />
           </div>
+        )}
+      </div>
 
-          <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="font-bold text-amber-600 dark:text-amber-400">
-              {`Level ${stage.minLevel}+`}
-            </span>
-          </div>
+      {/* Stage Essential Details + Inline Compact Skill */}
+      <div className="flex-1 min-w-0 space-y-1">
+        <div className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white truncate">
+          {`Stage ${stage.stage}: ${stage.name}`}
         </div>
 
-        {/* Status Pill */}
-        <div className="shrink-0 self-start sm:self-center">
-          {isCurrent ? (
-            <span className="px-2.5 py-1 rounded-full text-xs font-black bg-amber-500 text-white shadow-xs">
-              Current
-            </span>
-          ) : isReached ? (
-            <span className="px-2.5 py-1 rounded-full text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-              <Check className="w-3 h-3" /> Unlocked
-            </span>
-          ) : (
-            <span className="px-2.5 py-1 rounded-full text-xs font-semibold text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
-              <Lock className="w-3 h-3" /> Locked
-            </span>
+        <div className="flex items-center gap-2 flex-wrap text-xs">
+          <span className="font-bold text-amber-600 dark:text-amber-400 whitespace-nowrap">
+            {`Level ${stage.minLevel}+`}
+          </span>
+
+          {stageSkill && (
+            <ExamIntegrityPetSkill
+              variant="compact"
+              skill={stageSkill}
+              posterUrl={stage.imageUrl}
+              locked={isSkillLocked}
+              open={
+                activePetSkill?.petId === petId &&
+                activePetSkill.skillId === stageSkill.id
+              }
+              onOpenChange={(open) => {
+                if (open && isSkillLocked) return;
+                onSetActivePetSkill?.(
+                  open ? { petId, skillId: stageSkill.id } : null
+                );
+              }}
+            />
           )}
         </div>
       </div>
 
-      {/* Stage Ability with Cast capability */}
-      {stageSkill && (
-        <div className="pt-1 border-t border-stone-200/60 dark:border-stone-800/60">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-extrabold uppercase tracking-wide text-violet-600 dark:text-violet-300">
-              Stage Ability
-            </span>
-          </div>
-          <ExamIntegrityPetSkill
-            skill={stageSkill}
-            posterUrl={stage.imageUrl}
-            locked={isSkillLocked}
-            open={
-              activePetSkill?.petId === petId &&
-              activePetSkill.skillId === stageSkill.id
-            }
-            onOpenChange={(open) => {
-              if (open && isSkillLocked) return;
-              onSetActivePetSkill?.(
-                open ? { petId, skillId: stageSkill.id } : null
-              );
-            }}
-          />
-        </div>
-      )}
+      {/* Status Pill */}
+      <div className="shrink-0 self-start sm:self-center">
+        {isCurrent ? (
+          <span className="px-2.5 py-1 rounded-full text-xs font-black bg-amber-500 text-white shadow-xs">
+            Current
+          </span>
+        ) : isReached ? (
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+            <Check className="w-3 h-3" /> Unlocked
+          </span>
+        ) : (
+          <span className="px-2.5 py-1 rounded-full text-xs font-semibold text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
+            <Lock className="w-3 h-3" /> Locked
+          </span>
+        )}
+      </div>
     </div>
   );
 };
