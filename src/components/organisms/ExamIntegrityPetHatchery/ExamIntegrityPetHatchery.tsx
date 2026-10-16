@@ -1045,6 +1045,7 @@ const PetCardStageSelector: React.FC<PetCardStageSelectorProps> = ({
 
 interface PetCardAbilitiesProps {
   pet: StudentPet;
+  displayedStage?: EvolutionStageInfo;
   displayedImageUrl?: string;
   activePetSkill: { petId: string; skillId: string } | null;
   onOpenEvolutionModal: (pet: StudentPet) => void;
@@ -1053,6 +1054,7 @@ interface PetCardAbilitiesProps {
 
 const PetCardAbilities: React.FC<PetCardAbilitiesProps> = ({
   pet,
+  displayedStage,
   displayedImageUrl,
   activePetSkill,
   onOpenEvolutionModal,
@@ -1062,6 +1064,23 @@ const PetCardAbilities: React.FC<PetCardAbilitiesProps> = ({
 
   const unlockedSkills = pet.skills.filter((skill) => pet.level >= skill.requiredLevel);
   const latestUnlockedSkill = unlockedSkills[unlockedSkills.length - 1];
+
+  const isDisplayedStageUnlocked = Boolean(
+    displayedStage && pet.level >= displayedStage.minLevel
+  );
+
+  const stageIndex =
+    pet.evolutionStages && displayedStage
+      ? pet.evolutionStages.findIndex((s) => s.stage === displayedStage.stage)
+      : -1;
+
+  const displayedStageSkill =
+    isDisplayedStageUnlocked && displayedStage
+      ? pet.skills.find((skill) => skill.requiredLevel === displayedStage.minLevel) ||
+        (stageIndex >= 0 && pet.skills[stageIndex] ? pet.skills[stageIndex] : undefined)
+      : undefined;
+
+  const activeSkill = displayedStageSkill || latestUnlockedSkill;
 
   return (
     <section className="space-y-2" aria-label={`${pet.name} abilities`}>
@@ -1077,17 +1096,17 @@ const PetCardAbilities: React.FC<PetCardAbilitiesProps> = ({
           {pet.skills.length} skills <Info className="h-3 w-3" aria-hidden="true" />
         </button>
       </div>
-      {latestUnlockedSkill ? (
+      {activeSkill ? (
         <ExamIntegrityPetSkill
-          skill={latestUnlockedSkill}
+          skill={activeSkill}
           posterUrl={displayedImageUrl}
           open={
             activePetSkill?.petId === pet.id &&
-            activePetSkill.skillId === latestUnlockedSkill.id
+            activePetSkill.skillId === activeSkill.id
           }
           onOpenChange={(open) =>
             onSetActivePetSkill(
-              open ? { petId: pet.id, skillId: latestUnlockedSkill.id } : null
+              open ? { petId: pet.id, skillId: activeSkill.id } : null
             )
           }
         />
@@ -1138,7 +1157,8 @@ export const PetCard: React.FC<PetCardProps> = ({
   const hasStages = stagesCount > 0;
 
   const displayedStage = hasStages
-    ? pet.evolutionStages?.[activeStageNum - 1]
+    ? pet.evolutionStages?.find((s) => s.stage === activeStageNum) ||
+      pet.evolutionStages?.[activeStageNum - 1]
     : undefined;
 
   const resolvePetImage = (imgName?: string, imgUrl?: string): string | undefined => {
@@ -1225,6 +1245,7 @@ export const PetCard: React.FC<PetCardProps> = ({
           {/* Abilities */}
           <PetCardAbilities
             pet={pet}
+            displayedStage={displayedStage}
             displayedImageUrl={displayedImageUrl}
             activePetSkill={activePetSkill}
             onOpenEvolutionModal={onOpenEvolutionModal}
@@ -1651,6 +1672,9 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
 
   const handleSwitchPetStage = (petId: string, stageNum: number) => {
     setPreviewStages((prev) => ({ ...prev, [petId]: stageNum }));
+    if (activePetSkill?.petId === petId) {
+      setActivePetSkill(null);
+    }
   };
 
   return (
