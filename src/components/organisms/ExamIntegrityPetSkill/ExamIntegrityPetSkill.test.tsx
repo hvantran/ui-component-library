@@ -64,4 +64,20 @@ describe('ExamIntegrityPetSkill', () => {
     expect(html).toContain('disabled=""');
     expect(html).toMatch(/Unlocks at level(?: <!-- -->)?7/);
   });
+
+  it('renders a space-efficient compact pill variant without long description text', () => {
+    const html = renderToString(
+      <ExamIntegrityPetSkill
+        variant="compact"
+        skill={{ ...voidSingularity, requiredLevel: 5 }}
+        open={false}
+        onOpenChange={() => undefined}
+      />
+    );
+
+    expect(html).toContain('Void Singularity');
+    expect(html).toContain('Cast');
+    expect(html).not.toContain('Summon a cinematic black hole.');
+    expect(html).toContain('data-testid="pet-skill-trigger-void-singularity"');
+  });
 });

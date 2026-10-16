@@ -23,6 +23,7 @@ export interface ExamIntegrityPetSkillProps {
   locked?: boolean;
   onOpenChange: (open: boolean) => void;
   className?: string;
+  variant?: 'card' | 'compact';
 }
 
 const FOCUSABLE_DIALOG_SELECTOR =
@@ -35,6 +36,7 @@ export const ExamIntegrityPetSkill: React.FC<ExamIntegrityPetSkillProps> = ({
   locked = false,
   onOpenChange,
   className,
+  variant = 'card',
 }) => {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -104,62 +106,95 @@ export const ExamIntegrityPetSkill: React.FC<ExamIntegrityPetSkillProps> = ({
 
   return (
     <>
-      <button
-        ref={triggerRef}
-        type="button"
-        data-testid={`pet-skill-trigger-${skill.id}`}
-        aria-haspopup={locked ? undefined : 'dialog'}
-        disabled={locked}
-        onClick={() => {
-          if (!locked) onOpenChange(true);
-        }}
-        className={cn(
-          'group w-full rounded-lg border p-3 text-left shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
-          locked
-            ? 'cursor-not-allowed border-stone-700 bg-stone-900/70 text-stone-400'
-            : 'border-violet-400/50 bg-violet-950/70 text-violet-100 hover:border-violet-300 hover:bg-violet-900',
-          className
-        )}
-      >
-        <span className="flex items-center gap-3">
+      {variant === 'compact' ? (
+        <button
+          ref={triggerRef}
+          type="button"
+          data-testid={`pet-skill-trigger-${skill.id}`}
+          aria-haspopup={locked ? undefined : 'dialog'}
+          disabled={locked}
+          onClick={() => {
+            if (!locked) onOpenChange(true);
+          }}
+          className={cn(
+            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400',
+            locked
+              ? 'cursor-not-allowed border-stone-300 dark:border-stone-700 bg-stone-100 dark:bg-stone-800/80 text-stone-400 dark:text-stone-500'
+              : 'border-violet-300 dark:border-violet-700/60 bg-violet-100/90 dark:bg-violet-950/70 text-violet-800 dark:text-violet-200 hover:border-violet-400 hover:bg-violet-200/90 dark:hover:bg-violet-900 shadow-xs active:scale-95',
+            className
+          )}
+        >
+          <Sparkles className="w-3 h-3 text-violet-500 dark:text-violet-400 shrink-0" aria-hidden="true" />
+          <span className="font-extrabold truncate max-w-[130px] sm:max-w-[180px]">{skill.name}</span>
           <span
             className={cn(
-              'flex h-9 w-9 shrink-0 items-center justify-center rounded-md border transition-colors',
+              'px-1.5 py-0.2 rounded text-[10px] font-black uppercase tracking-wide shrink-0',
               locked
-                ? 'border-stone-600 bg-stone-800 text-stone-500'
-                : 'border-violet-300/20 bg-violet-500/20 text-violet-200 group-hover:bg-violet-500/30'
-            )}
-          >
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-extrabold">{skill.name}</span>
-            <span
-              className={cn(
-                'mt-0.5 block text-xs font-medium',
-                locked ? 'text-stone-500' : 'text-violet-200/80'
-              )}
-            >
-              {skill.description}
-            </span>
-          </span>
-          <span
-            className={cn(
-              'rounded-md border px-2 py-1 text-[10px] font-extrabold uppercase tracking-wide transition-colors',
-              locked
-                ? 'border-stone-600 bg-stone-800 text-stone-400'
-                : 'border-violet-300/30 bg-violet-500/20 text-violet-100 group-hover:bg-violet-500/30'
+                ? 'bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-400'
+                : 'bg-violet-600 text-white shadow-xs'
             )}
           >
             {locked ? `Lvl ${skill.requiredLevel}` : 'Cast'}
           </span>
-        </span>
-        {locked && (
-          <span className="mt-2 block text-[10px] font-bold text-stone-500">
-            Unlocks at level {skill.requiredLevel}
+        </button>
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          data-testid={`pet-skill-trigger-${skill.id}`}
+          aria-haspopup={locked ? undefined : 'dialog'}
+          disabled={locked}
+          onClick={() => {
+            if (!locked) onOpenChange(true);
+          }}
+          className={cn(
+            'group w-full rounded-lg border p-3 text-left shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300',
+            locked
+              ? 'cursor-not-allowed border-stone-700 bg-stone-900/70 text-stone-400'
+              : 'border-violet-400/50 bg-violet-950/70 text-violet-100 hover:border-violet-300 hover:bg-violet-900',
+            className
+          )}
+        >
+          <span className="flex items-center gap-3">
+            <span
+              className={cn(
+                'flex h-9 w-9 shrink-0 items-center justify-center rounded-md border transition-colors',
+                locked
+                  ? 'border-stone-600 bg-stone-800 text-stone-500'
+                  : 'border-violet-300/20 bg-violet-500/20 text-violet-200 group-hover:bg-violet-500/30'
+              )}
+            >
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-extrabold">{skill.name}</span>
+              <span
+                className={cn(
+                  'mt-0.5 block text-xs font-medium',
+                  locked ? 'text-stone-500' : 'text-violet-200/80'
+                )}
+              >
+                {skill.description}
+              </span>
+            </span>
+            <span
+              className={cn(
+                'rounded-md border px-2 py-1 text-[10px] font-extrabold uppercase tracking-wide transition-colors',
+                locked
+                  ? 'border-stone-600 bg-stone-800 text-stone-400'
+                  : 'border-violet-300/30 bg-violet-500/20 text-violet-100 group-hover:bg-violet-500/30'
+              )}
+            >
+              {locked ? `Lvl ${skill.requiredLevel}` : 'Cast'}
+            </span>
           </span>
-        )}
-      </button>
+          {locked && (
+            <span className="mt-2 block text-[10px] font-bold text-stone-500">
+              Unlocks at level {skill.requiredLevel}
+            </span>
+          )}
+        </button>
+      )}
 
       {isOpen && (
         <div

@@ -15,6 +15,7 @@ import {
   formatHatchTime,
   PET_CODEX_REGISTRY,
   ALL_PET_CODEX_REGISTRY,
+  PetEvolutionModal,
 } from './ExamIntegrityPetHatchery';
 
 describe('ExamIntegrityPetHatchery', () => {
@@ -397,7 +398,7 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('animate-pet-glow');
   });
 
-  it('automatically enriches pet missing evolutionStages and renders stage buttons and Codex', () => {
+  it('automatically enriches pet missing evolutionStages and renders stage buttons and Evolution Tree', () => {
     const rawPet: StudentPet = {
       id: 'pet-umbra-server',
       name: 'Umbra (Umbral Eclipse Panther)',
@@ -433,7 +434,7 @@ describe('ExamIntegrityPetHatchery', () => {
 
     expect(html).toContain('Inspect Evolution Forms');
     expect(html).toContain('Levels in Stitch');
-    expect(html).toContain('Codex');
+    expect(html).toContain('Evolution Tree');
     expect(html).toContain('Eclipsefang');
     expect(html).toContain('Eclipse Fang');
     expect(html).toContain('Lvl <!-- -->1');
@@ -616,5 +617,32 @@ describe('ExamIntegrityPetHatchery', () => {
     // Stage 6 shows Primordial Cosmic Oceanic Song and Primordial Astral Leviathan Overlord
     expect(html).toContain('Primordial Cosmic Oceanic Song');
     expect(html).toContain('Primordial Astral Leviathan Overlord');
+  });
+
+  it('renders redesigned concise PetEvolutionModal tree without verbose descriptions', () => {
+    const phoenix = createFirePhoenixPet(2, true);
+    const html = renderToString(
+      <PetEvolutionModal
+        pet={phoenix}
+        onClose={() => {}}
+      />
+    );
+
+    expect(html).toContain('Evolution Tree');
+    expect(html).toContain('Primordial Solar Phoenix');
+    expect(html).toContain('evolution stages and level requirements');
+    expect(html).toContain('Stage 1: Sun Ember Fledgling');
+    expect(html).toContain('Stage 2: Ignited Pyrepaw');
+    expect(html).toContain('Stage 3: Solar Firebird');
+    expect(html).toContain('Stage 4: Pyre Sovereign');
+    expect(html).toContain('Stage 5: Primordial Solar Emperor');
+    expect(html).toContain('Current');
+    expect(html).toContain('Unlocked');
+    // Verifies stage abilities render with space-efficient compact Cast action when required level is reached
+    expect(html).toContain('Cast');
+    expect(html).toContain('Lvl 6');
+    // Verifies verbose descriptions are omitted from the concise evolution tree
+    expect(html).not.toContain('Hatched in the heart of solar flares');
+    expect(html).not.toContain('Tiny baby solar fledgling chick');
   });
 });
