@@ -639,6 +639,10 @@ describe('ExamIntegrityPetHatchery', () => {
     expect(html).toContain('Current');
     expect(html).toContain('Unlocked');
     expect(html).toContain('Locked');
+    // Verifies stage abilities render with Cast action when required level is reached
+    expect(html).toContain('Stage Ability');
+    expect(html).toContain('Cast');
+    expect(html).toContain('Unlocks at level <!-- -->6');
     // Verifies verbose descriptions are omitted from the concise evolution tree
     expect(html).not.toContain('Hatched in the heart of solar flares');
   });

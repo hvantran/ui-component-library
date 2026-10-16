@@ -33,7 +33,7 @@ import { ProgressBar } from '../../atoms/ProgressBar';
 import { ThreeEggViewer, EggTier } from '../../molecules/ThreeEggViewer';
 import { cn } from '../../../utils/cn';
 import phoenixEggImg from '../../../assets/pets/phoenix-egg.png';
-import { ExamIntegrityPetSkill } from '../ExamIntegrityPetSkill';
+import { ExamIntegrityPetSkill, type PetSkill } from '../ExamIntegrityPetSkill';
 export * from './petsData';
 import {
   type EvolutionStageInfo,
@@ -311,23 +311,31 @@ const EggQueueHatchStatus: React.FC<EggQueueHatchStatusProps> = ({ remainingSeco
 
 interface PetEvolutionStageNodeProps {
   stage: EvolutionStageInfo;
+  petId: string;
+  petLevel: number;
   currentStageLevel: number;
-  skills?: StudentPet['skills'];
+  stageSkill?: PetSkill;
+  activePetSkill?: { petId: string; skillId: string } | null;
+  onSetActivePetSkill?: (skill: { petId: string; skillId: string } | null) => void;
 }
 
 const PetEvolutionStageNode: React.FC<PetEvolutionStageNodeProps> = ({
   stage,
+  petId,
+  petLevel,
   currentStageLevel,
-  skills,
+  stageSkill,
+  activePetSkill,
+  onSetActivePetSkill,
 }) => {
   const isReached = currentStageLevel >= stage.stage;
   const isCurrent = currentStageLevel === stage.stage;
-  const stageSkill = skills?.find((skill) => skill.requiredLevel === stage.minLevel);
+  const isSkillLocked = petLevel < (stageSkill?.requiredLevel ?? 999);
 
   return (
     <div
       className={cn(
-        'relative flex items-center gap-3.5 sm:gap-4 p-3 sm:p-4 rounded-2xl border-2 transition-all',
+        'relative flex flex-col gap-3 p-3.5 sm:p-4 rounded-2xl border-2 transition-all',
         isCurrent
           ? 'border-amber-500 bg-amber-50/70 dark:bg-amber-950/30 shadow-md ring-2 ring-amber-500/20'
           : isReached
@@ -335,85 +343,107 @@ const PetEvolutionStageNode: React.FC<PetEvolutionStageNodeProps> = ({
           : 'border-dashed border-stone-200 dark:border-stone-800 bg-stone-50/20 dark:bg-stone-900/20 opacity-60'
       )}
     >
-      {/* Stage Number Badge */}
-      <div
-        className={cn(
-          'w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 border shadow-xs',
-          isCurrent
-            ? 'bg-amber-500 text-white border-amber-400'
-            : isReached
-            ? 'bg-emerald-500 text-white border-emerald-400'
-            : 'bg-stone-200 dark:bg-stone-800 text-stone-500 border-stone-300 dark:border-stone-700'
-        )}
-      >
-        {stage.stage}
-      </div>
+      <div className="flex items-center gap-3.5 sm:gap-4">
+        {/* Stage Number Badge */}
+        <div
+          className={cn(
+            'w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 border shadow-xs',
+            isCurrent
+              ? 'bg-amber-500 text-white border-amber-400'
+              : isReached
+              ? 'bg-emerald-500 text-white border-emerald-400'
+              : 'bg-stone-200 dark:bg-stone-800 text-stone-500 border-stone-300 dark:border-stone-700'
+          )}
+        >
+          {stage.stage}
+        </div>
 
-      {/* Stage Visual Thumbnail */}
-      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative shadow-sm">
-        {stage.imageUrl ? (
-          <img
-            src={stage.imageUrl}
-            alt={stage.name}
-            className={cn(
-              'w-full h-full object-contain p-1 select-none',
-              !isReached && 'brightness-0 opacity-40 contrast-200'
+        {/* Stage Visual Thumbnail */}
+        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-b from-[#1c0e07] to-stone-900 flex items-center justify-center border border-amber-500/30 overflow-hidden shrink-0 relative shadow-sm">
+          {stage.imageUrl ? (
+            <img
+              src={stage.imageUrl}
+              alt={stage.name}
+              className={cn(
+                'w-full h-full object-contain p-1 select-none',
+                !isReached && 'brightness-0 opacity-40 contrast-200'
+              )}
+            />
+          ) : (
+            <span className={cn('text-2xl sm:text-3xl select-none', !isReached && 'opacity-40 grayscale')}>
+              {stage.avatarEmoji}
+            </span>
+          )}
+          {!isReached && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+              <Lock className="w-4 h-4 text-amber-400" />
+            </div>
+          )}
+        </div>
+
+        {/* Stage Essential Details */}
+        <div className="flex-1 min-w-0 space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white truncate">
+              {`Stage ${stage.stage}: ${stage.name}`}
+            </div>
+            {stage.title && (
+              <span className="text-xs text-stone-500 dark:text-stone-400 hidden sm:inline">
+                {`• ${stage.title}`}
+              </span>
             )}
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap text-xs">
+            <span className="font-bold text-amber-600 dark:text-amber-400">
+              {`Level ${stage.minLevel}+`}
+            </span>
+          </div>
+        </div>
+
+        {/* Status Pill */}
+        <div className="shrink-0 self-start sm:self-center">
+          {isCurrent ? (
+            <span className="px-2.5 py-1 rounded-full text-xs font-black bg-amber-500 text-white shadow-xs">
+              Current
+            </span>
+          ) : isReached ? (
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+              <Check className="w-3 h-3" /> Unlocked
+            </span>
+          ) : (
+            <span className="px-2.5 py-1 rounded-full text-xs font-semibold text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
+              <Lock className="w-3 h-3" /> Locked
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Stage Ability with Cast capability */}
+      {stageSkill && (
+        <div className="pt-1 border-t border-stone-200/60 dark:border-stone-800/60">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] font-extrabold uppercase tracking-wide text-violet-600 dark:text-violet-300">
+              Stage Ability
+            </span>
+          </div>
+          <ExamIntegrityPetSkill
+            skill={stageSkill}
+            posterUrl={stage.imageUrl}
+            locked={isSkillLocked}
+            open={
+              activePetSkill?.petId === petId &&
+              activePetSkill.skillId === stageSkill.id
+            }
+            onOpenChange={(open) => {
+              if (open && isSkillLocked) return;
+              onSetActivePetSkill?.(
+                open ? { petId, skillId: stageSkill.id } : null
+              );
+            }}
           />
-        ) : (
-          <span className={cn('text-2xl sm:text-3xl select-none', !isReached && 'opacity-40 grayscale')}>
-            {stage.avatarEmoji}
-          </span>
-        )}
-        {!isReached && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-            <Lock className="w-4 h-4 text-amber-400" />
-          </div>
-        )}
-      </div>
-
-      {/* Stage Essential Details */}
-      <div className="flex-1 min-w-0 space-y-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <div className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white truncate">
-            {`Stage ${stage.stage}: ${stage.name}`}
-          </div>
-          {stage.title && (
-            <span className="text-xs text-stone-500 dark:text-stone-400 hidden sm:inline">
-              {`• ${stage.title}`}
-            </span>
-          )}
         </div>
-
-        <div className="flex items-center gap-2 flex-wrap text-xs">
-          <span className="font-bold text-amber-600 dark:text-amber-400">
-            {`Level ${stage.minLevel}+`}
-          </span>
-          {stageSkill && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 font-bold text-[11px] border border-violet-200 dark:border-violet-800/80">
-              <Zap className="w-3 h-3" />
-              {stageSkill.name}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Status Pill */}
-      <div className="shrink-0">
-        {isCurrent ? (
-          <span className="px-2.5 py-1 rounded-full text-xs font-black bg-amber-500 text-white shadow-xs">
-            Current
-          </span>
-        ) : isReached ? (
-          <span className="px-2.5 py-1 rounded-full text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-            <Check className="w-3 h-3" /> Unlocked
-          </span>
-        ) : (
-          <span className="px-2.5 py-1 rounded-full text-xs font-semibold text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 flex items-center gap-1">
-            <Lock className="w-3 h-3" /> Locked
-          </span>
-        )}
-      </div>
+      )}
     </div>
   );
 };
@@ -421,14 +451,29 @@ const PetEvolutionStageNode: React.FC<PetEvolutionStageNodeProps> = ({
 export interface PetEvolutionModalProps {
   pet: StudentPet | null;
   onClose: () => void;
+  activePetSkill?: { petId: string; skillId: string } | null;
+  onSetActivePetSkill?: (skill: { petId: string; skillId: string } | null) => void;
 }
 
-export const PetEvolutionModal: React.FC<PetEvolutionModalProps> = ({ pet, onClose }) => {
+export const PetEvolutionModal: React.FC<PetEvolutionModalProps> = ({
+  pet,
+  onClose,
+  activePetSkill: externalActivePetSkill,
+  onSetActivePetSkill: externalOnSetActivePetSkill,
+}) => {
+  const [internalActiveSkill, setInternalActiveSkill] = useState<{
+    petId: string;
+    skillId: string;
+  } | null>(null);
+
   if (!pet) return null;
   const inspectingPet = enrichStudentPet(pet);
   const elementMeta = getPetElementMetadata(inspectingPet.element);
   const ElementIcon = PET_ELEMENT_ICONS[elementMeta.iconName] || Sparkles;
   const totalStages = inspectingPet.totalStages || inspectingPet.evolutionStages?.length || 5;
+
+  const activePetSkill = externalActivePetSkill !== undefined ? externalActivePetSkill : internalActiveSkill;
+  const onSetActivePetSkill = externalOnSetActivePetSkill || setInternalActiveSkill;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
@@ -462,15 +507,25 @@ export const PetEvolutionModal: React.FC<PetEvolutionModalProps> = ({ pet, onClo
         </div>
 
         {/* Tree Progression List */}
-        <div className="space-y-3">
-          {inspectingPet.evolutionStages?.map((stage) => (
-            <PetEvolutionStageNode
-              key={stage.stage}
-              stage={stage}
-              currentStageLevel={inspectingPet.stageLevel}
-              skills={inspectingPet.skills}
-            />
-          ))}
+        <div className="space-y-4">
+          {inspectingPet.evolutionStages?.map((stage) => {
+            const stageSkill = inspectingPet.skills?.find(
+              (skill) => skill.requiredLevel === stage.minLevel
+            );
+
+            return (
+              <PetEvolutionStageNode
+                key={stage.stage}
+                stage={stage}
+                petId={inspectingPet.id}
+                petLevel={inspectingPet.level}
+                currentStageLevel={inspectingPet.stageLevel}
+                stageSkill={stageSkill}
+                activePetSkill={activePetSkill}
+                onSetActivePetSkill={onSetActivePetSkill}
+              />
+            );
+          })}
         </div>
 
         <div className="flex justify-end pt-2">
@@ -1900,6 +1955,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       <PetEvolutionModal
         pet={inspectingEvolutionPet}
         onClose={() => setInspectingEvolutionPet(null)}
+        activePetSkill={activePetSkill}
+        onSetActivePetSkill={setActivePetSkill}
       />
 
       {/* Evolution Celebration Modal */}
