@@ -16,6 +16,7 @@ import {
   PET_CODEX_REGISTRY,
   ALL_PET_CODEX_REGISTRY,
   PetEvolutionModal,
+  PetCard,
 } from './ExamIntegrityPetHatchery';
 
 describe('ExamIntegrityPetHatchery', () => {
@@ -644,5 +645,89 @@ describe('ExamIntegrityPetHatchery', () => {
     // Verifies verbose descriptions are omitted from the concise evolution tree
     expect(html).not.toContain('Hatched in the heart of solar flares');
     expect(html).not.toContain('Tiny baby solar fledgling chick');
+  });
+
+  it('displays ability corresponding to inspected evolution stage when stage is unlocked', () => {
+    // Fire Phoenix at stage 3 (level 6, so stages 1, 2, 3 are unlocked; stages 4 and 5 are locked)
+    const phoenix = createFirePhoenixPet(3, true);
+
+    // Inspect stage 1 (unlocked) -> shows Stage 1 ability (Solar Sparkle)
+    const htmlStage1 = renderToString(
+      <PetCard
+        pet={phoenix}
+        starBalance={100}
+        activeStageNum={1}
+        wobblingPetId={null}
+        activePetSkill={null}
+        onSetPreviewStage={() => {}}
+        onSetWobblingPetId={() => {}}
+        onOpenEvolutionModal={() => {}}
+        onOpenFullImageModal={() => {}}
+        onSetActivePetSkill={() => {}}
+        onGrowPet={() => {}}
+        onEquipPet={() => {}}
+      />
+    );
+    expect(htmlStage1).toContain('Solar Sparkle');
+    expect(htmlStage1).not.toContain('Solar Phoenix Dive');
+
+    // Inspect stage 2 (unlocked) -> shows Stage 2 ability (Ignited Radiance)
+    const htmlStage2 = renderToString(
+      <PetCard
+        pet={phoenix}
+        starBalance={100}
+        activeStageNum={2}
+        wobblingPetId={null}
+        activePetSkill={null}
+        onSetPreviewStage={() => {}}
+        onSetWobblingPetId={() => {}}
+        onOpenEvolutionModal={() => {}}
+        onOpenFullImageModal={() => {}}
+        onSetActivePetSkill={() => {}}
+        onGrowPet={() => {}}
+        onEquipPet={() => {}}
+      />
+    );
+    expect(htmlStage2).toContain('Ignited Radiance');
+    expect(htmlStage2).not.toContain('Solar Phoenix Dive');
+
+    // Inspect stage 3 (unlocked, current level) -> shows Stage 3 ability (Solar Phoenix Dive)
+    const htmlStage3 = renderToString(
+      <PetCard
+        pet={phoenix}
+        starBalance={100}
+        activeStageNum={3}
+        wobblingPetId={null}
+        activePetSkill={null}
+        onSetPreviewStage={() => {}}
+        onSetWobblingPetId={() => {}}
+        onOpenEvolutionModal={() => {}}
+        onOpenFullImageModal={() => {}}
+        onSetActivePetSkill={() => {}}
+        onGrowPet={() => {}}
+        onEquipPet={() => {}}
+      />
+    );
+    expect(htmlStage3).toContain('Solar Phoenix Dive');
+
+    // Inspect stage 4 (locked, minLevel 8 > pet.level 6) -> falls back to highest unlocked ability (Stage 3: Solar Phoenix Dive)
+    const htmlStage4 = renderToString(
+      <PetCard
+        pet={phoenix}
+        starBalance={100}
+        activeStageNum={4}
+        wobblingPetId={null}
+        activePetSkill={null}
+        onSetPreviewStage={() => {}}
+        onSetWobblingPetId={() => {}}
+        onOpenEvolutionModal={() => {}}
+        onOpenFullImageModal={() => {}}
+        onSetActivePetSkill={() => {}}
+        onGrowPet={() => {}}
+        onEquipPet={() => {}}
+      />
+    );
+    expect(htmlStage4).toContain('Solar Phoenix Dive');
+    expect(htmlStage4).not.toContain('Pyre Sovereign Rebirth');
   });
 });
