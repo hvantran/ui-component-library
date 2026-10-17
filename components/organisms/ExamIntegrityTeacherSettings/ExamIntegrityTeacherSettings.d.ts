@@ -14,6 +14,7 @@ export interface SystemSettingsData {
     pet_max_level?: number;
     pet_base_exp_needed?: number;
     stars_per_score_point?: number;
+    stars_per_answered_question?: number;
     stars_per_user_level?: number;
     [key: string]: any;
 }
