@@ -49,3 +49,6 @@ export * from './ExamIntegrityStudentWelcomeBanner';
 export * from './ExamIntegrityStudentExamCard';
 export * from './ExamIntegrityStudentAchievementsTray';
 export * from './ExamIntegrityExamGrid';
+export * from './ExamIntegrityReplaceFromBankModal';
+export * from './ExamIntegrityQuestionReviewWorkspace';
+export * from './ExamIntegrityQuestionReviewSummaryCard';

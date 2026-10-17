@@ -35,6 +35,9 @@ import {
   ExamIntegrityStudentAchievementsTray,
   ExamIntegrityExamGrid,
   ExamIntegrityExamGridLoader,
+  ExamIntegrityReplaceFromBankModal,
+  ExamIntegrityQuestionReviewWorkspace,
+  ExamIntegrityQuestionReviewSummaryCard,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -563,6 +566,70 @@ describe('ExamIntegrity Organisms', () => {
 
     const loaderHtml = renderToString(<ExamIntegrityExamGridLoader count={3} />);
     expect(loaderHtml).toContain('data-testid="exam-grid-skeleton"');
+  });
+
+  it('renders ExamIntegrityReplaceFromBankModal when open', () => {
+    const html = renderToString(
+      <ExamIntegrityReplaceFromBankModal
+        open
+        onClose={() => {}}
+        onSelect={() => {}}
+        search="algorithm"
+        onSearchChange={() => {}}
+        questions={[
+          {
+            id: 'q1',
+            content: 'Describe binary search algorithm',
+            type: 'MCQ',
+            points: 2,
+          },
+        ]}
+      />
+    );
+    expect(html).toContain('Select questions from the bank');
+    expect(html).toContain('algorithm');
+    expect(html).toContain('Describe binary search algorithm');
+    expect(html).toContain('Select');
+  });
+
+  it('renders ExamIntegrityQuestionReviewWorkspace', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionReviewWorkspace
+        questions={[
+          { id: 'q1', questionNumber: 1 },
+          { id: 'q2', questionNumber: 2 },
+        ]}
+        currentIndex={0}
+        onSelectIndex={() => {}}
+      >
+        <span>Active Question Body</span>
+      </ExamIntegrityQuestionReviewWorkspace>
+    );
+    expect(html).toContain('Question 1');
+    expect(html).toContain('Question 2');
+    expect(html).toContain('Active Question Body');
+    expect(html).toContain('Prev');
+    expect(html).toContain('Next');
+    expect(html).toContain('1 / 2');
+  });
+
+  it('renders ExamIntegrityQuestionReviewSummaryCard', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionReviewSummaryCard
+        filename="Physics_Exam_2026.pdf"
+        totalQuestions={15}
+        totalPoints={60}
+        flaggedCount={3}
+      />
+    );
+    expect(html).toContain('Draft Info');
+    expect(html).toContain('Physics_Exam_2026.pdf');
+    expect(html).toContain('15');
+    expect(html).toContain('questions');
+    expect(html).toContain('60');
+    expect(html).toContain('pts');
+    expect(html).toContain('3');
+    expect(html).toContain('questions need review');
   });
 });
 
