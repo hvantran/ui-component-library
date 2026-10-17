@@ -98,8 +98,11 @@ const SKILL_VIDEOS: Record<string, string> = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
-export const DEFAULT_SKILL_CDN_BASE =
-  'https://github.com/hvantran/ui-component-library/releases/download/skill-assets-v1';
+export const DEFAULT_ASSETS_CDN_BASE =
+  'https://github.com/hvantran/ui-component-library/releases/download/assets-v1';
+
+export const DEFAULT_SKILL_CDN_BASE = DEFAULT_ASSETS_CDN_BASE;
+export const DEFAULT_PET_CDN_BASE = DEFAULT_ASSETS_CDN_BASE;
 
 export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): string | undefined {
   if (!filename) return bundledUrl;
@@ -128,6 +131,30 @@ export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): st
   }
 
   return `${DEFAULT_SKILL_CDN_BASE}/${filename}`;
+}
+
+export function resolvePetImageUrl(imageName?: string, bundledUrl?: string): string | undefined {
+  if (!imageName) return bundledUrl;
+
+  const globalEnv =
+    typeof globalThis !== 'undefined'
+      ? (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process?.env
+      : undefined;
+
+  const customBase =
+    (typeof window !== 'undefined' &&
+      (window as unknown as { __PET_ASSETS_BASE_URL__?: string }).__PET_ASSETS_BASE_URL__) ||
+    globalEnv?.REACT_APP_PET_ASSETS_BASE_URL;
+
+  if (customBase) {
+    return `${String(customBase).replace(/\/$/, '')}/${imageName}`;
+  }
+
+  if (bundledUrl) {
+    return bundledUrl;
+  }
+
+  return `${DEFAULT_PET_CDN_BASE}/${imageName}`;
 }
 
 export interface EvolutionStageInfo {
