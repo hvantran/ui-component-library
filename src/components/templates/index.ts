@@ -16,4 +16,5 @@ export * from './ExamIntegrityTeacherIngestionTemplate';
 export * from './ExamIntegrityTeacherQuestionBankTemplate';
 export * from './ExamIntegrityTeacherQuestionReviewTemplate';
 export * from './ExamIntegrityTeacherSettingsTemplate';
+export * from './ExamIntegrityTeacherScoringTemplate';
 export * from './domain';
