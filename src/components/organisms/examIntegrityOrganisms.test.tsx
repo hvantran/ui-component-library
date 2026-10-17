@@ -19,6 +19,7 @@ import {
   ExamIntegrityExamCard,
   ExamIntegrityCreateExamDialog,
   ExamIntegrityExamFilterBar,
+  ExamIntegrityExamPreviewModal,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -293,6 +294,28 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('All');
     expect(html).toContain('Published');
     expect(html).toContain('10');
+  });
+
+  it('renders ExamIntegrityExamPreviewModal when open', () => {
+    const html = renderToString(
+      <ExamIntegrityExamPreviewModal
+        open
+        onClose={() => {}}
+        examTitle="Sample Quiz"
+        questions={[
+          {
+            questionNumber: 1,
+            content: 'Sample Question 1',
+            type: 'MCQ',
+            options: ['Opt A', 'Opt B'],
+          },
+        ]}
+      />
+    );
+    expect(html).toContain('Exam Preview');
+    expect(html).toContain('Sample Quiz');
+    expect(html).toContain('Sample Question 1');
+    expect(html).toContain('Close Preview');
   });
 });
 

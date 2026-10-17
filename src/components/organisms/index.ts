@@ -35,4 +35,5 @@ export * from './ExamIntegrityGradeSwitcherPill';
 export * from './ExamIntegrityExamCard';
 export * from './ExamIntegrityCreateExamDialog';
 export * from './ExamIntegrityExamFilterBar';
+export * from './ExamIntegrityExamPreviewModal';
 
