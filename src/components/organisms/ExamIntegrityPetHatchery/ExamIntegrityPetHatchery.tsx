@@ -60,9 +60,8 @@ import {
   createChronoDracoPet,
   createAegisPaladinPet,
   rollMysteryPet,
-  PET_IMAGE_MAP,
   enrichStudentPet,
-  resolveAssetUrl,
+  resolvePetImageUrl,
 } from './petsData';
 
 export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -235,11 +234,6 @@ export function formatHatchTime(totalSeconds: number): string {
   const m = Math.floor((totalSeconds % 3600) / 60);
   const s = totalSeconds % 60;
   return `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
-}
-
-export function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined {
-  const fallback = (imageName && PET_IMAGE_MAP[imageName]) || imageUrl;
-  return resolveAssetUrl(imageName, fallback, 'pet');
 }
 
 // ---------------------------------------------------------------------------

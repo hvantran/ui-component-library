@@ -148,9 +148,6 @@ export function resolveAssetUrl(
 export const resolveSkillVideoUrl = (filename?: string, bundledUrl?: string): string | undefined =>
   resolveAssetUrl(filename, bundledUrl, 'skill');
 
-export const resolvePetImageUrl = (imageName?: string, bundledUrl?: string): string | undefined =>
-  resolveAssetUrl(imageName, bundledUrl, 'pet');
-
 export interface EvolutionStageInfo {
   stage: number;
   minLevel: number;
@@ -2663,6 +2660,11 @@ export const PET_IMAGE_MAP: Record<string, string> = {
   'aegispaladin-stage-7.png': aegispaladinStage7Img,
   'aegispaladin-stage-8.png': aegispaladinStage8Img,
 };
+
+export function resolvePetImageUrl(imageName?: string, fallbackUrl?: string): string | undefined {
+  const fallback = (imageName && PET_IMAGE_MAP[imageName]) || fallbackUrl;
+  return resolveAssetUrl(imageName, fallback, 'pet');
+}
 
 export interface SyncPetLibraryStageDTO {
   stage: number;

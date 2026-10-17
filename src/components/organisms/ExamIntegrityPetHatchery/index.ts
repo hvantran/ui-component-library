@@ -5,6 +5,7 @@ export {
   DEFAULT_PET_CDN_BASE,
   resolveAssetUrl,
   resolveSkillVideoUrl,
+  resolvePetImageUrl,
 } from './petsData';
 export type { AssetType } from './petsData';
 
