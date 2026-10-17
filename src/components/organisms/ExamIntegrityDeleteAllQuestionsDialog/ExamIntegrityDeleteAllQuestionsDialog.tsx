@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal } from '../../atoms/Modal';
 import { Button } from '../../atoms/Button';
-import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityDeleteAllQuestionsDialogProps {
   isOpen: boolean;

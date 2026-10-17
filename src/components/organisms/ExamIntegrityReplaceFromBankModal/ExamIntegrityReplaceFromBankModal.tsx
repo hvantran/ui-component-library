@@ -6,7 +6,6 @@ import { Input } from '../../atoms/Input';
 import { Skeleton } from '../../atoms/Skeleton';
 import { Chip } from '../../atoms/Chip';
 import type { DraftQuestionDTO } from '../../../types/examIntegrity';
-import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityReplaceFromBankModalProps {
   open: boolean;
