@@ -11,6 +11,7 @@ import {
   ExamIntegrityTeacherQuestionBankTemplate,
   ExamIntegrityTeacherIngestionTemplate,
   ExamIntegrityTeacherFinalPublicationTemplate,
+  ExamIntegrityTeacherScoringTemplate,
 } from './index';
 
 describe('Exam Integrity Templates', () => {
@@ -204,6 +205,45 @@ describe('Exam Integrity Templates', () => {
     );
     expect(html).toContain('Exam Publication Readiness');
     expect(html).toContain('Approved Questions');
+  });
+
+  it('renders ExamIntegrityTeacherScoringTemplate with queue and scoring buttons', () => {
+    const html = renderToString(
+      <ExamIntegrityTeacherScoringTemplate
+        queue={[
+          {
+            sessionId: 'session-1',
+            examTitle: 'Biology Midterm',
+            studentId: 'student-1',
+            pendingEssayCount: 1,
+            totalEarned: 5,
+            totalMax: 10,
+          },
+        ]}
+        selectedSessionId="session-1"
+        dashboard={{
+          sessionId: 'session-1',
+          finalScore10: 5,
+          scores: [
+            {
+              questionId: 'q-1',
+              questionNumber: 1,
+              questionText: 'Explain photosynthesis.',
+              questionType: 'ESSAY',
+              maxPoints: 5,
+              earnedPoints: 2.5,
+              studentAnswer: 'Plants use sunlight.',
+              status: 'PENDING_REVIEW',
+            },
+          ],
+        }}
+      />,
+    );
+    expect(html).toContain('Essay Scoring');
+    expect(html).toContain('Biology Midterm');
+    expect(html).toContain('Explain photosynthesis.');
+    expect(html).toContain('Mark correct');
+    expect(html).toContain('Save score');
   });
 });
 
