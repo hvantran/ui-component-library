@@ -6,7 +6,7 @@ import { EmptyState } from '../../molecules/EmptyState';
 import { ExamIntegrityStudentExamHeader } from '../ExamIntegrityStudentExamHeader';
 import { ExamIntegrityStudentExamNavigationBar } from '../ExamIntegrityStudentExamNavigationBar';
 import { ExamIntegrityQuestionPanel } from '../ExamIntegrityQuestionPanel';
-import type { QuestionOption } from '../ExamIntegrityQuestionPanel';
+import type { QuestionOption, QuestionType } from '../../../types/examIntegrity';
 
 export interface PreviewQuestionDTO {
   questionNumber: number;
@@ -114,7 +114,7 @@ export const ExamIntegrityExamPreviewModal: React.FC<ExamIntegrityExamPreviewMod
                     questionNumber={activeQuestion.questionNumber}
                     questionText={activeQuestion.content}
                     questionStem={activeQuestion.stem}
-                    questionType={activeQuestion.type}
+                    questionType={(activeQuestion.type as QuestionType) || 'MCQ'}
                     options={resolvedMapOptions(activeQuestion.options)}
                     questionParts={activeQuestion.questionParts}
                     selectedAnswer=""

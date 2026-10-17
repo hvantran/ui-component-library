@@ -161,7 +161,7 @@ export const ExamIntegrityCreateExamDialog: React.FC<ExamIntegrityCreateExamDial
                   key={t}
                   label={t}
                   size="sm"
-                  variant="info"
+                  color="primary"
                   onDelete={() => handleRemoveTag(t)}
                 />
               ))}
