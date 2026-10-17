@@ -20,6 +20,16 @@ import {
   ExamIntegrityCreateExamDialog,
   ExamIntegrityExamFilterBar,
   ExamIntegrityExamPreviewModal,
+  ExamIntegrityMcqOptionsForm,
+  ExamIntegrityQuestionBankCard,
+  ExamIntegrityQuestionBankEditCard,
+  ExamIntegrityQuestionBankFilterBar,
+  ExamIntegrityQuestionBankActionBar,
+  ExamIntegrityAddQuestionDialog,
+  ExamIntegrityDeleteAllQuestionsDialog,
+  ExamIntegrityQuestionBankPreviewModal,
+  ExamIntegrityQuestionBankListLoader,
+  ExamIntegrityQuestionBankEndMessage,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -316,6 +326,163 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('Sample Quiz');
     expect(html).toContain('Sample Question 1');
     expect(html).toContain('Close Preview');
+  });
+
+  it('renders ExamIntegrityMcqOptionsForm', () => {
+    const html = renderToString(
+      <ExamIntegrityMcqOptionsForm
+        options={['Option A', 'Option B', 'Option C', 'Option D']}
+        correctAnswer="A"
+        onOptionChange={() => {}}
+        onCorrectAnswerChange={() => {}}
+      />
+    );
+    expect(html).toContain('Answer Options');
+    expect(html).toContain('Option A');
+    expect(html).toContain('Option B');
+  });
+
+  it('renders ExamIntegrityQuestionBankCard', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionBankCard
+        index={0}
+        content="What is TypeScript?"
+        type="MCQ"
+        points={2}
+        usesCount={3}
+        tags={['TS', 'JS']}
+        onEdit={() => {}}
+        onDelete={() => {}}
+      />
+    );
+    expect(html).toContain('1.');
+    expect(html).toContain('What is TypeScript?');
+    expect(html).toContain('MCQ');
+    expect(html).toContain('2');
+    expect(html).toContain('pts');
+    expect(html).toContain('3');
+    expect(html).toContain('uses');
+    expect(html).toContain('TS');
+    expect(html).toContain('Edit');
+    expect(html).toContain('Delete');
+  });
+
+  it('renders ExamIntegrityQuestionBankEditCard', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionBankEditCard
+        initialValues={{
+          content: 'Explain closures',
+          type: 'MCQ',
+          difficulty: 'Medium',
+          options: ['A', 'B', 'C', 'D'],
+          optionImages: [undefined, undefined, undefined, undefined],
+          correctAnswer: 'A',
+          points: 1,
+          tags: 'js, closures',
+        }}
+        onSave={() => {}}
+        onCancel={() => {}}
+      />
+    );
+    expect(html).toContain('Edit Question');
+    expect(html).toContain('Explain closures');
+    expect(html).toContain('Save Changes');
+    expect(html).toContain('Cancel');
+  });
+
+  it('renders ExamIntegrityQuestionBankFilterBar', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionBankFilterBar
+        searchQuery="test query"
+        onSearchChange={() => {}}
+        typeFilter="MCQ"
+        onTypeChange={() => {}}
+        typeOptions={[{ value: 'MCQ', label: 'MCQ' }]}
+        tagInput=""
+        onTagInputChange={() => {}}
+        availableTags={['tag1', 'tag2']}
+        selectedTags={['tag1']}
+        onAddTag={() => {}}
+        onRemoveTag={() => {}}
+      />
+    );
+    expect(html).toContain('test query');
+    expect(html).toContain('tag1');
+    expect(html).toContain('MCQ');
+  });
+
+  it('renders ExamIntegrityQuestionBankActionBar', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionBankActionBar
+        totalCount={15}
+        onPreview={() => {}}
+        onAddQuestion={() => {}}
+        onDeleteAll={() => {}}
+      />
+    );
+    expect(html).toContain('Showing');
+    expect(html).toContain('15');
+    expect(html).toContain('Preview');
+    expect(html).toContain('Add Question');
+    expect(html).toContain('Delete All');
+  });
+
+  it('renders ExamIntegrityAddQuestionDialog when open', () => {
+    const html = renderToString(
+      <ExamIntegrityAddQuestionDialog
+        isOpen
+        onClose={() => {}}
+        onSubmit={() => {}}
+      />
+    );
+    expect(html).toContain('Add New Question');
+    expect(html).toContain('Question Type');
+    expect(html).toContain('Difficulty Level');
+    expect(html).toContain('Cancel');
+    expect(html).toContain('Add Question');
+  });
+
+  it('renders ExamIntegrityDeleteAllQuestionsDialog when open', () => {
+    const html = renderToString(
+      <ExamIntegrityDeleteAllQuestionsDialog
+        isOpen
+        onClose={() => {}}
+        onConfirm={() => {}}
+        totalCount={25}
+      />
+    );
+    expect(html).toContain('Delete All Questions');
+    expect(html).toContain('25');
+    expect(html).toContain('Delete All');
+  });
+
+  it('renders ExamIntegrityQuestionBankPreviewModal when open', () => {
+    const html = renderToString(
+      <ExamIntegrityQuestionBankPreviewModal
+        isOpen
+        onClose={() => {}}
+        totalElements={1}
+        questions={[
+          {
+            id: 'q1',
+            questionNumber: 1,
+            questionText: 'What is DOM?',
+            questionType: 'MCQ',
+          },
+        ]}
+      />
+    );
+    expect(html).toContain('Question Preview (Student View)');
+    expect(html).toContain('Previewing');
+    expect(html).toContain('questions');
+    expect(html).toContain('What is DOM?');
+  });
+
+  it('renders ExamIntegrityQuestionBankListState loader and end message', () => {
+    const loaderHtml = renderToString(<ExamIntegrityQuestionBankListLoader count={2} />);
+    const endMsgHtml = renderToString(<ExamIntegrityQuestionBankEndMessage message="End of list" />);
+    expect(loaderHtml).toContain('Loading more questions');
+    expect(endMsgHtml).toContain('End of list');
   });
 });
 
