@@ -17,6 +17,7 @@ describe('ExamIntegrityTeacherSettings', () => {
     pet_max_level: 10,
     pet_base_exp_needed: 100,
     stars_per_score_point: 1.0,
+    stars_per_answered_question: 0.5,
     stars_per_user_level: 20,
   };
 
@@ -40,6 +41,7 @@ describe('ExamIntegrityTeacherSettings', () => {
     expect(html).toContain('Mythic (%)');
     expect(html).toContain('Companion Pet Growth &amp; Progression');
     expect(html).toContain('Star Rewards &amp; Gamification Economy');
+    expect(html).toContain('Stars Per Answered Question');
     expect(html).toContain('Egg Shop Price (Stars)');
     expect(html).toContain('250');
   });

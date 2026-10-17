@@ -26,6 +26,7 @@ export interface SystemSettingsData {
   pet_max_level?: number;
   pet_base_exp_needed?: number;
   stars_per_score_point?: number;
+  stars_per_answered_question?: number;
   stars_per_user_level?: number;
   [key: string]: any;
 }
@@ -293,6 +294,18 @@ export const ExamIntegrityTeacherSettings: React.FC<ExamIntegrityTeacherSettings
                 onSettingsChange('stars_per_score_point', Number(e.target.value))
               }
               helperText="Ratio of stars earned per exam score point."
+              required
+            />
+            <Input
+              label="Stars Per Answered Question"
+              type="number"
+              step="0.1"
+              min={0}
+              value={settings.stars_per_answered_question ?? 0.5}
+              onChange={(e) =>
+                onSettingsChange('stars_per_answered_question', Number(e.target.value))
+              }
+              helperText="Stars earned for each question answered in the exam."
               required
             />
             <Input
