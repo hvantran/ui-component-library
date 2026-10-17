@@ -52,3 +52,7 @@ export * from './ExamIntegrityExamGrid';
 export * from './ExamIntegrityReplaceFromBankModal';
 export * from './ExamIntegrityQuestionReviewWorkspace';
 export * from './ExamIntegrityQuestionReviewSummaryCard';
+export * from './ExamIntegrityStudentExamResultCard';
+export * from './ExamIntegrityStudentExamResultsGrid';
+export * from './ExamIntegrityTeacherPdfIngestionZone';
+export * from './ExamIntegrityReviewContentContainer';

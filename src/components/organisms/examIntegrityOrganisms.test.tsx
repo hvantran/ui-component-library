@@ -38,6 +38,10 @@ import {
   ExamIntegrityReplaceFromBankModal,
   ExamIntegrityQuestionReviewWorkspace,
   ExamIntegrityQuestionReviewSummaryCard,
+  ExamIntegrityStudentExamResultCard,
+  ExamIntegrityStudentExamResultsGrid,
+  ExamIntegrityTeacherPdfIngestionZone,
+  ExamIntegrityReviewContentContainer,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -630,6 +634,98 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('pts');
     expect(html).toContain('3');
     expect(html).toContain('questions need review');
+  });
+
+  it('renders ExamIntegrityStudentExamResultCard in standard and elementary modes', () => {
+    const onSelect = vi.fn();
+    const standardHtml = renderToString(
+      <ExamIntegrityStudentExamResultCard
+        sessionId="sess-1"
+        examTitle="Algebra 101"
+        submittedAt="2026-10-15T09:30:00Z"
+        finalScore10={8.5}
+        totalEarned={85}
+        totalMax={100}
+        starsEarned={9}
+        pendingEssayCount={2}
+        isSelected={true}
+        onSelect={onSelect}
+      />
+    );
+    expect(standardHtml).toContain('Algebra 101');
+    expect(standardHtml).toContain('8.5');
+    expect(standardHtml).toContain('/10');
+    expect(standardHtml).toContain('85.0');
+    expect(standardHtml).toContain('100.0');
+    expect(standardHtml).toContain('pts');
+    expect(standardHtml).toContain('2');
+    expect(standardHtml).toContain('essay pending');
+    expect(standardHtml).toContain('border-blue-600');
+
+    const elementaryHtml = renderToString(
+      <ExamIntegrityStudentExamResultCard
+        sessionId="sess-2"
+        examTitle="Math Safari Quest"
+        finalScore10={9.0}
+        starsEarned={9}
+        isElementary={true}
+        isSelected={false}
+        onSelect={onSelect}
+      />
+    );
+    expect(elementaryHtml).toContain('Math Safari Quest');
+    expect(elementaryHtml).toContain('9');
+    expect(elementaryHtml).toContain('Stars');
+    expect(elementaryHtml).toContain('View Celebration');
+  });
+
+  it('renders ExamIntegrityStudentExamResultsGrid', () => {
+    const html = renderToString(
+      <ExamIntegrityStudentExamResultsGrid>
+        <div>Child 1</div>
+        <div>Child 2</div>
+      </ExamIntegrityStudentExamResultsGrid>
+    );
+    expect(html).toContain('grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3');
+    expect(html).toContain('Child 1');
+    expect(html).toContain('Child 2');
+  });
+
+  it('renders ExamIntegrityTeacherPdfIngestionZone in processing, success and error states', () => {
+    const onSelect = vi.fn();
+    const htmlProcessing = renderToString(
+      <ExamIntegrityTeacherPdfIngestionZone
+        onFileSelect={onSelect}
+        isProcessing={true}
+      />
+    );
+    expect(htmlProcessing).toContain('Processing PDF…');
+
+    const htmlSuccess = renderToString(
+      <ExamIntegrityTeacherPdfIngestionZone
+        onFileSelect={onSelect}
+        isSuccess={true}
+      />
+    );
+    expect(htmlSuccess).toContain('Upload successful! Redirecting to review page…');
+
+    const htmlError = renderToString(
+      <ExamIntegrityTeacherPdfIngestionZone
+        onFileSelect={onSelect}
+        error="Invalid PDF syntax"
+      />
+    );
+    expect(htmlError).toContain('Invalid PDF syntax');
+  });
+
+  it('renders ExamIntegrityReviewContentContainer', () => {
+    const html = renderToString(
+      <ExamIntegrityReviewContentContainer>
+        <div>Dashboard Review Data</div>
+      </ExamIntegrityReviewContentContainer>
+    );
+    expect(html).toContain('Dashboard Review Data');
+    expect(html).toContain('p-2 sm:p-4 min-h-[300px]');
   });
 });
 
