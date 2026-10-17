@@ -62,6 +62,7 @@ import {
   rollMysteryPet,
   PET_IMAGE_MAP,
   enrichStudentPet,
+  resolveAssetUrl,
 } from './petsData';
 
 export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -237,10 +238,8 @@ export function formatHatchTime(totalSeconds: number): string {
 }
 
 export function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined {
-  if (imageName && PET_IMAGE_MAP[imageName]) {
-    return PET_IMAGE_MAP[imageName];
-  }
-  return imageUrl;
+  const fallback = (imageName && PET_IMAGE_MAP[imageName]) || imageUrl;
+  return resolveAssetUrl(imageName, fallback, 'pet');
 }
 
 // ---------------------------------------------------------------------------
@@ -1161,14 +1160,9 @@ export const PetCard: React.FC<PetCardProps> = ({
       pet.evolutionStages?.[activeStageNum - 1]
     : undefined;
 
-  const resolvePetImage = (imgName?: string, imgUrl?: string): string | undefined => {
-    if (imgName && PET_IMAGE_MAP[imgName]) return PET_IMAGE_MAP[imgName];
-    return imgUrl;
-  };
-
   const displayedImageUrl =
-    resolvePetImage(displayedStage?.imageName, displayedStage?.imageUrl) ||
-    resolvePetImage(pet.imageName, pet.imageUrl);
+    resolvePetImageUrl(displayedStage?.imageName, displayedStage?.imageUrl) ||
+    resolvePetImageUrl(pet.imageName, pet.imageUrl);
   const displayedStageName = displayedStage?.name || pet.stageName;
   const isDisplayedStageLocked = Boolean(
     hasStages && displayedStage && pet.level < displayedStage.minLevel
