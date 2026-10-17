@@ -45,3 +45,7 @@ export * from './ExamIntegrityAddQuestionDialog';
 export * from './ExamIntegrityDeleteAllQuestionsDialog';
 export * from './ExamIntegrityQuestionBankPreviewModal';
 export * from './ExamIntegrityQuestionBankListState';
+export * from './ExamIntegrityStudentWelcomeBanner';
+export * from './ExamIntegrityStudentExamCard';
+export * from './ExamIntegrityStudentAchievementsTray';
+export * from './ExamIntegrityExamGrid';

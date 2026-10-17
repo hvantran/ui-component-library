@@ -30,6 +30,11 @@ import {
   ExamIntegrityQuestionBankPreviewModal,
   ExamIntegrityQuestionBankListLoader,
   ExamIntegrityQuestionBankEndMessage,
+  ExamIntegrityStudentWelcomeBanner,
+  ExamIntegrityStudentExamCard,
+  ExamIntegrityStudentAchievementsTray,
+  ExamIntegrityExamGrid,
+  ExamIntegrityExamGridLoader,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -483,6 +488,81 @@ describe('ExamIntegrity Organisms', () => {
     const endMsgHtml = renderToString(<ExamIntegrityQuestionBankEndMessage message="End of list" />);
     expect(loaderHtml).toContain('Loading more questions');
     expect(endMsgHtml).toContain('End of list');
+  });
+
+  it('renders ExamIntegrityStudentWelcomeBanner', () => {
+    const html = renderToString(
+      <ExamIntegrityStudentWelcomeBanner
+        studentName="Leo"
+        avatarEmoji="🦁"
+      />
+    );
+    expect(html).toContain('Welcome back, Leo! 🚀');
+    expect(html).toContain('🦁');
+    expect(html).toContain("Ready for today&#x27;s learning adventures?");
+  });
+
+  it('renders ExamIntegrityStudentExamCard in both elementary and standard modes', () => {
+    const elemHtml = renderToString(
+      <ExamIntegrityStudentExamCard
+        id="exam-elem-1"
+        title="Math Quest 1"
+        questionCount={5}
+        durationSeconds={600}
+        totalPoints={15}
+        tags={['Math', 'G1']}
+        isElementary
+        subject="math"
+        onStart={() => {}}
+      />
+    );
+    expect(elemHtml).toContain('Math Quest 1');
+    expect(elemHtml).toContain('🦁 Math');
+    expect(elemHtml).toContain('15');
+    expect(elemHtml).toContain('Stars');
+    expect(elemHtml).toContain('Start Quest');
+
+    const stdHtml = renderToString(
+      <ExamIntegrityStudentExamCard
+        id="exam-std-1"
+        title="Physics Midterm"
+        questionCount={20}
+        durationSeconds={3600}
+        totalPoints={100}
+        tags={['Physics']}
+        isElementary={false}
+        onStart={() => {}}
+      />
+    );
+    expect(stdHtml).toContain('Physics Midterm');
+    expect(stdHtml).toContain('20');
+    expect(stdHtml).toContain('questions');
+    expect(stdHtml).toContain('100');
+    expect(stdHtml).toContain('pts');
+    expect(stdHtml).toContain('Start Exam');
+  });
+
+  it('renders ExamIntegrityStudentAchievementsTray', () => {
+    const html = renderToString(<ExamIntegrityStudentAchievementsTray />);
+    expect(html).toContain('Recent Badges &amp; Achievements');
+    expect(html).toContain('Math Wizard');
+    expect(html).toContain('Story Explorer');
+    expect(html).toContain('Space Cadet');
+    expect(html).toContain('Super Fast');
+  });
+
+  it('renders ExamIntegrityExamGrid and ExamIntegrityExamGridLoader', () => {
+    const gridHtml = renderToString(
+      <ExamIntegrityExamGrid>
+        <span>Card 1</span>
+        <span>Card 2</span>
+      </ExamIntegrityExamGrid>
+    );
+    expect(gridHtml).toContain('Card 1');
+    expect(gridHtml).toContain('Card 2');
+
+    const loaderHtml = renderToString(<ExamIntegrityExamGridLoader count={3} />);
+    expect(loaderHtml).toContain('data-testid="exam-grid-skeleton"');
   });
 });
 
