@@ -1,7 +1,11 @@
 import { EggTier } from '../../molecules/ThreeEggViewer';
 import { PetSkill } from '../ExamIntegrityPetSkill';
-export declare const DEFAULT_SKILL_CDN_BASE = "https://github.com/hvantran/ui-component-library/releases/download/skill-assets-v1";
-export declare function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): string | undefined;
+export declare const DEFAULT_ASSETS_CDN_BASE = "https://github.com/hvantran/ui-component-library/releases/download/assets-v1";
+export declare const DEFAULT_SKILL_CDN_BASE = "https://github.com/hvantran/ui-component-library/releases/download/assets-v1";
+export declare const DEFAULT_PET_CDN_BASE = "https://github.com/hvantran/ui-component-library/releases/download/assets-v1";
+export type AssetType = 'skill' | 'pet';
+export declare function resolveAssetUrl(filename?: string, bundledUrl?: string, assetType?: AssetType): string | undefined;
+export declare const resolveSkillVideoUrl: (filename?: string, bundledUrl?: string) => string | undefined;
 export interface EvolutionStageInfo {
     stage: number;
     minLevel: number;
@@ -140,6 +144,7 @@ export interface RarityDropRateInfo {
 export declare const RARITY_DROP_RATES: Record<PetRarity, RarityDropRateInfo>;
 export declare function rollMysteryPet(fixedRoll?: number): StudentPet;
 export declare const PET_IMAGE_MAP: Record<string, string>;
+export declare function resolvePetImageUrl(imageName?: string, fallbackUrl?: string): string | undefined;
 export interface SyncPetLibraryStageDTO {
     stage: number;
     minLevel: number;

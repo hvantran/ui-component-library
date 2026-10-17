@@ -50,7 +50,6 @@ export interface ExamIntegrityPetHatcheryProps {
 export declare const DEFAULT_INCUBATING_EGGS: IncubatingEgg[];
 export declare const DEFAULT_STUDENT_PETS: StudentPet[];
 export declare function formatHatchTime(totalSeconds: number): string;
-export declare function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined;
 export interface PetEvolutionModalProps {
     pet: StudentPet | null;
     onClose: () => void;
