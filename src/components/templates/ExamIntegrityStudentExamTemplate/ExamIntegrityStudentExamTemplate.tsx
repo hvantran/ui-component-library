@@ -33,7 +33,7 @@ export const ExamIntegrityStudentExamTemplate: React.FC<
 }) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  if (children) {
+  if (children && !headerSlot && !contentSlot) {
     return (
       <div
         className={cn(
@@ -148,6 +148,8 @@ export const ExamIntegrityStudentExamTemplate: React.FC<
           </div>
         </footer>
       )}
+
+      {children}
     </div>
   );
 };
