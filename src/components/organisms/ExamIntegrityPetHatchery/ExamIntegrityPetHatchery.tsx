@@ -60,8 +60,8 @@ import {
   createChronoDracoPet,
   createAegisPaladinPet,
   rollMysteryPet,
-  PET_IMAGE_MAP,
   enrichStudentPet,
+  resolvePetImageUrl,
 } from './petsData';
 
 export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -234,13 +234,6 @@ export function formatHatchTime(totalSeconds: number): string {
   const m = Math.floor((totalSeconds % 3600) / 60);
   const s = totalSeconds % 60;
   return `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
-}
-
-export function resolvePetImageUrl(imageName?: string, imageUrl?: string): string | undefined {
-  if (imageName && PET_IMAGE_MAP[imageName]) {
-    return PET_IMAGE_MAP[imageName];
-  }
-  return imageUrl;
 }
 
 // ---------------------------------------------------------------------------
@@ -1161,14 +1154,9 @@ export const PetCard: React.FC<PetCardProps> = ({
       pet.evolutionStages?.[activeStageNum - 1]
     : undefined;
 
-  const resolvePetImage = (imgName?: string, imgUrl?: string): string | undefined => {
-    if (imgName && PET_IMAGE_MAP[imgName]) return PET_IMAGE_MAP[imgName];
-    return imgUrl;
-  };
-
   const displayedImageUrl =
-    resolvePetImage(displayedStage?.imageName, displayedStage?.imageUrl) ||
-    resolvePetImage(pet.imageName, pet.imageUrl);
+    resolvePetImageUrl(displayedStage?.imageName, displayedStage?.imageUrl) ||
+    resolvePetImageUrl(pet.imageName, pet.imageUrl);
   const displayedStageName = displayedStage?.name || pet.stageName;
   const isDisplayedStageLocked = Boolean(
     hasStages && displayedStage && pet.level < displayedStage.minLevel

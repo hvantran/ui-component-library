@@ -98,10 +98,19 @@ const SKILL_VIDEOS: Record<string, string> = import.meta.glob(
   { eager: true, query: '?url', import: 'default' }
 );
 
-export const DEFAULT_SKILL_CDN_BASE =
-  'https://github.com/hvantran/ui-component-library/releases/download/skill-assets-v1';
+export const DEFAULT_ASSETS_CDN_BASE =
+  'https://github.com/hvantran/ui-component-library/releases/download/assets-v1';
 
-export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): string | undefined {
+export const DEFAULT_SKILL_CDN_BASE = DEFAULT_ASSETS_CDN_BASE;
+export const DEFAULT_PET_CDN_BASE = DEFAULT_ASSETS_CDN_BASE;
+
+export type AssetType = 'skill' | 'pet';
+
+export function resolveAssetUrl(
+  filename?: string,
+  bundledUrl?: string,
+  assetType: AssetType = 'skill'
+): string | undefined {
   if (!filename) return bundledUrl;
 
   const globalEnv =
@@ -109,10 +118,16 @@ export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): st
       ? (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process?.env
       : undefined;
 
+  const envKey = assetType === 'skill' ? 'REACT_APP_SKILL_ASSETS_BASE_URL' : 'REACT_APP_PET_ASSETS_BASE_URL';
+  const windowKey = assetType === 'skill' ? '__SKILL_ASSETS_BASE_URL__' : '__PET_ASSETS_BASE_URL__';
+
   const customBase =
     (typeof window !== 'undefined' &&
-      (window as unknown as { __SKILL_ASSETS_BASE_URL__?: string }).__SKILL_ASSETS_BASE_URL__) ||
-    globalEnv?.REACT_APP_SKILL_ASSETS_BASE_URL;
+      (window as unknown as Record<string, string | undefined>)[windowKey]) ||
+    (typeof window !== 'undefined' &&
+      (window as unknown as Record<string, string | undefined>).__ASSETS_BASE_URL__) ||
+    globalEnv?.[envKey] ||
+    globalEnv?.REACT_APP_ASSETS_BASE_URL;
 
   if (customBase) {
     return `${String(customBase).replace(/\/$/, '')}/${filename}`;
@@ -127,8 +142,11 @@ export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): st
     return bundledUrl;
   }
 
-  return `${DEFAULT_SKILL_CDN_BASE}/${filename}`;
+  return `${DEFAULT_ASSETS_CDN_BASE}/${filename}`;
 }
+
+export const resolveSkillVideoUrl = (filename?: string, bundledUrl?: string): string | undefined =>
+  resolveAssetUrl(filename, bundledUrl, 'skill');
 
 export interface EvolutionStageInfo {
   stage: number;
@@ -2642,6 +2660,11 @@ export const PET_IMAGE_MAP: Record<string, string> = {
   'aegispaladin-stage-7.png': aegispaladinStage7Img,
   'aegispaladin-stage-8.png': aegispaladinStage8Img,
 };
+
+export function resolvePetImageUrl(imageName?: string, fallbackUrl?: string): string | undefined {
+  const fallback = (imageName && PET_IMAGE_MAP[imageName]) || fallbackUrl;
+  return resolveAssetUrl(imageName, fallback, 'pet');
+}
 
 export interface SyncPetLibraryStageDTO {
   stage: number;
