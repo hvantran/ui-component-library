@@ -104,7 +104,13 @@ export const DEFAULT_ASSETS_CDN_BASE =
 export const DEFAULT_SKILL_CDN_BASE = DEFAULT_ASSETS_CDN_BASE;
 export const DEFAULT_PET_CDN_BASE = DEFAULT_ASSETS_CDN_BASE;
 
-export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): string | undefined {
+export type AssetType = 'skill' | 'pet';
+
+export function resolveAssetUrl(
+  filename?: string,
+  bundledUrl?: string,
+  assetType: AssetType = 'skill'
+): string | undefined {
   if (!filename) return bundledUrl;
 
   const globalEnv =
@@ -112,10 +118,16 @@ export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): st
       ? (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process?.env
       : undefined;
 
+  const envKey = assetType === 'skill' ? 'REACT_APP_SKILL_ASSETS_BASE_URL' : 'REACT_APP_PET_ASSETS_BASE_URL';
+  const windowKey = assetType === 'skill' ? '__SKILL_ASSETS_BASE_URL__' : '__PET_ASSETS_BASE_URL__';
+
   const customBase =
     (typeof window !== 'undefined' &&
-      (window as unknown as { __SKILL_ASSETS_BASE_URL__?: string }).__SKILL_ASSETS_BASE_URL__) ||
-    globalEnv?.REACT_APP_SKILL_ASSETS_BASE_URL;
+      (window as unknown as Record<string, string | undefined>)[windowKey]) ||
+    (typeof window !== 'undefined' &&
+      (window as unknown as Record<string, string | undefined>).__ASSETS_BASE_URL__) ||
+    globalEnv?.[envKey] ||
+    globalEnv?.REACT_APP_ASSETS_BASE_URL;
 
   if (customBase) {
     return `${String(customBase).replace(/\/$/, '')}/${filename}`;
@@ -130,32 +142,14 @@ export function resolveSkillVideoUrl(filename?: string, bundledUrl?: string): st
     return bundledUrl;
   }
 
-  return `${DEFAULT_SKILL_CDN_BASE}/${filename}`;
+  return `${DEFAULT_ASSETS_CDN_BASE}/${filename}`;
 }
 
-export function resolvePetImageUrl(imageName?: string, bundledUrl?: string): string | undefined {
-  if (!imageName) return bundledUrl;
+export const resolveSkillVideoUrl = (filename?: string, bundledUrl?: string): string | undefined =>
+  resolveAssetUrl(filename, bundledUrl, 'skill');
 
-  const globalEnv =
-    typeof globalThis !== 'undefined'
-      ? (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process?.env
-      : undefined;
-
-  const customBase =
-    (typeof window !== 'undefined' &&
-      (window as unknown as { __PET_ASSETS_BASE_URL__?: string }).__PET_ASSETS_BASE_URL__) ||
-    globalEnv?.REACT_APP_PET_ASSETS_BASE_URL;
-
-  if (customBase) {
-    return `${String(customBase).replace(/\/$/, '')}/${imageName}`;
-  }
-
-  if (bundledUrl) {
-    return bundledUrl;
-  }
-
-  return `${DEFAULT_PET_CDN_BASE}/${imageName}`;
-}
+export const resolvePetImageUrl = (imageName?: string, bundledUrl?: string): string | undefined =>
+  resolveAssetUrl(imageName, bundledUrl, 'pet');
 
 export interface EvolutionStageInfo {
   stage: number;
