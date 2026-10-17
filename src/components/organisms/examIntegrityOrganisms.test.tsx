@@ -16,6 +16,9 @@ import {
   ExamIntegrityPetHatchery,
   ExamIntegrityStudentQuestTrail,
   ExamIntegrityStudentElementarySidebar,
+  ExamIntegrityExamCard,
+  ExamIntegrityCreateExamDialog,
+  ExamIntegrityExamFilterBar,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -227,6 +230,69 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('Flagged for Review');
     expect(html).toContain('Jump →');
     expect(html).toContain('Proctoring Status');
+  });
+
+  it('renders ExamIntegrityExamCard', () => {
+    const html = renderToString(
+      <ExamIntegrityExamCard
+        examId="e-1"
+        title="Mid-term Exam"
+        durationSeconds={3600}
+        questionCount={20}
+        totalPoints={100}
+        status="ACTIVE"
+        tags={['Math', 'Grade 10']}
+        onPreview={() => {}}
+        onManageQuestions={() => {}}
+        onExport={() => {}}
+        onDelete={() => {}}
+        onSyncQuestions={() => {}}
+      />
+    );
+    expect(html).toContain('Mid-term Exam');
+    expect(html).toContain('60');
+    expect(html).toContain('min');
+    expect(html).toContain('20');
+    expect(html).toContain('questions');
+    expect(html).toContain('100');
+    expect(html).toContain('pts');
+    expect(html).toContain('Published');
+    expect(html).toContain('Math');
+  });
+
+  it('renders ExamIntegrityCreateExamDialog when open', () => {
+    const html = renderToString(
+      <ExamIntegrityCreateExamDialog
+        open
+        onClose={() => {}}
+        onSubmit={() => {}}
+        availableTags={['Math', 'Science']}
+      />
+    );
+    expect(html).toContain('Create Exam from Question Bank');
+    expect(html).toContain('Exam Name');
+    expect(html).toContain('Duration (minutes)');
+    expect(html).toContain('Question Bank Selection');
+  });
+
+  it('renders ExamIntegrityExamFilterBar', () => {
+    const html = renderToString(
+      <ExamIntegrityExamFilterBar
+        title="Filter exams"
+        subtitle="Showing 5 of 10 exams"
+        options={[
+          { key: 'all', label: 'All', count: 10 },
+          { key: 'published', label: 'Published', count: 5 },
+        ]}
+        selectedKey="all"
+        onSelectKey={() => {}}
+      />
+    );
+    expect(html).toContain('Filter exams');
+    expect(html).toContain('Showing 5 of 10 exams');
+    expect(html).toContain('All');
+    expect(html).toContain('Published');
+    expect(html).toContain('10');
   });
 });
 

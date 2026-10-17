@@ -32,4 +32,7 @@ export * from './ExamIntegrityStudentElementarySidebar';
 export * from './ExamIntegrityStudentElementaryBanner';
 export * from './ExamIntegrityStudentElementaryReassurance';
 export * from './ExamIntegrityGradeSwitcherPill';
+export * from './ExamIntegrityExamCard';
+export * from './ExamIntegrityCreateExamDialog';
+export * from './ExamIntegrityExamFilterBar';
 
