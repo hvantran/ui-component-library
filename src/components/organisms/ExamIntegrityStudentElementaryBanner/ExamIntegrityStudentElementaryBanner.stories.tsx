@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ExamIntegrityStudentElementaryBanner } from './ExamIntegrityStudentElementaryBanner';
 
 const meta: Meta<typeof ExamIntegrityStudentElementaryBanner> = {
-  title: 'Molecules/ExamIntegrityStudentElementaryBanner',
+  title: 'Organisms/ExamIntegrityStudentElementaryBanner',
   component: ExamIntegrityStudentElementaryBanner,
   tags: ['autodocs'],
 };

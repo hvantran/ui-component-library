@@ -29,4 +29,7 @@ export * from './ExamIntegrityQuestionPickerModal';
 export * from './ExamIntegrityTeacherSettings';
 export * from './ExamIntegrityStudentQuestTrail';
 export * from './ExamIntegrityStudentElementarySidebar';
+export * from './ExamIntegrityStudentElementaryBanner';
+export * from './ExamIntegrityStudentElementaryReassurance';
+export * from './ExamIntegrityGradeSwitcherPill';
 

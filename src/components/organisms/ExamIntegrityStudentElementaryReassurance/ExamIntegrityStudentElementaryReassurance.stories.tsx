@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ExamIntegrityStudentElementaryReassurance } from './ExamIntegrityStudentElementaryReassurance';
 
 const meta: Meta<typeof ExamIntegrityStudentElementaryReassurance> = {
-  title: 'Molecules/ExamIntegrityStudentElementaryReassurance',
+  title: 'Organisms/ExamIntegrityStudentElementaryReassurance',
   component: ExamIntegrityStudentElementaryReassurance,
   tags: ['autodocs'],
 };

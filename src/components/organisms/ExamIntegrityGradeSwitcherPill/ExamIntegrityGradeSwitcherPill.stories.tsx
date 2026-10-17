@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ExamIntegrityGradeSwitcherPill } from './ExamIntegrityGradeSwitcherPill';
 
 const meta: Meta<typeof ExamIntegrityGradeSwitcherPill> = {
-  title: 'Molecules/ExamIntegrityGradeSwitcherPill',
+  title: 'Organisms/ExamIntegrityGradeSwitcherPill',
   component: ExamIntegrityGradeSwitcherPill,
   parameters: {
     layout: 'centered',
