@@ -42,6 +42,7 @@ import {
   ExamIntegrityStudentExamResultsGrid,
   ExamIntegrityTeacherPdfIngestionZone,
   ExamIntegrityReviewContentContainer,
+  ExamIntegrityStudentMyExamsWorkspace,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -726,6 +727,16 @@ describe('ExamIntegrity Organisms', () => {
     );
     expect(html).toContain('Dashboard Review Data');
     expect(html).toContain('p-2 sm:p-4 min-h-[300px]');
+  });
+
+  it('renders ExamIntegrityStudentMyExamsWorkspace', () => {
+    const html = renderToString(
+      <ExamIntegrityStudentMyExamsWorkspace>
+        <div>Workspace Child</div>
+      </ExamIntegrityStudentMyExamsWorkspace>
+    );
+    expect(html).toContain('Workspace Child');
+    expect(html).toContain('space-y-6');
   });
 });
 

@@ -56,3 +56,4 @@ export * from './ExamIntegrityStudentExamResultCard';
 export * from './ExamIntegrityStudentExamResultsGrid';
 export * from './ExamIntegrityTeacherPdfIngestionZone';
 export * from './ExamIntegrityReviewContentContainer';
+export * from './ExamIntegrityStudentMyExamsWorkspace';
