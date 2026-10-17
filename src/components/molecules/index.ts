@@ -17,3 +17,5 @@ export * from './TimerDisplay';
 export * from './ThreeEggViewer';
 export * from './MathInput';
 export * from './ExamIntegrityGradeSwitcherPill';
+export * from './ExamIntegrityStudentElementaryBanner';
+export * from './ExamIntegrityStudentElementaryReassurance';

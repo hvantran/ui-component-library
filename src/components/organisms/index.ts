@@ -27,4 +27,6 @@ export * from './ExamIntegrityResultsCelebration';
 export * from './ExamIntegrityQuestionDisplay';
 export * from './ExamIntegrityQuestionPickerModal';
 export * from './ExamIntegrityTeacherSettings';
+export * from './ExamIntegrityStudentQuestTrail';
+export * from './ExamIntegrityStudentElementarySidebar';
 

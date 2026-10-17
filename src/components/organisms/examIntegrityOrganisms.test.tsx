@@ -14,6 +14,8 @@ import {
   ExamIntegrityReviewDashboard,
   ExamIntegrityEggShop,
   ExamIntegrityPetHatchery,
+  ExamIntegrityStudentQuestTrail,
+  ExamIntegrityStudentElementarySidebar,
 } from './index';
 
 describe('ExamIntegrity Organisms', () => {
@@ -192,6 +194,39 @@ describe('ExamIntegrity Organisms', () => {
     expect(html).toContain('Pet Hatchery &amp; Sanctuary');
     expect(html).toContain('Incubator');
     expect(html).toContain('My Pets');
+  });
+
+  it('renders ExamIntegrityStudentQuestTrail', () => {
+    const html = renderToString(
+      <ExamIntegrityStudentQuestTrail
+        totalQuestions={5}
+        currentQuestion={2}
+        answeredCount={1}
+        answeredMap={{ 1: true }}
+        flaggedMap={{ 3: true }}
+        onSelectQuestion={() => {}}
+      />
+    );
+    expect(html).toContain('Quest Trail:');
+    expect(html).toContain('Quest');
+    expect(html).toContain('Done');
+    expect(html).toContain('🚀');
+  });
+
+  it('renders ExamIntegrityStudentElementarySidebar', () => {
+    const html = renderToString(
+      <ExamIntegrityStudentElementarySidebar
+        mascotEmoji="🦉"
+        mascotName="Ollie"
+        mascotTip="Believe in yourself!"
+        flaggedNumbers={[1, 4]}
+      />
+    );
+    expect(html).toContain('Ollie');
+    expect(html).toContain('Believe in yourself!');
+    expect(html).toContain('Flagged for Review');
+    expect(html).toContain('Jump →');
+    expect(html).toContain('Proctoring Status');
   });
 });
 

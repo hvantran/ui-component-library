@@ -4,40 +4,70 @@ import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityStudentExamTemplateProps {
   headerSlot?: React.ReactNode;
-  contentSlot?: React.ReactNode;
+  bannerSlot?: React.ReactNode;
+  questTrailSlot?: React.ReactNode;
   navigationSlot?: React.ReactNode;
+  contentSlot?: React.ReactNode;
   sidebarSlot?: React.ReactNode;
   footerSlot?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
+  pageAccentClass?: string;
+  headerClass?: string;
 }
 
-export const ExamIntegrityStudentExamTemplate: React.FC<ExamIntegrityStudentExamTemplateProps> = ({
+export const ExamIntegrityStudentExamTemplate: React.FC<
+  ExamIntegrityStudentExamTemplateProps
+> = ({
   headerSlot,
-  contentSlot,
+  bannerSlot,
+  questTrailSlot,
   navigationSlot,
+  contentSlot,
   sidebarSlot,
   footerSlot,
   children,
   className,
+  pageAccentClass,
+  headerClass,
 }) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   if (children) {
     return (
-      <div className={cn('min-h-screen bg-gradient-to-b from-[#f7fafc] to-[#e9eef6] dark:from-gray-900 dark:to-gray-800', className)}>
+      <div
+        className={cn(
+          'min-h-screen bg-gradient-to-b from-[#f7fafc] to-[#e9eef6] dark:from-gray-900 dark:to-gray-800',
+          className
+        )}
+      >
         {children}
       </div>
     );
   }
 
   return (
-    <div className={cn('min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900', className)}>
+    <div
+      className={cn(
+        'min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900',
+        pageAccentClass,
+        className
+      )}
+    >
       {headerSlot && (
-        <header className="sticky top-0 z-40 w-full border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800">
+        <header
+          className={cn(
+            'sticky top-0 z-40 w-full border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)]',
+            headerClass
+          )}
+        >
           {headerSlot}
         </header>
       )}
+
+      {bannerSlot && <div className="w-full">{bannerSlot}</div>}
+
+      {questTrailSlot && <div className="w-full">{questTrailSlot}</div>}
 
       {navigationSlot && (
         <nav className="w-full border-b border-gray-200 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/70 px-3 sm:px-4 py-2">
@@ -45,11 +75,22 @@ export const ExamIntegrityStudentExamTemplate: React.FC<ExamIntegrityStudentExam
         </nav>
       )}
 
-      <div className="flex-1 flex w-full max-w-7xl mx-auto p-3 sm:p-6 gap-6">
-        <main className="flex-1 min-w-0">{contentSlot}</main>
-        {sidebarSlot && (
-          <aside className="w-80 shrink-0 hidden lg:block">{sidebarSlot}</aside>
-        )}
+      <div className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 md:px-8 py-4 sm:py-6 pb-28">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <main
+            className={cn(
+              sidebarSlot ? 'lg:col-span-8' : 'lg:col-span-12',
+              'flex flex-col gap-5 min-w-0'
+            )}
+          >
+            {contentSlot}
+          </main>
+          {sidebarSlot && (
+            <aside className="lg:col-span-4 hidden lg:flex flex-col gap-5">
+              {sidebarSlot}
+            </aside>
+          )}
+        </div>
       </div>
 
       {/* Mobile Drawer & Floating Button for sidebarSlot */}
@@ -83,7 +124,9 @@ export const ExamIntegrityStudentExamTemplate: React.FC<ExamIntegrityStudentExam
             )}
           >
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-200 dark:border-gray-700 shrink-0">
-              <span className="font-bold text-sm text-gray-900 dark:text-gray-100">Exam Overview & Tools</span>
+              <span className="font-bold text-sm text-gray-900 dark:text-gray-100">
+                Exam Overview & Tools
+              </span>
               <button
                 type="button"
                 onClick={() => setIsMobileSidebarOpen(false)}
@@ -100,12 +143,15 @@ export const ExamIntegrityStudentExamTemplate: React.FC<ExamIntegrityStudentExam
 
       {footerSlot && (
         <footer className="sticky bottom-0 z-30 w-full border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 py-3 px-3 sm:px-6 shadow-md">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">{footerSlot}</div>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            {footerSlot}
+          </div>
         </footer>
       )}
     </div>
   );
 };
 
-ExamIntegrityStudentExamTemplate.displayName = 'ExamIntegrityStudentExamTemplate';
+ExamIntegrityStudentExamTemplate.displayName =
+  'ExamIntegrityStudentExamTemplate';
 export default ExamIntegrityStudentExamTemplate;
