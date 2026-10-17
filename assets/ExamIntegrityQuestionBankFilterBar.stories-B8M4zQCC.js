@@ -1,0 +1,25 @@
+import{j as a}from"./jsx-runtime-DFAAy_2V.js";import{B as b}from"./Button-CHA6iI3F.js";import{S}from"./Select-MzxQnoU9.js";import{C}from"./Combobox-DSkH8rgj.js";import{c as t}from"./cn-DOIGBiOF.js";import{S as q}from"./search-BA6qmz_L.js";import{X as w}from"./x-DiakLl4d.js";import"./index-Bc2G9s8g.js";import"./createLucideIcon-B_AfoRjS.js";import"./check-My_ONosZ.js";const k="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100",o=({searchQuery:l,onSearchChange:p,typeFilter:g,onTypeChange:u,typeOptions:m,tagInput:d,onTagInputChange:c,availableTags:y,isTagsLoading:h=!1,selectedTags:v,onAddTag:T,onRemoveTag:f,className:x})=>a.jsxs("div",{className:t("flex flex-wrap gap-2 items-center",x),children:[a.jsxs("div",{className:"relative flex-1 min-w-[320px]",children:[a.jsx(q,{size:18,className:"absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500"}),a.jsx("input",{className:t(k,"w-full pl-8"),placeholder:"Search questions…",value:l,onChange:e=>p(e.target.value),"aria-label":"Search questions"})]}),a.jsx(S,{value:g,onChange:e=>u(e.target.value),options:m,placeholder:"All Types",className:"min-w-[160px] w-[160px]"}),a.jsx(C,{className:"w-48 shrink-0",placeholder:h?"Loading tags…":"Select tag…",value:d,onChange:e=>{e&&(T(e),c(""))},options:y.map(e=>({value:e,label:e}))}),v.map(e=>a.jsxs("span",{className:"inline-flex items-center gap-1 text-xs font-semibold bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 rounded-full px-2 h-6 shrink-0",children:[e,a.jsx(b,{type:"button",variant:"ghost",size:"sm",onClick:()=>f(e),className:"!min-w-0 !h-5 !px-1 !py-0 leading-none hover:opacity-70","aria-label":`Remove tag ${e}`,children:a.jsx(w,{size:14})})]},e))]});o.__docgenInfo={description:"",methods:[],displayName:"ExamIntegrityQuestionBankFilterBar",props:{searchQuery:{required:!0,tsType:{name:"string"},description:""},onSearchChange:{required:!0,tsType:{name:"signature",type:"function",raw:"(q: string) => void",signature:{arguments:[{type:{name:"string"},name:"q"}],return:{name:"void"}}},description:""},typeFilter:{required:!0,tsType:{name:"string"},description:""},onTypeChange:{required:!0,tsType:{name:"signature",type:"function",raw:"(type: string) => void",signature:{arguments:[{type:{name:"string"},name:"type"}],return:{name:"void"}}},description:""},typeOptions:{required:!0,tsType:{name:"Array",elements:[{name:"signature",type:"object",raw:"{ value: string; label: string }",signature:{properties:[{key:"value",value:{name:"string",required:!0}},{key:"label",value:{name:"string",required:!0}}]}}],raw:"{ value: string; label: string }[]"},description:""},tagInput:{required:!0,tsType:{name:"string"},description:""},onTagInputChange:{required:!0,tsType:{name:"signature",type:"function",raw:"(tag: string) => void",signature:{arguments:[{type:{name:"string"},name:"tag"}],return:{name:"void"}}},description:""},availableTags:{required:!0,tsType:{name:"Array",elements:[{name:"string"}],raw:"string[]"},description:""},isTagsLoading:{required:!1,tsType:{name:"boolean"},description:"",defaultValue:{value:"false",computed:!1}},selectedTags:{required:!0,tsType:{name:"Array",elements:[{name:"string"}],raw:"string[]"},description:""},onAddTag:{required:!0,tsType:{name:"signature",type:"function",raw:"(tag: string) => void",signature:{arguments:[{type:{name:"string"},name:"tag"}],return:{name:"void"}}},description:""},onRemoveTag:{required:!0,tsType:{name:"signature",type:"function",raw:"(tag: string) => void",signature:{arguments:[{type:{name:"string"},name:"tag"}],return:{name:"void"}}},description:""},className:{required:!1,tsType:{name:"string"},description:""}}};const _={title:"Organisms/ExamIntegrityQuestionBankFilterBar",component:o,parameters:{layout:"padded"}},r={args:{searchQuery:"",onSearchChange:()=>{},typeFilter:"",onTypeChange:()=>{},typeOptions:[{value:"MCQ",label:"MCQ"},{value:"ESSAY_SHORT",label:"Essay (Short)"},{value:"ESSAY_LONG",label:"Essay (Long)"}],tagInput:"",onTagInputChange:()=>{},availableTags:["React","TypeScript","Algorithms","CSS"],isTagsLoading:!1,selectedTags:["React"],onAddTag:()=>{},onRemoveTag:()=>{}}};var n,s,i;r.parameters={...r.parameters,docs:{...(n=r.parameters)==null?void 0:n.docs,source:{originalSource:`{
+  args: {
+    searchQuery: '',
+    onSearchChange: () => {},
+    typeFilter: '',
+    onTypeChange: () => {},
+    typeOptions: [{
+      value: 'MCQ',
+      label: 'MCQ'
+    }, {
+      value: 'ESSAY_SHORT',
+      label: 'Essay (Short)'
+    }, {
+      value: 'ESSAY_LONG',
+      label: 'Essay (Long)'
+    }],
+    tagInput: '',
+    onTagInputChange: () => {},
+    availableTags: ['React', 'TypeScript', 'Algorithms', 'CSS'],
+    isTagsLoading: false,
+    selectedTags: ['React'],
+    onAddTag: () => {},
+    onRemoveTag: () => {}
+  }
+}`,...(i=(s=r.parameters)==null?void 0:s.docs)==null?void 0:i.source}}};const F=["Default"];export{r as Default,F as __namedExportsOrder,_ as default};

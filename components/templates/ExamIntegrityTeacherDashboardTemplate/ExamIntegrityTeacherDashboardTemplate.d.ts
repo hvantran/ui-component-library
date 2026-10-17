@@ -23,8 +23,9 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
     headerSubtitle?: string;
     headerActionsSlot?: React.ReactNode;
     filtersSlot?: React.ReactNode;
+    gridSlot?: React.ReactNode;
     sidebar?: React.ReactNode;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     className?: string;
     /** Navigation dock mode ('pinned' | 'docked' | 'auto-hide') */
     dockMode?: ExamIntegrityNavDockMode;

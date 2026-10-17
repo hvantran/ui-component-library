@@ -1,0 +1,9 @@
+import{j as e}from"./jsx-runtime-DFAAy_2V.js";import{c as p}from"./cn-DOIGBiOF.js";import"./index-Bc2G9s8g.js";const o=({title:d="Draft Info",filename:a,totalQuestions:m,totalPoints:l,flaggedCount:s=0,className:u})=>e.jsxs("div",{className:p("p-4",u),children:[e.jsx("div",{className:"text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1",children:d}),a&&e.jsx("div",{className:"text-xs text-gray-500 dark:text-gray-400",children:a}),e.jsxs("div",{className:"text-xs text-gray-500 dark:text-gray-400 mt-2",children:[m," questions · ",l," pts"]}),s>0&&e.jsxs("div",{className:"text-xs text-yellow-700 dark:text-yellow-400 mt-2",children:["⚠ ",s," questions need review"]})]});o.__docgenInfo={description:"",methods:[],displayName:"ExamIntegrityQuestionReviewSummaryCard",props:{title:{required:!1,tsType:{name:"string"},description:"",defaultValue:{value:"'Draft Info'",computed:!1}},filename:{required:!1,tsType:{name:"string"},description:""},totalQuestions:{required:!0,tsType:{name:"number"},description:""},totalPoints:{required:!0,tsType:{name:"number"},description:""},flaggedCount:{required:!1,tsType:{name:"number"},description:"",defaultValue:{value:"0",computed:!1}},className:{required:!1,tsType:{name:"string"},description:""}}};const y={title:"Organisms/ExamIntegrityQuestionReviewSummaryCard",component:o,parameters:{layout:"padded"}},t={args:{title:"Draft Info",filename:"Midterm_Exam_2026.pdf",totalQuestions:25,totalPoints:100,flaggedCount:2}};var r,n,i;t.parameters={...t.parameters,docs:{...(r=t.parameters)==null?void 0:r.docs,source:{originalSource:`{
+  args: {
+    title: 'Draft Info',
+    filename: 'Midterm_Exam_2026.pdf',
+    totalQuestions: 25,
+    totalPoints: 100,
+    flaggedCount: 2
+  }
+}`,...(i=(n=t.parameters)==null?void 0:n.docs)==null?void 0:i.source}}};const g=["Default"];export{t as Default,g as __namedExportsOrder,y as default};
