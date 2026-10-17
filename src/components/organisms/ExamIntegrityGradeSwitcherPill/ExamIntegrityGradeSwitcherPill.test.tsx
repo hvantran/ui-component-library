@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import { ExamIntegrityGradeSwitcherPill } from './ExamIntegrityGradeSwitcherPill';
 
-describe('ExamIntegrityGradeSwitcherPill molecule', () => {
+describe('ExamIntegrityGradeSwitcherPill organism', () => {
   it('renders dropdown when canSwitchGrade is true', () => {
     const html = renderToString(
       <ExamIntegrityGradeSwitcherPill

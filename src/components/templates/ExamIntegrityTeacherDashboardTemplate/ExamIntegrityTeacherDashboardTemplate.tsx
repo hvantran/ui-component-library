@@ -59,8 +59,9 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
   headerSubtitle?: string;
   headerActionsSlot?: React.ReactNode;
   filtersSlot?: React.ReactNode;
+  gridSlot?: React.ReactNode;
   sidebar?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 
   /** Navigation dock mode ('pinned' | 'docked' | 'auto-hide') */
@@ -106,6 +107,7 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
   headerSubtitle,
   headerActionsSlot,
   filtersSlot,
+  gridSlot,
   sidebar,
   children,
   className,
@@ -419,6 +421,11 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
               </div>
             )}
             {filtersSlot && <div>{filtersSlot}</div>}
+            {gridSlot && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {gridSlot}
+              </div>
+            )}
             {children}
           </div>
         </main>
