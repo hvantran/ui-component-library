@@ -34,13 +34,21 @@ import { ThreeEggViewer, EggTier } from '../../molecules/ThreeEggViewer';
 import { cn } from '../../../utils/cn';
 import phoenixEggImg from '../../../assets/pets/phoenix-egg.png';
 import { ExamIntegrityPetSkill, type PetSkill } from '../ExamIntegrityPetSkill';
-export * from './petsData';
+export * from './ExamIntegrityPetHatchery.types';
+export * from './petUtils';
+export * from './mockPets';
+
 import {
   type EvolutionStageInfo,
   type StudentPet,
+} from './ExamIntegrityPetHatchery.types';
+import {
   getPetElementMetadata,
   getPetSpeciesTypeMetadata,
   normalizePetSpeciesType,
+  resolvePetImageUrl,
+} from './petUtils';
+import {
   createSproutlingPet,
   createPipflickPet,
   createEmbersqueakPet,
@@ -61,8 +69,7 @@ import {
   createAegisPaladinPet,
   rollMysteryPet,
   enrichStudentPet,
-  resolvePetImageUrl,
-} from './petsData';
+} from './mockPets';
 
 export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Leaf,

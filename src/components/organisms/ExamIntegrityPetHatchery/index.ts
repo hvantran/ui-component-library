@@ -6,6 +6,5 @@ export {
   resolveAssetUrl,
   resolveSkillVideoUrl,
   resolvePetImageUrl,
-} from './petsData';
-export type { AssetType } from './petsData';
-
+} from './petUtils';
+export type { AssetType } from './ExamIntegrityPetHatchery.types';
