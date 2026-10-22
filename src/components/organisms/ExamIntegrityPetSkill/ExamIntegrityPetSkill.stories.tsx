@@ -13,7 +13,7 @@ import {
   createFirePhoenixPet,
   createChronoDracoPet,
   createAegisPaladinPet,
-} from '../ExamIntegrityPetHatchery';
+} from '../ExamIntegrityPetHatchery/mockPets';
 
 const ControlledPetSkill = ({
   skill,
