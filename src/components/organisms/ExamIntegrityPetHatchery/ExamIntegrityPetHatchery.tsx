@@ -41,6 +41,8 @@ export * from './mockPets';
 import {
   type EvolutionStageInfo,
   type StudentPet,
+  PetRarity,
+  PetElement,
 } from './ExamIntegrityPetHatchery.types';
 import {
   getPetElementMetadata,
@@ -104,7 +106,7 @@ export interface IncubatingEgg {
   id: string;
   name: string;
   tier: EggTier;
-  rarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+  rarity?: PetRarity;
   crackProgress: number; // 0 to 1
   hatchedPetName: string;
   hatchedSpecies: string;
@@ -163,7 +165,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
     id: 'inc-egg-phoenix',
     name: 'Primordial Fire Phoenix Egg',
     tier: 'dragon',
-    rarity: 'Epic',
+    rarity: PetRarity.Epic,
     crackProgress: 0.35,
     hatchedPetName: 'Sun Ember Fledgling',
     hatchedSpecies: 'Primordial Solar Phoenix',
@@ -177,7 +179,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
     id: 'inc-egg-void',
     name: 'Void Abyssal Singularity Egg',
     tier: 'dragon',
-    rarity: 'Mythic',
+    rarity: PetRarity.Mythic,
     crackProgress: 0.15,
     hatchedPetName: 'Voidling Pip',
     hatchedSpecies: 'Mythic Void Abyssal Dragon',
@@ -188,7 +190,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
     id: 'inc-egg-1',
     name: 'Warm Bronze Dragon Egg',
     tier: 'dragon',
-    rarity: 'Legendary',
+    rarity: PetRarity.Legendary,
     crackProgress: 0.65,
     hatchedPetName: 'Stardrop Wyrmlet',
     hatchedSpecies: 'Celestial Astral Dragon',
@@ -199,7 +201,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
     id: 'inc-egg-frost',
     name: 'Glacial Frostpaw Egg',
     tier: 'celestial',
-    rarity: 'Rare',
+    rarity: PetRarity.Rare,
     crackProgress: 0.5,
     hatchedPetName: 'Frostpup',
     hatchedSpecies: 'Arctic Snow Leopard',
@@ -210,7 +212,7 @@ export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
     id: 'inc-egg-sproutling',
     name: 'Emerald Sproutling Egg',
     tier: 'forest',
-    rarity: 'Common',
+    rarity: PetRarity.Common,
     crackProgress: 0.8,
     hatchedPetName: 'Sproutling',
     hatchedSpecies: 'Flora Sproutling Seedling',
@@ -1345,6 +1347,30 @@ export const PetCard: React.FC<PetCardProps> = ({
 // Main Component
 // ---------------------------------------------------------------------------
 
+const PET_HATCH_CREATOR_MAP: Array<{
+  keywords: readonly string[];
+  create: () => StudentPet;
+}> = [
+  { keywords: ['pipflick', 'water drake'], create: () => createPipflickPet(1, false) },
+  { keywords: ['embersqueak', 'solartiger'], create: () => createEmbersqueakPet(1, false) },
+  { keywords: ['zephyrpuff', 'pufftail', 'zephyrhare'], create: () => createZephyrpuffPet(1, false) },
+  { keywords: ['magmafang', 'cinderpig', 'boar'], create: () => createMagmafangPet(1, false) },
+  { keywords: ['voltwing', 'sparkhoot', 'storm owl'], create: () => createVoltwingPet(1, false) },
+  { keywords: ['thundercat', 'sparkpaw', 'storm tiger'], create: () => createThundercatPet(1, false) },
+  { keywords: ['chrono chimera', 'chronopip', 'time sprite'], create: () => createChronoChimeraPet(1, false) },
+  { keywords: ['shadowpanther', 'umbralpaw', 'eclipse panther'], create: () => createShadowpantherPet(1, false) },
+  { keywords: ['stormstag', 'sparkfawn', 'thunder elk'], create: () => createStormstagPet(1, false) },
+  { keywords: ['ocean leviathan', 'astraea', 'cosmic whale'], create: () => createAstralLeviathanPet(1, false) },
+  { keywords: ['solar wyvern', 'solarpup', 'archon wyvern'], create: () => createSolarWyvernPet(1, false) },
+  { keywords: ['chrono-draco', 'chronowing', 'temporal dragon'], create: () => createChronoDracoPet(1, false) },
+  { keywords: ['aegis', 'paladin'], create: () => createAegisPaladinPet(1, false) },
+  { keywords: ['phoenix', 'inc-egg-phoenix'], create: () => createFirePhoenixPet(1, false) },
+  { keywords: ['void', 'inc-egg-void'], create: () => createVoidDragonPet(1, false) },
+  { keywords: ['astral', 'dragon', 'inc-egg-1'], create: () => createAstralDragonPet(1, false) },
+  { keywords: ['frost', 'inc-egg-frost'], create: () => createFrostpawPet(1, false) },
+  { keywords: ['sprout', 'inc-egg-sproutling'], create: () => createSproutlingPet(1, false) },
+];
+
 export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> = ({
   starBalance = 450,
   crackCostInStars = 15,
@@ -1481,74 +1507,46 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       const eggName = (activeEgg.name || '').toLowerCase();
       const petName = (activeEgg.hatchedPetName || '').toLowerCase();
       const specName = (activeEgg.hatchedSpecies || '').toLowerCase();
+      const combinedSearch = `${activeEgg.id || ''} ${eggName} ${petName} ${specName}`;
 
-      if (
+      const isMystery =
         activeEgg.isMystery ||
-        eggName.includes('mystery') ||
-        petName.includes('?') ||
-        petName.includes('mystery')
-      ) {
+        combinedSearch.includes('mystery') ||
+        petName.includes('?');
+
+      if (isMystery) {
         newPet = rollMysteryPet();
-      } else if (eggName.includes('pipflick') || petName.includes('pipflick') || specName.includes('water drake')) {
-        newPet = createPipflickPet(1, false);
-      } else if (eggName.includes('embersqueak') || petName.includes('embersqueak') || specName.includes('solartiger')) {
-        newPet = createEmbersqueakPet(1, false);
-      } else if (eggName.includes('zephyrpuff') || petName.includes('pufftail') || specName.includes('zephyrhare')) {
-        newPet = createZephyrpuffPet(1, false);
-      } else if (eggName.includes('magmafang') || petName.includes('cinderpig') || specName.includes('boar')) {
-        newPet = createMagmafangPet(1, false);
-      } else if (eggName.includes('voltwing') || petName.includes('sparkhoot') || specName.includes('storm owl')) {
-        newPet = createVoltwingPet(1, false);
-      } else if (eggName.includes('thundercat') || petName.includes('sparkpaw') || specName.includes('storm tiger')) {
-        newPet = createThundercatPet(1, false);
-      } else if (eggName.includes('chrono chimera') || petName.includes('chronopip') || specName.includes('time sprite')) {
-        newPet = createChronoChimeraPet(1, false);
-      } else if (eggName.includes('shadowpanther') || petName.includes('umbralpaw') || specName.includes('eclipse panther')) {
-        newPet = createShadowpantherPet(1, false);
-      } else if (eggName.includes('stormstag') || petName.includes('sparkfawn') || specName.includes('thunder elk')) {
-        newPet = createStormstagPet(1, false);
-      } else if (eggName.includes('ocean leviathan') || petName.includes('astraea') || specName.includes('cosmic whale')) {
-        newPet = createAstralLeviathanPet(1, false);
-      } else if (eggName.includes('solar wyvern') || petName.includes('solarpup') || specName.includes('archon wyvern')) {
-        newPet = createSolarWyvernPet(1, false);
-      } else if (eggName.includes('chrono-draco') || petName.includes('chronowing') || specName.includes('temporal dragon')) {
-        newPet = createChronoDracoPet(1, false);
-      } else if (eggName.includes('aegis') || petName.includes('aegis') || specName.includes('paladin')) {
-        newPet = createAegisPaladinPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-phoenix' || eggName.includes('phoenix')) {
-        newPet = createFirePhoenixPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-void' || eggName.includes('void')) {
-        newPet = createVoidDragonPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-1' || eggName.includes('astral') || eggName.includes('dragon')) {
-        newPet = createAstralDragonPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-frost' || eggName.includes('frost')) {
-        newPet = createFrostpawPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-sproutling' || eggName.includes('sprout')) {
-        newPet = createSproutlingPet(1, false);
       } else {
-        newPet = {
-          id: `pet-${Date.now()}`,
-          name: activeEgg.hatchedPetName,
-          species: activeEgg.hatchedSpecies,
-          rarity: activeEgg.rarity || 'Common',
-          tier: activeEgg.tier,
-          element: 'Normal',
-          level: 1,
-          maxLevel: 10,
-          currentExp: 0,
-          expNeeded: 100,
-          growthCostInStars: 25,
-          stats: {
-            vitality: 60,
-            wisdom: 60,
-            integrityBond: 90,
-            solarRadiance: 40,
-          },
-          avatarEmoji: '🐲',
-          stageLevel: 1,
-          stageName: 'Hatchling',
-          isEquipped: false,
-        };
+        const matchedCreator = PET_HATCH_CREATOR_MAP.find((entry) =>
+          entry.keywords.some((kw) => combinedSearch.includes(kw))
+        );
+        if (matchedCreator) {
+          newPet = matchedCreator.create();
+        } else {
+          newPet = {
+            id: `pet-${Date.now()}`,
+            name: activeEgg.hatchedPetName,
+            species: activeEgg.hatchedSpecies,
+            rarity: activeEgg.rarity || PetRarity.Common,
+            tier: activeEgg.tier,
+            element: PetElement.Cosmic,
+            level: 1,
+            maxLevel: 10,
+            currentExp: 0,
+            expNeeded: 100,
+            growthCostInStars: 25,
+            stats: {
+              vitality: 60,
+              wisdom: 60,
+              integrityBond: 90,
+              solarRadiance: 40,
+            },
+            avatarEmoji: '🐲',
+            stageLevel: 1,
+            stageName: 'Hatchling',
+            isEquipped: false,
+          };
+        }
       }
       finishHatching(newPet);
     }

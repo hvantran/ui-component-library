@@ -1890,13 +1890,18 @@ export const ALL_PETS_ALL_STAGES: StudentPet[] = [
   ...[1, 2, 3, 4, 5, 6, 7, 8].map((lvl) => createAegisPaladinPet(lvl, false)),
 ];
 
+const MYSTERY_PET_ROLL_TABLE: Array<{ maxRoll: number; create: () => StudentPet }> = [
+  { maxRoll: 50, create: () => createSproutlingPet(1, false) },
+  { maxRoll: 78, create: () => createFrostpawPet(1, false) },
+  { maxRoll: 92, create: () => createFirePhoenixPet(1, false) },
+  { maxRoll: 98, create: () => createAstralDragonPet(1, false) },
+  { maxRoll: 100, create: () => createVoidDragonPet(1, false) },
+];
+
 export function rollMysteryPet(fixedRoll?: number): StudentPet {
   const roll = fixedRoll !== undefined ? fixedRoll : Math.random() * 100;
-  if (roll < 50) return createSproutlingPet(1, false);
-  if (roll < 78) return createFrostpawPet(1, false);
-  if (roll < 92) return createFirePhoenixPet(1, false);
-  if (roll < 98) return createAstralDragonPet(1, false);
-  return createVoidDragonPet(1, false);
+  const entry = MYSTERY_PET_ROLL_TABLE.find((t) => roll < t.maxRoll) ?? MYSTERY_PET_ROLL_TABLE[MYSTERY_PET_ROLL_TABLE.length - 1];
+  return entry.create();
 }
 
 export function findPetCodexEntry(

@@ -3,9 +3,20 @@ import type { PetSkill } from '../ExamIntegrityPetSkill';
 
 export type { EggTier };
 
-export type AssetType = 'skill' | 'pet';
+export enum AssetType {
+  Skill = 'skill',
+  Pet = 'pet',
+}
 
-export type PetRarity = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
+export enum PetRarity {
+  Common = 'Common',
+  Rare = 'Rare',
+  Epic = 'Epic',
+  Legendary = 'Legendary',
+  Mythic = 'Mythic',
+}
+
+export type PetRarityValue = PetRarity | `${PetRarity}`;
 
 export interface EvolutionStageInfo {
   stage: number;
@@ -24,25 +35,27 @@ export interface EvolutionStageInfo {
   };
 }
 
-export type StandardPetElement =
-  | 'Flora'
-  | 'Water'
-  | 'Fire'
-  | 'Wind'
-  | 'Ice'
-  | 'Earth'
-  | 'Lightning'
-  | 'Cosmic'
-  | 'Shadow'
-  | 'Astral'
-  | 'Void'
-  | 'Temporal'
-  | 'Divine';
+export enum PetElement {
+  Flora = 'Flora',
+  Water = 'Water',
+  Fire = 'Fire',
+  Wind = 'Wind',
+  Ice = 'Ice',
+  Earth = 'Earth',
+  Lightning = 'Lightning',
+  Cosmic = 'Cosmic',
+  Shadow = 'Shadow',
+  Astral = 'Astral',
+  Void = 'Void',
+  Temporal = 'Temporal',
+  Divine = 'Divine',
+}
 
-export type PetElement = StandardPetElement | (string & {});
+export type PetElementValue = PetElement | `${PetElement}`;
+export type StandardPetElement = PetElement;
 
 export interface PetElementMetadata {
-  label: StandardPetElement;
+  label: PetElement;
   iconName:
     | 'Leaf'
     | 'Droplets'
@@ -63,22 +76,24 @@ export interface PetElementMetadata {
   glowClass: string;
 }
 
-export type StandardPetSpeciesType =
-  | 'Plant'
-  | 'Aquatic'
-  | 'Beast'
-  | 'Avian'
-  | 'Mythical'
-  | 'Dragon'
-  | 'Celestial'
-  | 'Void'
-  | 'Temporal'
-  | 'Knight';
+export enum PetSpeciesType {
+  Plant = 'Plant',
+  Aquatic = 'Aquatic',
+  Beast = 'Beast',
+  Avian = 'Avian',
+  Mythical = 'Mythical',
+  Dragon = 'Dragon',
+  Celestial = 'Celestial',
+  Void = 'Void',
+  Temporal = 'Temporal',
+  Knight = 'Knight',
+}
 
-export type PetSpeciesType = StandardPetSpeciesType | (string & {});
+export type PetSpeciesTypeValue = PetSpeciesType | `${PetSpeciesType}`;
+export type StandardPetSpeciesType = PetSpeciesType;
 
 export interface PetSpeciesTypeMetadata {
-  label: StandardPetSpeciesType;
+  label: PetSpeciesType;
   iconName:
     | 'Leaf'
     | 'Fish'
@@ -106,10 +121,10 @@ export interface StudentPet {
   name: string;
   species: string;
   tier: EggTier;
-  rarity?: PetRarity;
-  element: PetElement;
-  elements?: PetElement[];
-  speciesTypes?: PetSpeciesType[];
+  rarity?: PetRarityValue;
+  element: PetElementValue | string;
+  elements?: (PetElementValue | string)[];
+  speciesTypes?: (PetSpeciesTypeValue | string)[];
   level: number;
   maxLevel: number;
   currentExp: number;
@@ -132,10 +147,10 @@ export interface PetCodexEntry {
   key: string;
   name: string;
   species: string;
-  rarity: PetRarity;
-  element: PetElement;
-  elements?: PetElement[];
-  speciesTypes?: PetSpeciesType[];
+  rarity: PetRarityValue;
+  element: PetElementValue;
+  elements?: PetElementValue[];
+  speciesTypes?: PetSpeciesTypeValue[];
   avatarEmoji: string;
   tier: EggTier;
   totalStages: number;
@@ -159,11 +174,11 @@ export interface SyncPetLibraryItemDTO {
   petKey: string;
   name: string;
   species: string;
-  rarity: PetRarity;
+  rarity: PetRarityValue;
   tier: EggTier;
-  element: PetElement;
-  elements?: PetElement[];
-  speciesTypes?: PetSpeciesType[];
+  element: PetElementValue;
+  elements?: PetElementValue[];
+  speciesTypes?: PetSpeciesTypeValue[];
   avatarEmoji: string;
   totalStages: number;
   maxLevel: number;
@@ -173,3 +188,4 @@ export interface SyncPetLibraryItemDTO {
   bannerGradient: string;
   stages: SyncPetLibraryStageDTO[];
 }
+
