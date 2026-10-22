@@ -18,6 +18,22 @@ export enum PetRarity {
 
 export type PetRarityValue = PetRarity | `${PetRarity}`;
 
+export interface IncubatingEgg {
+  id: string;
+  name: string;
+  tier: EggTier;
+  rarity?: PetRarityValue;
+  crackProgress: number; // 0 to 1
+  hatchedPetName: string;
+  hatchedSpecies: string;
+  isEquipped?: boolean;
+  equipCostInStars?: number;
+  imageUrl?: string;
+  isMystery?: boolean;
+  hatchDurationHours?: number;
+  remainingSeconds?: number;
+}
+
 export interface EvolutionStageInfo {
   stage: number;
   minLevel: number;

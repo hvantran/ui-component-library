@@ -1,8 +1,10 @@
 import type { PetSkill } from '../ExamIntegrityPetSkill';
-import type {
-  EvolutionStageInfo,
-  PetCodexEntry,
-  StudentPet,
+import {
+  type EvolutionStageInfo,
+  type IncubatingEgg,
+  type PetCodexEntry,
+  PetRarity,
+  type StudentPet,
 } from './ExamIntegrityPetHatchery.types';
 import {
   resolvePetImageUrl,
@@ -1853,10 +1855,6 @@ export const createVoidDragonPet = (lvl = 1, eq = false) => createPetFromCodex('
 export const createChronoDracoPet = (lvl = 1, eq = false) => createPetFromCodex('chronodraco', lvl, eq);
 export const createAegisPaladinPet = (lvl = 1, eq = false) => createPetFromCodex('aegispaladin', lvl, eq);
 
-export const DEFAULT_STUDENT_PETS: StudentPet[] = [
-  createFirePhoenixPet(1, true),
-];
-
 export const ALL_SHOP_STARTER_PETS: StudentPet[] = [
   createSproutlingPet(1, false),
   createFrostpawPet(1, false),
@@ -1999,3 +1997,85 @@ export function enrichStudentPet(pet: StudentPet): StudentPet {
     totalStages: pet.totalStages || evolutionStages?.length || codexEntry?.totalStages,
   };
 }
+
+export const MOCK_INCUBATING_EGGS: IncubatingEgg[] = [
+  {
+    id: 'inc-egg-mystery',
+    name: 'Ancient Mysterious Egg',
+    tier: 'dragon',
+    crackProgress: 0.1,
+    hatchedPetName: '??? Secret Pet',
+    hatchedSpecies: 'Veiled Ancient Beast',
+    isEquipped: true,
+    equipCostInStars: 25,
+    isMystery: true,
+    hatchDurationHours: 8,
+    remainingSeconds: 0,
+  },
+  {
+    id: 'inc-egg-phoenix',
+    name: 'Primordial Fire Phoenix Egg',
+    tier: 'dragon',
+    rarity: PetRarity.Epic,
+    crackProgress: 0.35,
+    hatchedPetName: 'Sun Ember Fledgling',
+    hatchedSpecies: 'Primordial Solar Phoenix',
+    isEquipped: false,
+    equipCostInStars: 25,
+    imageUrl: resolvePetImageUrl('phoenix-egg.png'),
+    hatchDurationHours: 8,
+    remainingSeconds: 18720,
+  },
+  {
+    id: 'inc-egg-void',
+    name: 'Void Abyssal Singularity Egg',
+    tier: 'dragon',
+    rarity: PetRarity.Mythic,
+    crackProgress: 0.15,
+    hatchedPetName: 'Voidling Pip',
+    hatchedSpecies: 'Mythic Void Abyssal Dragon',
+    isEquipped: false,
+    equipCostInStars: 50,
+  },
+  {
+    id: 'inc-egg-1',
+    name: 'Warm Bronze Dragon Egg',
+    tier: 'dragon',
+    rarity: PetRarity.Legendary,
+    crackProgress: 0.65,
+    hatchedPetName: 'Stardrop Wyrmlet',
+    hatchedSpecies: 'Celestial Astral Dragon',
+    isEquipped: false,
+    equipCostInStars: 35,
+  },
+  {
+    id: 'inc-egg-frost',
+    name: 'Glacial Frostpaw Egg',
+    tier: 'celestial',
+    rarity: PetRarity.Rare,
+    crackProgress: 0.5,
+    hatchedPetName: 'Frostpup',
+    hatchedSpecies: 'Arctic Snow Leopard',
+    isEquipped: false,
+    equipCostInStars: 20,
+  },
+  {
+    id: 'inc-egg-sproutling',
+    name: 'Emerald Sproutling Egg',
+    tier: 'forest',
+    rarity: PetRarity.Common,
+    crackProgress: 0.8,
+    hatchedPetName: 'Sproutling',
+    hatchedSpecies: 'Flora Sproutling Seedling',
+    isEquipped: false,
+    equipCostInStars: 15,
+  },
+];
+
+export const MOCK_STUDENT_PETS: StudentPet[] = [
+  createFirePhoenixPet(1, true),
+];
+
+export const DEFAULT_INCUBATING_EGGS = MOCK_INCUBATING_EGGS;
+export const DEFAULT_STUDENT_PETS = MOCK_STUDENT_PETS;
+

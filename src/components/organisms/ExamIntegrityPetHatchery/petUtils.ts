@@ -1,10 +1,12 @@
 import {
   AssetType,
+  type PetCodexEntry,
   PetElement,
   type PetElementMetadata,
   PetRarity,
   PetSpeciesType,
   type PetSpeciesTypeMetadata,
+  type StudentPet,
 } from './ExamIntegrityPetHatchery.types';
 
 export const DEFAULT_ASSETS_CDN_BASE =
@@ -303,6 +305,130 @@ export const REQUIRED_ELEMENT_COUNT_MAP: Record<PetRarity, number> = {
 export function getRequiredElementCount(rarity?: PetRarity | string): number {
   if (!rarity) return 1;
   return REQUIRED_ELEMENT_COUNT_MAP[rarity as PetRarity] ?? 1;
+}
+
+export function findCodexEntryInLibrary(
+  pet: Partial<StudentPet>,
+  petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[]
+): PetCodexEntry | undefined {
+  if (!pet || !petLibrary) return undefined;
+
+  const entries: PetCodexEntry[] = Array.isArray(petLibrary)
+    ? petLibrary
+    : Object.values(petLibrary);
+
+  if (pet.petLibraryId) {
+    const direct = entries.find((e) => e.key === pet.petLibraryId);
+    if (direct) return direct;
+  }
+
+  const cleanPetName = (pet.name || '').toLowerCase().trim();
+  const cleanSpecies = (pet.species || '').toLowerCase().trim();
+  const cleanStageName = (pet.stageName || '').toLowerCase().trim();
+  const cleanId = (pet.id || '').toLowerCase().trim();
+
+  const exact = entries.find((e) => {
+    const entrySpecies = e.species.toLowerCase();
+    const entryName = e.name.toLowerCase();
+    return (
+      (cleanSpecies && entrySpecies === cleanSpecies) ||
+      (cleanPetName && (entryName === cleanPetName || entryName.startsWith(cleanPetName)))
+    );
+  });
+  if (exact) return exact;
+
+  const fuzzy = entries.find((e) => {
+    const entryKey = e.key.toLowerCase();
+    const entrySpecies = e.species.toLowerCase();
+    const entryName = e.name.toLowerCase();
+
+    return (
+      (cleanSpecies && (cleanSpecies.includes(entrySpecies) || entrySpecies.includes(cleanSpecies))) ||
+      (cleanPetName && (cleanPetName.includes(entryName) || entryName.includes(cleanPetName))) ||
+      (cleanId && cleanId.includes(entryKey))
+    );
+  });
+  if (fuzzy) return fuzzy;
+
+  if (cleanStageName) {
+    const stageMatch = entries.find((e) =>
+      e.stages?.some((s) => s.name.toLowerCase() === cleanStageName)
+    );
+    if (stageMatch) return stageMatch;
+  }
+
+  return undefined;
+}
+
+export function enrichStudentPet(
+  pet: StudentPet,
+  petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[]
+): StudentPet {
+  if (!pet) return pet;
+
+  const codexEntry = findCodexEntryInLibrary(pet, petLibrary);
+
+  const rawElement = pet.element || codexEntry?.element;
+  const element = normalizePetElement(rawElement);
+
+  const elements =
+    pet.elements && pet.elements.length > 0
+      ? pet.elements.map(normalizePetElement)
+      : codexEntry?.elements && codexEntry.elements.length > 0
+      ? codexEntry.elements.map(normalizePetElement)
+      : [element];
+
+  const speciesTypes =
+    pet.speciesTypes && pet.speciesTypes.length > 0
+      ? pet.speciesTypes.map(normalizePetSpeciesType)
+      : codexEntry?.speciesTypes && codexEntry.speciesTypes.length > 0
+      ? codexEntry.speciesTypes.map(normalizePetSpeciesType)
+      : [normalizePetSpeciesType(pet.species || codexEntry?.species)];
+
+  const evolutionStages = (pet.evolutionStages || codexEntry?.stages)?.map((stage) => ({
+    ...stage,
+    imageUrl: stage.imageUrl || (stage.imageName ? resolvePetImageUrl(stage.imageName) : '') || '',
+  }));
+
+  const stageName =
+    pet.stageName ||
+    (evolutionStages && evolutionStages[pet.stageLevel - 1]?.name) ||
+    pet.name;
+
+  const imageName =
+    pet.imageName ||
+    (evolutionStages && evolutionStages[pet.stageLevel - 1]?.imageName);
+
+  const imageUrl =
+    pet.imageUrl || (imageName ? resolvePetImageUrl(imageName) : undefined);
+
+  let skills = pet.skills;
+  if (!skills && evolutionStages && evolutionStages.length > 0) {
+    skills = evolutionStages.map((stage) => {
+      const ability = stage.ability;
+      return {
+        id: `${codexEntry?.key || pet.id}-stage-${stage.stage}-skill`,
+        name: ability?.name ?? `${stage.name} Technique`,
+        description: ability?.description ?? `Channel the power of ${stage.name}.`,
+        requiredLevel: stage.minLevel,
+        icon: 'Sparkles',
+        ...(ability?.videoUrl ? { videoSources: { mp4: ability.videoUrl } } : {}),
+      };
+    });
+  }
+
+  return {
+    ...pet,
+    element,
+    elements,
+    speciesTypes,
+    evolutionStages,
+    skills,
+    stageName,
+    imageName,
+    imageUrl,
+    totalStages: pet.totalStages || evolutionStages?.length || codexEntry?.totalStages || 1,
+  };
 }
 
 

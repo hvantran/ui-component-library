@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ExamIntegrityStudentCollectionTemplate } from './ExamIntegrityStudentCollectionTemplate';
-import { DEFAULT_INCUBATING_EGGS, DEFAULT_STUDENT_PETS } from '../../organisms/ExamIntegrityPetHatchery';
+import {
+  DEFAULT_INCUBATING_EGGS,
+  DEFAULT_STUDENT_PETS,
+} from '../../organisms/ExamIntegrityPetHatchery/mockPets';
 
 const meta: Meta<typeof ExamIntegrityStudentCollectionTemplate> = {
   title: 'Templates/ExamIntegrityStudentCollectionTemplate',
