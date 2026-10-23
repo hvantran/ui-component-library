@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import voidDragonPoster from '../../../assets/pets/voiddragon-stage-8.png';
+import voidDragonPoster from '../../../assets/pets/void-dragon-stage-8.png';
 import sproutlingPoster from '../../../assets/pets/sproutling-stage-1.png';
 import firePhoenixPoster from '../../../assets/pets/phoenix-stage-5.png';
 import chronoDracoPoster from '../../../assets/pets/chronodraco-stage-8.png';
@@ -13,7 +13,7 @@ import {
   createFirePhoenixPet,
   createChronoDracoPet,
   createAegisPaladinPet,
-} from '../ExamIntegrityPetHatchery/petsData';
+} from '../ExamIntegrityPetHatchery/mockPets';
 
 const ControlledPetSkill = ({
   skill,

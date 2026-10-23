@@ -19,7 +19,7 @@ describe('ExamIntegrityPetSkill', () => {
     const html = renderToString(
       <ExamIntegrityPetSkill
         skill={voidSingularity}
-        posterUrl="/assets/pets/voiddragon-stage-8.png"
+        posterUrl="/assets/pets/void-dragon-stage-8.png"
         open={false}
         onOpenChange={() => undefined}
       />
@@ -34,7 +34,7 @@ describe('ExamIntegrityPetSkill', () => {
     const html = renderToString(
       <ExamIntegrityPetSkill
         skill={voidSingularity}
-        posterUrl="/assets/pets/voiddragon-stage-8.png"
+        posterUrl="/assets/pets/void-dragon-stage-8.png"
         open
         onOpenChange={() => undefined}
       />
@@ -54,7 +54,7 @@ describe('ExamIntegrityPetSkill', () => {
     const html = renderToString(
       <ExamIntegrityPetSkill
         skill={{ ...voidSingularity, requiredLevel: 7 }}
-        posterUrl="/assets/pets/voiddragon-stage-1.png"
+        posterUrl="/assets/pets/void-dragon-stage-1.png"
         open={false}
         locked
         onOpenChange={() => undefined}

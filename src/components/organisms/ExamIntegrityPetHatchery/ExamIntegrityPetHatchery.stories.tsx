@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   ExamIntegrityPetHatchery,
+  type StudentPet,
+} from './ExamIntegrityPetHatchery';
+import {
   DEFAULT_INCUBATING_EGGS,
   DEFAULT_STUDENT_PETS,
   createSproutlingPet,
@@ -23,8 +26,7 @@ import {
   createAegisPaladinPet,
   ALL_SHOP_STARTER_PETS,
   ALL_ROSTER_STARTER_PETS,
-  type StudentPet,
-} from './ExamIntegrityPetHatchery';
+} from './mockPets';
 
 const meta: Meta<typeof ExamIntegrityPetHatchery> = {
   title: 'Organisms/ExamIntegrityPetHatchery',

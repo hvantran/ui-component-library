@@ -30,39 +30,25 @@ import {
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { ProgressBar } from '../../atoms/ProgressBar';
-import { ThreeEggViewer, EggTier } from '../../molecules/ThreeEggViewer';
+import { ThreeEggViewer } from '../../molecules/ThreeEggViewer';
 import { cn } from '../../../utils/cn';
-import phoenixEggImg from '../../../assets/pets/phoenix-egg.png';
 import { ExamIntegrityPetSkill, type PetSkill } from '../ExamIntegrityPetSkill';
-export * from './petsData';
+export * from './ExamIntegrityPetHatchery.types';
+export * from './petUtils';
+
 import {
   type EvolutionStageInfo,
+  type IncubatingEgg,
+  type PetCodexEntry,
   type StudentPet,
+} from './ExamIntegrityPetHatchery.types';
+import {
+  enrichStudentPet,
   getPetElementMetadata,
   getPetSpeciesTypeMetadata,
   normalizePetSpeciesType,
-  createSproutlingPet,
-  createPipflickPet,
-  createEmbersqueakPet,
-  createZephyrpuffPet,
-  createFrostpawPet,
-  createMagmafangPet,
-  createVoltwingPet,
-  createThundercatPet,
-  createFirePhoenixPet,
-  createChronoChimeraPet,
-  createShadowpantherPet,
-  createStormstagPet,
-  createAstralDragonPet,
-  createAstralLeviathanPet,
-  createSolarWyvernPet,
-  createVoidDragonPet,
-  createChronoDracoPet,
-  createAegisPaladinPet,
-  rollMysteryPet,
-  enrichStudentPet,
   resolvePetImageUrl,
-} from './petsData';
+} from './petUtils';
 
 export const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Leaf,
@@ -93,22 +79,6 @@ export const PET_SPECIES_TYPE_ICONS: Record<string, React.ComponentType<{ classN
   Shield,
 };
 
-export interface IncubatingEgg {
-  id: string;
-  name: string;
-  tier: EggTier;
-  rarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
-  crackProgress: number; // 0 to 1
-  hatchedPetName: string;
-  hatchedSpecies: string;
-  isEquipped?: boolean;
-  equipCostInStars?: number;
-  imageUrl?: string;
-  isMystery?: boolean;
-  hatchDurationHours?: number;
-  remainingSeconds?: number;
-}
-
 export interface FullImageModalData {
   name: string;
   stageName: string;
@@ -125,6 +95,7 @@ export interface ExamIntegrityPetHatcheryProps {
   crackCostInStars?: number;
   incubatingEggs?: IncubatingEgg[];
   pets?: StudentPet[];
+  petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[];
   defaultTab?: 'incubator' | 'pets';
   onGrowPet?: (petId: string, starsSpent: number) => void;
   onEggHatched?: (
@@ -138,83 +109,8 @@ export interface ExamIntegrityPetHatcheryProps {
   className?: string;
 }
 
-export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [
-  {
-    id: 'inc-egg-mystery',
-    name: 'Ancient Mysterious Egg',
-    tier: 'dragon',
-    crackProgress: 0.1,
-    hatchedPetName: '??? Secret Pet',
-    hatchedSpecies: 'Veiled Ancient Beast',
-    isEquipped: true,
-    equipCostInStars: 25,
-    isMystery: true,
-    hatchDurationHours: 8,
-    remainingSeconds: 0,
-  },
-  {
-    id: 'inc-egg-phoenix',
-    name: 'Primordial Fire Phoenix Egg',
-    tier: 'dragon',
-    rarity: 'Epic',
-    crackProgress: 0.35,
-    hatchedPetName: 'Sun Ember Fledgling',
-    hatchedSpecies: 'Primordial Solar Phoenix',
-    isEquipped: false,
-    equipCostInStars: 25,
-    imageUrl: phoenixEggImg,
-    hatchDurationHours: 8,
-    remainingSeconds: 18720,
-  },
-  {
-    id: 'inc-egg-void',
-    name: 'Void Abyssal Singularity Egg',
-    tier: 'dragon',
-    rarity: 'Mythic',
-    crackProgress: 0.15,
-    hatchedPetName: 'Voidling Pip',
-    hatchedSpecies: 'Mythic Void Abyssal Dragon',
-    isEquipped: false,
-    equipCostInStars: 50,
-  },
-  {
-    id: 'inc-egg-1',
-    name: 'Warm Bronze Dragon Egg',
-    tier: 'dragon',
-    rarity: 'Legendary',
-    crackProgress: 0.65,
-    hatchedPetName: 'Stardrop Wyrmlet',
-    hatchedSpecies: 'Celestial Astral Dragon',
-    isEquipped: false,
-    equipCostInStars: 35,
-  },
-  {
-    id: 'inc-egg-frost',
-    name: 'Glacial Frostpaw Egg',
-    tier: 'celestial',
-    rarity: 'Rare',
-    crackProgress: 0.5,
-    hatchedPetName: 'Frostpup',
-    hatchedSpecies: 'Arctic Snow Leopard',
-    isEquipped: false,
-    equipCostInStars: 20,
-  },
-  {
-    id: 'inc-egg-sproutling',
-    name: 'Emerald Sproutling Egg',
-    tier: 'forest',
-    rarity: 'Common',
-    crackProgress: 0.8,
-    hatchedPetName: 'Sproutling',
-    hatchedSpecies: 'Flora Sproutling Seedling',
-    isEquipped: false,
-    equipCostInStars: 15,
-  },
-];
-
-export const DEFAULT_STUDENT_PETS: StudentPet[] = [
-  createFirePhoenixPet(1, true)
-];
+export const DEFAULT_INCUBATING_EGGS: IncubatingEgg[] = [];
+export const DEFAULT_STUDENT_PETS: StudentPet[] = [];
 
 function getEggCrackStatusText(progress: number, isHatched: boolean): string {
   if (isHatched || progress >= 1.0) {
@@ -1343,6 +1239,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   crackCostInStars = 15,
   incubatingEggs = DEFAULT_INCUBATING_EGGS,
   pets = DEFAULT_STUDENT_PETS,
+  petLibrary,
   defaultTab = 'incubator',
   onGrowPet,
   onEggHatched,
@@ -1352,12 +1249,13 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   initialPreviewPet,
   className,
 }) => {
+  const enrich = (p: StudentPet) => enrichStudentPet(p, petLibrary);
   const [activeTab, setActiveTab] = useState<'incubator' | 'pets'>(
     defaultTab === 'pets' ? 'pets' : 'incubator'
   );
   const [currentEggs, setCurrentEggs] = useState<IncubatingEgg[]>(incubatingEggs);
   const [currentPets, setCurrentPets] = useState<StudentPet[]>(() =>
-    pets.map(enrichStudentPet)
+    pets.map(enrich)
   );
   const [selectedEggIndex, setSelectedEggIndex] = useState<number>(0);
   const [hatchedCelebration, setHatchedCelebration] = useState<StudentPet | null>(null);
@@ -1369,7 +1267,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   const [previewStages, setPreviewStages] = useState<Record<string, number>>({});
   const [fullImageModalData, setFullImageModalData] = useState<FullImageModalData | null>(() => {
     if (!initialPreviewPet) return null;
-    const enriched = enrichStudentPet(initialPreviewPet);
+    const enriched = enrich(initialPreviewPet);
     return {
       name: enriched.name,
       stageName: enriched.stageName || enriched.name,
@@ -1396,8 +1294,8 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   }, [incubatingEggs]);
 
   useEffect(() => {
-    setCurrentPets(pets.map(enrichStudentPet));
-  }, [pets]);
+    setCurrentPets(pets.map(enrich));
+  }, [pets, petLibrary]);
 
   // Incubator real-time countdown timer tick
   useEffect(() => {
@@ -1448,102 +1346,20 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       onStrikeCrack(activeEgg.id, crackCostInStars);
     }
 
-    if (newProgress >= 1.0) {
-      const finishHatching = (petToCelebrate: StudentPet) => {
-        const enriched = enrichStudentPet(petToCelebrate);
-        setHatchedCelebration(enriched);
-        setCurrentPets((prev) => [
-          enriched,
-          ...prev.filter((p) => p.id !== enriched.id),
-        ]);
-      };
-
-      if (onEggHatched) {
-        try {
-          const result = await Promise.resolve(onEggHatched(activeEgg.id));
-          if (result && result.name) {
-            finishHatching(result);
-            return;
-          }
-        } catch {
-          // fallback to client-side roll if server hatch fails
+    if (newProgress >= 1.0 && onEggHatched) {
+      try {
+        const result = await Promise.resolve(onEggHatched(activeEgg.id));
+        if (result && result.name) {
+          const enriched = enrich(result);
+          setHatchedCelebration(enriched);
+          setCurrentPets((prev) => [
+            enriched,
+            ...prev.filter((p) => p.id !== enriched.id),
+          ]);
         }
+      } catch {
+        // Server hatching failure handled by caller
       }
-
-      let newPet: StudentPet;
-      const eggName = (activeEgg.name || '').toLowerCase();
-      const petName = (activeEgg.hatchedPetName || '').toLowerCase();
-      const specName = (activeEgg.hatchedSpecies || '').toLowerCase();
-
-      if (
-        activeEgg.isMystery ||
-        eggName.includes('mystery') ||
-        petName.includes('?') ||
-        petName.includes('mystery')
-      ) {
-        newPet = rollMysteryPet();
-      } else if (eggName.includes('pipflick') || petName.includes('pipflick') || specName.includes('water drake')) {
-        newPet = createPipflickPet(1, false);
-      } else if (eggName.includes('embersqueak') || petName.includes('embersqueak') || specName.includes('solartiger')) {
-        newPet = createEmbersqueakPet(1, false);
-      } else if (eggName.includes('zephyrpuff') || petName.includes('pufftail') || specName.includes('zephyrhare')) {
-        newPet = createZephyrpuffPet(1, false);
-      } else if (eggName.includes('magmafang') || petName.includes('cinderpig') || specName.includes('boar')) {
-        newPet = createMagmafangPet(1, false);
-      } else if (eggName.includes('voltwing') || petName.includes('sparkhoot') || specName.includes('storm owl')) {
-        newPet = createVoltwingPet(1, false);
-      } else if (eggName.includes('thundercat') || petName.includes('sparkpaw') || specName.includes('storm tiger')) {
-        newPet = createThundercatPet(1, false);
-      } else if (eggName.includes('chrono chimera') || petName.includes('chronopip') || specName.includes('time sprite')) {
-        newPet = createChronoChimeraPet(1, false);
-      } else if (eggName.includes('shadowpanther') || petName.includes('umbralpaw') || specName.includes('eclipse panther')) {
-        newPet = createShadowpantherPet(1, false);
-      } else if (eggName.includes('stormstag') || petName.includes('sparkfawn') || specName.includes('thunder elk')) {
-        newPet = createStormstagPet(1, false);
-      } else if (eggName.includes('ocean leviathan') || petName.includes('astraea') || specName.includes('cosmic whale')) {
-        newPet = createAstralLeviathanPet(1, false);
-      } else if (eggName.includes('solar wyvern') || petName.includes('solarpup') || specName.includes('archon wyvern')) {
-        newPet = createSolarWyvernPet(1, false);
-      } else if (eggName.includes('chrono-draco') || petName.includes('chronowing') || specName.includes('temporal dragon')) {
-        newPet = createChronoDracoPet(1, false);
-      } else if (eggName.includes('aegis') || petName.includes('aegis') || specName.includes('paladin')) {
-        newPet = createAegisPaladinPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-phoenix' || eggName.includes('phoenix')) {
-        newPet = createFirePhoenixPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-void' || eggName.includes('void')) {
-        newPet = createVoidDragonPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-1' || eggName.includes('astral') || eggName.includes('dragon')) {
-        newPet = createAstralDragonPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-frost' || eggName.includes('frost')) {
-        newPet = createFrostpawPet(1, false);
-      } else if (activeEgg.id === 'inc-egg-sproutling' || eggName.includes('sprout')) {
-        newPet = createSproutlingPet(1, false);
-      } else {
-        newPet = {
-          id: `pet-${Date.now()}`,
-          name: activeEgg.hatchedPetName,
-          species: activeEgg.hatchedSpecies,
-          rarity: activeEgg.rarity || 'Common',
-          tier: activeEgg.tier,
-          element: 'Normal',
-          level: 1,
-          maxLevel: 10,
-          currentExp: 0,
-          expNeeded: 100,
-          growthCostInStars: 25,
-          stats: {
-            vitality: 60,
-            wisdom: 60,
-            integrityBond: 90,
-            solarRadiance: 40,
-          },
-          avatarEmoji: '🐲',
-          stageLevel: 1,
-          stageName: 'Hatchling',
-          isEquipped: false,
-        };
-      }
-      finishHatching(newPet);
     }
   };
 
@@ -1586,7 +1402,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   };
 
   const handleGrowPet = (rawPet: StudentPet) => {
-    const pet = enrichStudentPet(rawPet);
+    const pet = enrich(rawPet);
     if (pet.level >= (pet.maxLevel || 10)) return;
     if (starBalance < pet.growthCostInStars) return;
 
@@ -1923,7 +1739,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
       {activeTab === 'pets' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentPets.map((rawPet) => {
-            const pet = enrichStudentPet(rawPet);
+            const pet = enrich(rawPet);
             const activeStageNum = previewStages[pet.id] || pet.stageLevel;
 
             return (

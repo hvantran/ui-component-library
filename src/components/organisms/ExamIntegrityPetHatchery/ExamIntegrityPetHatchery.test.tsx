@@ -3,6 +3,11 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {
   ExamIntegrityPetHatchery,
+  formatHatchTime,
+  PetEvolutionModal,
+  PetCard,
+} from './ExamIntegrityPetHatchery';
+import {
   DEFAULT_INCUBATING_EGGS,
   DEFAULT_STUDENT_PETS,
   createSproutlingPet,
@@ -12,12 +17,9 @@ import {
   createAstralLeviathanPet,
   createVoidDragonPet,
   rollMysteryPet,
-  formatHatchTime,
   PET_CODEX_REGISTRY,
   ALL_PET_CODEX_REGISTRY,
-  PetEvolutionModal,
-  PetCard,
-} from './ExamIntegrityPetHatchery';
+} from './mockPets';
 
 describe('ExamIntegrityPetHatchery', () => {
   it('renders incubator view with Fire Phoenix egg and equip egg action', () => {
@@ -430,6 +432,7 @@ describe('ExamIntegrityPetHatchery', () => {
         defaultTab="pets"
         incubatingEggs={[]}
         pets={[rawPet]}
+        petLibrary={ALL_PET_CODEX_REGISTRY}
       />
     );
 
