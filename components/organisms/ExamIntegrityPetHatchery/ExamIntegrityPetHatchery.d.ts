@@ -1,28 +1,13 @@
 import { default as React } from '../../../../node_modules/react';
-import { EggTier } from '../../molecules/ThreeEggViewer';
-import { StudentPet } from './petsData';
-export * from './petsData';
+import { IncubatingEgg, PetCodexEntry, StudentPet } from './ExamIntegrityPetHatchery.types';
+export * from './ExamIntegrityPetHatchery.types';
+export * from './petUtils';
 export declare const PET_ELEMENT_ICONS: Record<string, React.ComponentType<{
     className?: string;
 }>>;
 export declare const PET_SPECIES_TYPE_ICONS: Record<string, React.ComponentType<{
     className?: string;
 }>>;
-export interface IncubatingEgg {
-    id: string;
-    name: string;
-    tier: EggTier;
-    rarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
-    crackProgress: number;
-    hatchedPetName: string;
-    hatchedSpecies: string;
-    isEquipped?: boolean;
-    equipCostInStars?: number;
-    imageUrl?: string;
-    isMystery?: boolean;
-    hatchDurationHours?: number;
-    remainingSeconds?: number;
-}
 export interface FullImageModalData {
     name: string;
     stageName: string;
@@ -38,6 +23,7 @@ export interface ExamIntegrityPetHatcheryProps {
     crackCostInStars?: number;
     incubatingEggs?: IncubatingEgg[];
     pets?: StudentPet[];
+    petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[];
     defaultTab?: 'incubator' | 'pets';
     onGrowPet?: (petId: string, starsSpent: number) => void;
     onEggHatched?: (eggId: string, hatchedPet?: StudentPet) => Promise<StudentPet | void> | StudentPet | void;
