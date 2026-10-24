@@ -10,6 +10,7 @@ export interface ThemeModeToggleProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   ariaLabel?: string;
+  showLabels?: boolean;
 }
 
 const sizeClasses = {
@@ -47,6 +48,7 @@ export const ThemeModeToggle: React.FC<ThemeModeToggleProps> = ({
   size = 'md',
   className,
   ariaLabel = 'Theme mode selector',
+  showLabels = true,
 }) => {
   let contextTheme: ThemeMode | undefined;
   let contextSetTheme: ((m: ThemeMode) => void) | undefined;
@@ -123,13 +125,14 @@ export const ThemeModeToggle: React.FC<ThemeModeToggleProps> = ({
             className={cn(
               'flex items-center gap-1.5 rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-primary-500/20',
               currentSize.segmentedBtn,
+              !showLabels && 'px-1.5 py-1',
               isActive
                 ? 'bg-white dark:bg-secondary-700 text-primary-600 dark:text-primary-300 shadow-xs'
                 : 'text-secondary-600 hover:text-secondary-900 dark:text-secondary-400 dark:hover:text-secondary-100'
             )}
           >
             <Icon className={currentSize.icon} />
-            <span>{label}</span>
+            {showLabels && <span>{label}</span>}
           </button>
         );
       })}

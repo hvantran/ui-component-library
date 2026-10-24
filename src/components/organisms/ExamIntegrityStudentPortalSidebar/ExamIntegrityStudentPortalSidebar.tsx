@@ -13,6 +13,8 @@ import {
   EyeOff,
   X,
 } from 'lucide-react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
+import { ThemeModeToggle } from '../../molecules/ThemeModeToggle';
 import { Button } from '../../atoms/Button';
 import { cn } from '../../../utils/cn';
 
@@ -47,6 +49,9 @@ export interface ExamIntegrityStudentPortalSidebarProps {
   className?: string;
   dockMode?: ExamIntegrityNavDockMode;
   onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
+  themeMode?: ThemeMode;
+  onThemeModeChange?: (mode: ThemeMode) => void;
+  showThemeToggle?: boolean;
 }
 
 export const ExamIntegrityStudentPortalSidebar: React.FC<
@@ -64,6 +69,9 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
   className,
   dockMode = 'pinned',
   onDockModeChange,
+  themeMode,
+  onThemeModeChange,
+  showThemeToggle = true,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isAutoHide = dockMode === 'auto-hide';
@@ -212,57 +220,94 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
             {isExpanded && 'Online Help'}
           </Button>
 
-          {/* Mode controls bar at end before Logout */}
-          {onDockModeChange && (
+          {/* Dock controls & Theme container */}
+          {(onDockModeChange || showThemeToggle) && (
             <div
-              data-testid="sidebar-dock-controls"
+              data-testid="sidebar-dock-container"
               className={cn(
-                'pt-2 pb-1 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-400',
-                isDocked && !isAutoHide && 'flex-col gap-1.5 px-0'
+                'pt-2 pb-1 border-t border-gray-100 dark:border-gray-800 space-y-2',
+                isDocked && !isAutoHide && 'space-y-1.5 px-0'
               )}
             >
-              {isExpanded && <span className="font-semibold uppercase tracking-wider text-[10px] text-gray-400">Sidebar Mode</span>}
-              <div className={cn('flex items-center gap-1', isDocked && !isAutoHide && 'flex-col')}>
-                <button
-                  type="button"
-                  data-testid="dock-mode-pinned-btn"
-                  onClick={() => onDockModeChange('pinned')}
-                  title="Pin navigation bar"
-                  aria-label="Pin navigation"
+              {showThemeToggle && (
+                <div
+                  data-testid="sidebar-theme-controls"
                   className={cn(
-                    'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-                    dockMode === 'pinned' ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50' : 'text-gray-400'
+                    'flex items-center justify-between text-xs text-gray-400',
+                    isDocked && !isAutoHide && 'flex-col gap-1 px-0'
                   )}
                 >
-                  <Pin size={14} className={dockMode === 'pinned' ? 'fill-current' : ''} />
-                </button>
-                <button
-                  type="button"
-                  data-testid="dock-mode-docked-btn"
-                  onClick={() => onDockModeChange('docked')}
-                  title="Dock to mini-rail"
-                  aria-label="Dock navigation to rail"
+                  {isExpanded && (
+                    <span className="font-semibold uppercase tracking-wider text-[10px] text-gray-400">
+                      Theme
+                    </span>
+                  )}
+                  <ThemeModeToggle
+                    mode={themeMode}
+                    onModeChange={onThemeModeChange}
+                    variant={isExpanded ? 'segmented' : 'button'}
+                    showLabels={false}
+                    size="sm"
+                  />
+                </div>
+              )}
+
+              {onDockModeChange && (
+                <div
+                  data-testid="sidebar-dock-controls"
                   className={cn(
-                    'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-                    dockMode === 'docked' ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50' : 'text-gray-400'
+                    'flex items-center justify-between text-xs text-gray-400',
+                    isDocked && !isAutoHide && 'flex-col gap-1 px-0'
                   )}
                 >
-                  <PanelLeftClose size={14} />
-                </button>
-                <button
-                  type="button"
-                  data-testid="dock-mode-autohide-btn"
-                  onClick={() => onDockModeChange('auto-hide')}
-                  title="Auto-hide navigation bar"
-                  aria-label="Auto hide navigation"
-                  className={cn(
-                    'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-                    dockMode === 'auto-hide' ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50' : 'text-gray-400'
+                  {isExpanded && (
+                    <span className="font-semibold uppercase tracking-wider text-[10px] text-gray-400">
+                      Sidebar Mode
+                    </span>
                   )}
-                >
-                  <EyeOff size={14} />
-                </button>
-              </div>
+                  <div className={cn('flex items-center gap-1', isDocked && !isAutoHide && 'flex-col')}>
+                    <button
+                      type="button"
+                      data-testid="dock-mode-pinned-btn"
+                      onClick={() => onDockModeChange('pinned')}
+                      title="Pin navigation bar"
+                      aria-label="Pin navigation"
+                      className={cn(
+                        'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
+                        dockMode === 'pinned' ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50' : 'text-gray-400'
+                      )}
+                    >
+                      <Pin size={14} className={dockMode === 'pinned' ? 'fill-current' : ''} />
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="dock-mode-docked-btn"
+                      onClick={() => onDockModeChange('docked')}
+                      title="Dock to mini-rail"
+                      aria-label="Dock navigation to rail"
+                      className={cn(
+                        'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
+                        dockMode === 'docked' ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50' : 'text-gray-400'
+                      )}
+                    >
+                      <PanelLeftClose size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="dock-mode-autohide-btn"
+                      onClick={() => onDockModeChange('auto-hide')}
+                      title="Auto-hide navigation bar"
+                      aria-label="Auto hide navigation"
+                      className={cn(
+                        'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
+                        dockMode === 'auto-hide' ? 'text-blue-600 bg-blue-50 dark:bg-blue-950/50' : 'text-gray-400'
+                      )}
+                    >
+                      <EyeOff size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

@@ -38,6 +38,7 @@ describe('Exam Integrity Templates', () => {
     expect(dockedHtml).toContain('data-dock-mode="docked"');
     expect(dockedHtml).toContain('ml-[72px]');
     expect(dockedHtml).toContain('data-testid="teacher-sidebar-dock-controls"');
+    expect(dockedHtml).toContain('data-testid="sidebar-theme-controls"');
 
     const autohideHtml = renderToString(
       <ExamIntegrityTeacherDashboardTemplate
@@ -127,6 +128,7 @@ describe('Exam Integrity Templates', () => {
     expect(dockedHtml).toContain('data-dock-mode="docked"');
     expect(dockedHtml).toContain('ml-[72px]');
     expect(dockedHtml).toContain('data-testid="dock-mode-pinned-btn"');
+    expect(dockedHtml).toContain('data-testid="sidebar-theme-controls"');
 
     const autohideHtml = renderToString(
       <ExamIntegrityStudentLandingTemplate
