@@ -27,9 +27,18 @@ export function resolveAssetUrl(
       ? (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process?.env
       : undefined;
 
-  const isSkill = (assetType as string) === AssetType.Skill;
-  const envKey = isSkill ? 'REACT_APP_SKILL_ASSETS_BASE_URL' : 'REACT_APP_PET_ASSETS_BASE_URL';
-  const windowKey = isSkill ? '__SKILL_ASSETS_BASE_URL__' : '__PET_ASSETS_BASE_URL__';
+  let envKey = 'REACT_APP_PET_ASSETS_BASE_URL';
+  let windowKey = '__PET_ASSETS_BASE_URL__';
+  if ((assetType as string) === AssetType.Skill) {
+    envKey = 'REACT_APP_SKILL_ASSETS_BASE_URL';
+    windowKey = '__SKILL_ASSETS_BASE_URL__';
+  } else if ((assetType as string) === AssetType.Icon) {
+    envKey = 'REACT_APP_ICON_ASSETS_BASE_URL';
+    windowKey = '__ICON_ASSETS_BASE_URL__';
+  } else if ((assetType as string) === AssetType.Background) {
+    envKey = 'REACT_APP_BG_ASSETS_BASE_URL';
+    windowKey = '__BG_ASSETS_BASE_URL__';
+  }
 
   const customBase =
     (typeof window !== 'undefined' &&
@@ -61,6 +70,16 @@ export const resolveSkillVideoUrl = (filename?: string, bundledUrl?: string): st
 export function resolvePetImageUrl(imageName?: string, fallbackUrl?: string): string | undefined {
   if (!imageName) return fallbackUrl;
   return resolveAssetUrl(imageName, fallbackUrl, AssetType.Pet);
+}
+
+export function resolvePetIconUrl(iconName?: string, fallbackUrl?: string): string | undefined {
+  if (!iconName) return fallbackUrl;
+  return resolveAssetUrl(iconName, fallbackUrl, AssetType.Icon);
+}
+
+export function resolvePetBackgroundUrl(bgName?: string, fallbackUrl?: string): string | undefined {
+  if (!bgName) return fallbackUrl;
+  return resolveAssetUrl(bgName, fallbackUrl, AssetType.Background);
 }
 
 export const PET_ELEMENT_METADATA: Record<PetElement, PetElementMetadata> = {

@@ -38,6 +38,7 @@ export interface ExamIntegrityStudentPortalSidebarProps {
   activeSection?: ExamIntegrityStudentPortalSection;
   studentName?: string;
   studentRole?: string;
+  avatarIconUrl?: string;
   isOpen?: boolean;
   onClose?: () => void;
   onNavigate?: (section: ExamIntegrityStudentPortalSection) => void;
@@ -54,6 +55,7 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
   activeSection = 'dashboard',
   studentName = '',
   studentRole = 'Learning Center',
+  avatarIconUrl,
   isOpen,
   onClose,
   onNavigate,
@@ -122,10 +124,16 @@ export const ExamIntegrityStudentPortalSidebar: React.FC<
         <div className={cn('px-6 mb-4 flex items-center justify-between', isDocked && !isAutoHide && 'px-0 justify-center mb-6')}>
           <div className="flex items-center gap-3 min-w-0">
             <div
-              className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-base border border-blue-300 dark:border-blue-700 shrink-0"
+              className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-base border border-blue-300 dark:border-blue-700 shrink-0 overflow-hidden"
               title={studentName || 'Student'}
             >
-              {studentName ? studentName.slice(0, 2).toUpperCase() : 'ST'}
+              {avatarIconUrl ? (
+                <img src={avatarIconUrl} alt={studentName} className="w-full h-full object-cover" />
+              ) : studentName ? (
+                studentName.slice(0, 2).toUpperCase()
+              ) : (
+                'ST'
+              )}
             </div>
             {isExpanded && (
               <div className="min-w-0">

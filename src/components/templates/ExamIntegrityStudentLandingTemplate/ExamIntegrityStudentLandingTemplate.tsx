@@ -28,6 +28,8 @@ export interface FilterItem {
 export interface ExamIntegrityStudentLandingTemplateProps {
   studentName?: string;
   studentRole?: string;
+  avatarIconUrl?: string;
+  backgroundImageUrl?: string;
   starCount?: number;
   activeSection?: StudentPortalSection;
   pageTitle?: string;
@@ -61,6 +63,8 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
 > = ({
   studentName = 'Student',
   studentRole = 'Student',
+  avatarIconUrl,
+  backgroundImageUrl,
   starCount,
   activeSection = 'dashboard',
   pageTitle = 'My Assigned Exams',
@@ -95,7 +99,10 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
     : 'ml-0 lg:ml-64';
 
   return (
-    <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
+    <div
+      className={cn('min-h-screen bg-gray-50 dark:bg-gray-900 bg-cover bg-center', className)}
+      style={backgroundImageUrl ? { backgroundImage: `url(${backgroundImageUrl})` } : undefined}
+    >
       <AppTopBar
         title="Exam Integrity Student Portal"
         onMenuToggle={() => setIsMobileNavOpen((prev) => !prev)}
@@ -193,10 +200,14 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
                 {/* Identity */}
                 <div className={cn('px-6 mb-4 flex items-center gap-3', isDocked && !isAutoHide && 'px-0 justify-center mb-6')}>
                   <div
-                    className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base border border-blue-300 shrink-0"
+                    className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base border border-blue-300 shrink-0 overflow-hidden"
                     title={studentName}
                   >
-                    {studentName.slice(0, 2).toUpperCase()}
+                    {avatarIconUrl ? (
+                      <img src={avatarIconUrl} alt={studentName} className="w-full h-full object-cover" />
+                    ) : (
+                      studentName.slice(0, 2).toUpperCase()
+                    )}
                   </div>
                   {isExpanded && (
                     <div className="min-w-0">

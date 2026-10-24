@@ -7,6 +7,8 @@ on:
     paths:
       - 'src/assets/skills/**'
       - 'src/assets/pets/**'
+      - 'src/assets/icons/**'
+      - 'src/assets/backgrounds/**'
   workflow_dispatch:
 
 permissions:
@@ -29,22 +31,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           TAG="assets-v1"
+          NOTES="Automated release containing pet ability cinematic MP4s, pet evolution PNGs, pet icons, and pet backgrounds."
           echo "Checking if release $TAG exists..."
           if ! gh release view "$TAG" > /dev/null 2>&1; then
             if gh release view "skill-assets-v1" > /dev/null 2>&1; then
               echo "Migrating skill-assets-v1 to $TAG..."
-              gh release edit "skill-assets-v1" --tag "$TAG" --title "Release Assets v1" --notes "Automated release containing pet ability cinematic MP4s and pet evolution PNG media assets." || \
-              gh release create "$TAG" --title "Release Assets v1" --notes "Automated release containing pet ability cinematic MP4s and pet evolution PNG media assets."
+              gh release edit "skill-assets-v1" --tag "$TAG" --title "Release Assets v1" --notes "$NOTES" || \
+              gh release create "$TAG" --title "Release Assets v1" --notes "$NOTES"
             else
               echo "Release $TAG does not exist. Creating release..."
               gh release create "$TAG" \
                 --title "Release Assets v1" \
-                --notes "Automated release containing pet ability cinematic MP4s and pet evolution PNG media assets."
+                --notes "$NOTES"
             fi
           else
             echo "Release $TAG already exists."
           fi
 
           echo "Uploading media assets..."
-          gh release upload "$TAG" src/assets/skills/*.mp4 src/assets/pets/*.png --clobber
+          gh release upload "$TAG" \
+            src/assets/skills/*.mp4 \
+            src/assets/pets/*.png \
+            src/assets/icons/* \
+            src/assets/backgrounds/* \
+            --clobber
 

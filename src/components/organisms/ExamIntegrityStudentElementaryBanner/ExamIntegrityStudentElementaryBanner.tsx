@@ -3,6 +3,7 @@ import { cn } from '../../../utils/cn';
 
 export interface ExamIntegrityStudentElementaryBannerProps {
   mascotEmoji?: string;
+  mascotIconUrl?: string;
   subjectTitle?: string;
   guardianLabel?: string;
   className?: string;
@@ -12,6 +13,7 @@ export const ExamIntegrityStudentElementaryBanner: React.FC<
   ExamIntegrityStudentElementaryBannerProps
 > = ({
   mascotEmoji = '🦉',
+  mascotIconUrl,
   subjectTitle = 'Math & Logic',
   guardianLabel = '🛡️ Friendly Guardian Active',
   className,
@@ -24,7 +26,11 @@ export const ExamIntegrityStudentElementaryBanner: React.FC<
   >
     <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <span className="text-lg">{mascotEmoji}</span>
+        {mascotIconUrl ? (
+          <img src={mascotIconUrl} alt="Mascot" className="w-6 h-6 rounded-full object-cover shrink-0" />
+        ) : (
+          <span className="text-lg">{mascotEmoji}</span>
+        )}
         <span className="font-bold text-amber-950 dark:text-amber-200 text-sm">
           {subjectTitle}
         </span>
