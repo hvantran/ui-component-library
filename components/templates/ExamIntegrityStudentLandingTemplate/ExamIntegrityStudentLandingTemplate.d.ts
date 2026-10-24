@@ -9,6 +9,8 @@ export interface FilterItem {
 export interface ExamIntegrityStudentLandingTemplateProps {
     studentName?: string;
     studentRole?: string;
+    avatarIconUrl?: string;
+    backgroundImageUrl?: string;
     starCount?: number;
     activeSection?: StudentPortalSection;
     pageTitle?: string;

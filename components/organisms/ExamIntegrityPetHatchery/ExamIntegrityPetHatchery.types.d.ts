@@ -3,7 +3,9 @@ import { PetSkill } from '../ExamIntegrityPetSkill';
 export type { EggTier };
 export declare enum AssetType {
     Skill = "skill",
-    Pet = "pet"
+    Pet = "pet",
+    Icon = "icon",
+    Background = "background"
 }
 export declare enum PetRarity {
     Common = "Common",
@@ -37,6 +39,9 @@ export interface EvolutionStageInfo {
     avatarEmoji: string;
     imageUrl: string;
     imageName?: string;
+    avatarIcon?: string;
+    icon?: string;
+    backgroundImage?: string;
     ability?: {
         name: string;
         description: string;
@@ -111,6 +116,9 @@ export interface StudentPet {
     growthCostInStars: number;
     stats: PetStats;
     avatarEmoji: string;
+    avatarIcon?: string;
+    icon?: string;
+    backgroundImage?: string;
     imageUrl?: string;
     imageName?: string;
     petLibraryId?: string;

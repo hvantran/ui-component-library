@@ -5,6 +5,8 @@ export declare const DEFAULT_PET_CDN_BASE = "https://github.com/hvantran/ui-comp
 export declare function resolveAssetUrl(filename?: string, bundledUrl?: string, assetType?: AssetType): string | undefined;
 export declare const resolveSkillVideoUrl: (filename?: string, bundledUrl?: string) => string | undefined;
 export declare function resolvePetImageUrl(imageName?: string, fallbackUrl?: string): string | undefined;
+export declare function resolvePetIconUrl(iconName?: string, fallbackUrl?: string): string | undefined;
+export declare function resolvePetBackgroundUrl(bgName?: string, fallbackUrl?: string): string | undefined;
 export declare const PET_ELEMENT_METADATA: Record<PetElement, PetElementMetadata>;
 export declare const ELEMENT_KEYWORDS_MAP: Record<PetElement, readonly string[]>;
 export declare function normalizePetElement(element?: string): PetElement;

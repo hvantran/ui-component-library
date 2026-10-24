@@ -3,6 +3,8 @@ export interface ExamIntegrityStudentElementarySidebarProps {
     mascotEmoji?: string;
     mascotName?: string;
     mascotTip?: string;
+    mascotIconUrl?: string;
+    backgroundImageUrl?: string;
     flaggedNumbers?: number[];
     onJumpToQuestion?: (questionNumber: number) => void;
     className?: string;
