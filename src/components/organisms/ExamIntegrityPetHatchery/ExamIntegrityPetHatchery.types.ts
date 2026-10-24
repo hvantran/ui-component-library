@@ -6,6 +6,8 @@ export type { EggTier };
 export enum AssetType {
   Skill = 'skill',
   Pet = 'pet',
+  Icon = 'icon',
+  Background = 'background',
 }
 
 export enum PetRarity {
@@ -43,6 +45,9 @@ export interface EvolutionStageInfo {
   avatarEmoji: string;
   imageUrl: string;
   imageName?: string;
+  avatarIcon?: string;
+  icon?: string;
+  backgroundImage?: string;
   ability?: {
     name: string;
     description: string;
@@ -148,6 +153,9 @@ export interface StudentPet {
   growthCostInStars: number;
   stats: PetStats;
   avatarEmoji: string;
+  avatarIcon?: string;
+  icon?: string;
+  backgroundImage?: string;
   imageUrl?: string;
   imageName?: string;
   petLibraryId?: string;

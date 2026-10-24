@@ -5,6 +5,8 @@ export interface ExamIntegrityStudentElementarySidebarProps {
   mascotEmoji?: string;
   mascotName?: string;
   mascotTip?: string;
+  mascotIconUrl?: string;
+  backgroundImageUrl?: string;
   flaggedNumbers?: number[];
   onJumpToQuestion?: (questionNumber: number) => void;
   className?: string;
@@ -16,16 +18,28 @@ export const ExamIntegrityStudentElementarySidebar: React.FC<
   mascotEmoji = '🦉',
   mascotName = 'Ollie the Owl',
   mascotTip = 'Read each question carefully. You can flag questions to look at them again anytime!',
+  mascotIconUrl,
+  backgroundImageUrl,
   flaggedNumbers = [],
   onJumpToQuestion,
   className,
 }) => (
   <aside className={cn('flex flex-col gap-5', className)}>
     {/* Mascot Card */}
-    <div className="rounded-3xl border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-gray-900 p-6 shadow-md relative">
-      <div className="flex items-start gap-4">
-        <div className="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/50 border-2 border-amber-300 dark:border-amber-700 flex items-center justify-center text-3xl shadow-inner shrink-0">
-          {mascotEmoji}
+    <div
+      className="rounded-3xl border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-gray-900 p-6 shadow-md relative overflow-hidden bg-cover bg-center"
+      style={backgroundImageUrl ? { backgroundImage: `url(${backgroundImageUrl})` } : undefined}
+    >
+      {backgroundImageUrl && (
+        <div className="absolute inset-0 bg-white/85 dark:bg-gray-900/85 backdrop-blur-[1px] pointer-events-none" />
+      )}
+      <div className="flex items-start gap-4 relative z-10">
+        <div className="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/50 border-2 border-amber-300 dark:border-amber-700 flex items-center justify-center text-3xl shadow-inner shrink-0 overflow-hidden">
+          {mascotIconUrl ? (
+            <img src={mascotIconUrl} alt={mascotName} className="w-full h-full object-cover" />
+          ) : (
+            mascotEmoji
+          )}
         </div>
         <div>
           <div className="flex items-center gap-1.5">
