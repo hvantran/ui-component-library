@@ -8,6 +8,7 @@ export * from './EmptyState';
 export * from './Tabs';
 export * from './JobStatusBadge';
 export * from './DarkModeToggle';
+export * from './ThemeModeToggle';
 export * from './ViewModeToggle';
 export * from './StatCard';
 export * from './Combobox';
