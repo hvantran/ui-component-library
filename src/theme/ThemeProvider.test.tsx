@@ -4,11 +4,13 @@ import { describe, expect, it } from 'vitest';
 import { ThemeProvider, useTheme } from './ThemeProvider';
 
 function TestConsumer() {
-  const { theme, resolvedTheme } = useTheme();
+  const { theme, resolvedTheme, companionElement, companionBackgroundImageUrl } = useTheme();
   return (
     <div>
       <span data-testid="theme">{theme}</span>
       <span data-testid="resolved">{resolvedTheme}</span>
+      <span data-testid="element">{companionElement}</span>
+      <span data-testid="bg">{companionBackgroundImageUrl}</span>
     </div>
   );
 }
@@ -33,5 +35,20 @@ describe('ThemeProvider & useTheme', () => {
     );
 
     expect(html).toContain('light');
+  });
+
+  it('provides companion theme tokens to context consumer', () => {
+    const html = renderToString(
+      <ThemeProvider
+        defaultTheme="light"
+        companionElement="Flora"
+        companionBackgroundImageUrl="https://cdn.example.com/bg.png"
+      >
+        <TestConsumer />
+      </ThemeProvider>
+    );
+
+    expect(html).toContain('Flora');
+    expect(html).toContain('https://cdn.example.com/bg.png');
   });
 });
