@@ -326,18 +326,32 @@ export function getRequiredElementCount(rarity?: PetRarity | string): number {
   return REQUIRED_ELEMENT_COUNT_MAP[rarity as PetRarity] ?? 1;
 }
 
+let defaultCodexRegistry: Record<string, PetCodexEntry> | undefined;
+
+export function setDefaultCodexRegistry(registry: Record<string, PetCodexEntry>) {
+  defaultCodexRegistry = registry;
+}
+
+export function getDefaultCodexRegistry() {
+  return defaultCodexRegistry;
+}
+
 export function findCodexEntryInLibrary(
   pet: Partial<StudentPet>,
   petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[]
 ): PetCodexEntry | undefined {
-  if (!pet || !petLibrary) return undefined;
+  const library = petLibrary || defaultCodexRegistry;
+  if (!pet || !library) return undefined;
 
-  const entries: PetCodexEntry[] = Array.isArray(petLibrary)
-    ? petLibrary
-    : Object.values(petLibrary);
+  const entries: PetCodexEntry[] = Array.isArray(library)
+    ? library
+    : Object.values(library);
 
   if (pet.petLibraryId) {
-    const direct = entries.find((e) => e.key === pet.petLibraryId);
+    const direct = entries.find((e) => {
+      const k = e.key || (e as { petKey?: string }).petKey || (e as { id?: string }).id;
+      return k === pet.petLibraryId;
+    });
     if (direct) return direct;
   }
 
@@ -357,14 +371,14 @@ export function findCodexEntryInLibrary(
   if (exact) return exact;
 
   const fuzzy = entries.find((e) => {
-    const entryKey = e.key.toLowerCase();
-    const entrySpecies = e.species.toLowerCase();
-    const entryName = e.name.toLowerCase();
+    const entryKey = (e.key || (e as { petKey?: string }).petKey || (e as { id?: string }).id || '').toLowerCase();
+    const entrySpecies = (e.species || '').toLowerCase();
+    const entryName = (e.name || '').toLowerCase();
 
     return (
       (cleanSpecies && (cleanSpecies.includes(entrySpecies) || entrySpecies.includes(cleanSpecies))) ||
       (cleanPetName && (cleanPetName.includes(entryName) || entryName.includes(cleanPetName))) ||
-      (cleanId && cleanId.includes(entryKey))
+      (cleanId && (cleanId.includes(entryKey) || (entryKey && entryKey.includes(cleanId))))
     );
   });
   if (fuzzy) return fuzzy;
@@ -423,10 +437,15 @@ export function enrichStudentPet(
 
   let skills = pet.skills;
   if (!skills && evolutionStages && evolutionStages.length > 0) {
+    const entryId =
+      (codexEntry as { key?: string; petKey?: string; id?: string })?.key ||
+      (codexEntry as { petKey?: string })?.petKey ||
+      (codexEntry as { id?: string })?.id ||
+      pet.id;
     skills = evolutionStages.map((stage) => {
       const ability = stage.ability;
       return {
-        id: `${codexEntry?.key || pet.id}-stage-${stage.stage}-skill`,
+        id: `${entryId}-stage-${stage.stage}-skill`,
         name: ability?.name ?? `${stage.name} Technique`,
         description: ability?.description ?? `Channel the power of ${stage.name}.`,
         requiredLevel: stage.minLevel,
