@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 export declare const EXAM_INTEGRITY_STUDENT_SIDEBAR_WIDTH = 256;
 export declare const EXAM_INTEGRITY_STUDENT_SIDEBAR_DOCKED_WIDTH = 72;
 export type ExamIntegrityStudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop' | 'collection';
@@ -16,6 +17,9 @@ export interface ExamIntegrityStudentPortalSidebarProps {
     className?: string;
     dockMode?: ExamIntegrityNavDockMode;
     onDockModeChange?: (mode: ExamIntegrityNavDockMode) => void;
+    themeMode?: ThemeMode;
+    onThemeModeChange?: (mode: ThemeMode) => void;
+    showThemeToggle?: boolean;
 }
 export declare const ExamIntegrityStudentPortalSidebar: React.FC<ExamIntegrityStudentPortalSidebarProps>;
 export default ExamIntegrityStudentPortalSidebar;

@@ -7,6 +7,7 @@ export interface ThemeModeToggleProps {
     size?: 'sm' | 'md' | 'lg';
     className?: string;
     ariaLabel?: string;
+    showLabels?: boolean;
 }
 export declare const ThemeModeToggle: React.FC<ThemeModeToggleProps>;
 export default ThemeModeToggle;
