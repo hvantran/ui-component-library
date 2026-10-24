@@ -64,8 +64,10 @@ describe('ExamIntegrity Organisms', () => {
     );
     expect(dockedHtml).toContain('data-dock-mode="docked"');
     expect(dockedHtml).toContain('data-testid="dock-mode-pinned-btn"');
+    expect(dockedHtml).toContain('data-testid="sidebar-theme-controls"');
     expect(dockedHtml).toContain('data-testid="dock-mode-docked-btn"');
     expect(dockedHtml).toContain('data-testid="dock-mode-autohide-btn"');
+    expect(dockedHtml).toContain('data-testid="sidebar-theme-controls"');
     expect(dockedHtml).toContain('w-[72px]');
 
     const autohideHtml = renderToString(
@@ -99,6 +101,7 @@ describe('ExamIntegrity Organisms', () => {
     );
     expect(dockedHtml).toContain('data-dock-mode="docked"');
     expect(dockedHtml).toContain('data-testid="dock-mode-pinned-btn"');
+    expect(dockedHtml).toContain('data-testid="sidebar-theme-controls"');
 
     const autohideHtml = renderToString(
       <ExamIntegrityStudentPortalSidebar
