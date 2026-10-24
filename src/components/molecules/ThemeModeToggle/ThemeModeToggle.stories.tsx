@@ -30,3 +30,4 @@ export const Segmented: Story = {
     return <ThemeModeToggle mode={mode} onModeChange={setMode} variant="segmented" />;
   },
 };
+

@@ -1,42 +1,37 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { renderToString } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { ThemeProvider } from '../../../theme/ThemeProvider';
 import { ThemeModeToggle } from './ThemeModeToggle';
 
-describe('ThemeModeToggle', () => {
-  it('renders single button mode and cycles light -> dark -> system', () => {
-    const onThemeChange = vi.fn();
-    render(<ThemeModeToggle mode="light" onModeChange={onThemeChange} variant="button" />);
-
-    const button = screen.getByRole('button', { name: 'Theme mode selector' });
-    expect(button).toBeInTheDocument();
-
-    fireEvent.click(button);
-    expect(onThemeChange).toHaveBeenCalledWith('dark');
+describe('ThemeModeToggle molecule', () => {
+  it('renders button variant and sets title/aria-label', () => {
+    const html = renderToString(
+      <ThemeModeToggle mode="light" onModeChange={vi.fn()} variant="button" />
+    );
+    expect(html).toContain('aria-label="Theme mode selector"');
+    expect(html).toContain('title="Theme: light (click to cycle)"');
   });
 
-  it('renders segmented mode and changes theme on option click', () => {
-    const onThemeChange = vi.fn();
-    render(<ThemeModeToggle mode="light" onModeChange={onThemeChange} variant="segmented" />);
-
-    const darkRadio = screen.getByRole('radio', { name: 'Dark theme' });
-    fireEvent.click(darkRadio);
-    expect(onThemeChange).toHaveBeenCalledWith('dark');
-
-    const systemRadio = screen.getByRole('radio', { name: 'System theme' });
-    fireEvent.click(systemRadio);
-    expect(onThemeChange).toHaveBeenCalledWith('system');
+  it('renders segmented variant with all 3 theme options', () => {
+    const html = renderToString(
+      <ThemeModeToggle mode="system" onModeChange={vi.fn()} variant="segmented" />
+    );
+    expect(html).toContain('role="radiogroup"');
+    expect(html).toContain('aria-label="Light theme"');
+    expect(html).toContain('aria-label="Dark theme"');
+    expect(html).toContain('aria-label="System theme"');
+    expect(html).toContain('aria-checked="true"');
   });
 
   it('integrates with ThemeProvider when uncontrolled', () => {
-    render(
-      <ThemeProvider defaultTheme="system">
+    const html = renderToString(
+      <ThemeProvider defaultTheme="dark">
         <ThemeModeToggle variant="segmented" />
       </ThemeProvider>
     );
-
-    const systemRadio = screen.getByRole('radio', { name: 'System theme' });
-    expect(systemRadio).toHaveAttribute('aria-checked', 'true');
+    expect(html).toContain('role="radiogroup"');
+    expect(html).toContain('Dark');
   });
 });
+

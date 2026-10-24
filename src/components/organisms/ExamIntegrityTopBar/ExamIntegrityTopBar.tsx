@@ -1,6 +1,8 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { AppSwitcher, AppSwitcherItem } from '../AppSwitcher';
+import { ThemeModeToggle } from '../../molecules/ThemeModeToggle';
 import { cn } from '../../../utils/cn';
 
 export const EXAM_INTEGRITY_APP_BAR_HEIGHT = 64;
@@ -15,6 +17,8 @@ export interface ExamIntegrityTopBarProps {
   onHelp?: () => void;
   onLogout?: () => void;
   onMenuToggle?: () => void;
+  themeMode?: ThemeMode;
+  onThemeModeChange?: (mode: ThemeMode) => void;
   appSwitcherItems?: AppSwitcherItem[];
   onNavigateApp?: (app: AppSwitcherItem) => void;
   className?: string;
@@ -53,6 +57,8 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
   starCount,
   onLogout,
   onMenuToggle,
+  themeMode,
+  onThemeModeChange,
   appSwitcherItems = defaultPlatformApps,
   onNavigateApp,
   className,
@@ -115,6 +121,14 @@ export const ExamIntegrityTopBar: React.FC<ExamIntegrityTopBarProps> = ({
               </button>
             )}
           </div>
+        )}
+        {(onThemeModeChange || themeMode) && (
+          <ThemeModeToggle
+            mode={themeMode}
+            onModeChange={onThemeModeChange}
+            variant="button"
+            size="md"
+          />
         )}
         <AppSwitcher
           items={appSwitcherItems}

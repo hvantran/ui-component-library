@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import {
   Home,
   Upload,
@@ -55,6 +56,10 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
   onHelp?: () => void;
+  themeMode?: ThemeMode;
+  onThemeModeChange?: (mode: ThemeMode) => void;
+  isDarkMode?: boolean;
+  onThemeToggle?: () => void;
   headerTitle?: string;
   headerSubtitle?: string;
   headerActionsSlot?: React.ReactNode;
@@ -103,6 +108,10 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
   onSearch,
   onNotifications,
   onHelp,
+  themeMode,
+  onThemeModeChange,
+  isDarkMode,
+  onThemeToggle,
   headerTitle,
   headerSubtitle,
   headerActionsSlot,
@@ -134,6 +143,10 @@ export const ExamIntegrityTeacherDashboardTemplate: React.FC<
     <div className={cn('min-h-screen bg-gray-50 dark:bg-gray-900', className)}>
       <AppTopBar
         title={appTitle}
+        themeMode={themeMode}
+        onThemeModeChange={onThemeModeChange}
+        isDarkMode={isDarkMode}
+        onThemeToggle={onThemeToggle}
         searchSlot={
           onSearch && (
             <input
