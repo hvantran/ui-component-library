@@ -14,6 +14,7 @@ import {
   EyeOff,
 } from 'lucide-react';
 import { cn } from '../../../utils/cn';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { AppTopBar } from '../../organisms/AppTopBar';
 import type { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 
@@ -41,6 +42,10 @@ export interface ExamIntegrityStudentLandingTemplateProps {
   onHelp?: () => void;
   onSearch?: (query: string) => void;
   onNotifications?: () => void;
+  themeMode?: ThemeMode;
+  onThemeModeChange?: (mode: ThemeMode) => void;
+  isDarkMode?: boolean;
+  onThemeToggle?: () => void;
   sidebarSlot?: React.ReactNode;
   bannerSlot?: React.ReactNode;
   children: React.ReactNode;
@@ -76,6 +81,10 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
   onHelp,
   onSearch,
   onNotifications,
+  themeMode,
+  onThemeModeChange,
+  isDarkMode,
+  onThemeToggle,
   sidebarSlot,
   bannerSlot,
   children,
@@ -106,6 +115,10 @@ export const ExamIntegrityStudentLandingTemplate: React.FC<
       <AppTopBar
         title="Exam Integrity Student Portal"
         onMenuToggle={() => setIsMobileNavOpen((prev) => !prev)}
+        themeMode={themeMode}
+        onThemeModeChange={onThemeModeChange}
+        isDarkMode={isDarkMode}
+        onThemeToggle={onThemeToggle}
         searchSlot={
           onSearch && (
             <input

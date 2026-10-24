@@ -45,6 +45,8 @@ export const ExamIntegrityTeacherSettingsTemplate: React.FC<
   isSaving = false,
   pageTitle,
   pageSubtitle,
+  themeMode,
+  onThemeModeChange,
 }) => (
   <ExamIntegrityTeacherDashboardTemplate
     userName={userName}
@@ -56,6 +58,8 @@ export const ExamIntegrityTeacherSettingsTemplate: React.FC<
     onLogout={onLogout}
     dockMode={dockMode}
     onDockModeChange={onDockModeChange}
+    themeMode={themeMode}
+    onThemeModeChange={onThemeModeChange}
     className={className}
   >
     <ExamIntegrityTeacherSettings
@@ -67,6 +71,8 @@ export const ExamIntegrityTeacherSettingsTemplate: React.FC<
       isSaving={isSaving}
       pageTitle={pageTitle}
       pageSubtitle={pageSubtitle}
+      themeMode={themeMode}
+      onThemeModeChange={onThemeModeChange}
     />
   </ExamIntegrityTeacherDashboardTemplate>
 );

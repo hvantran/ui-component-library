@@ -24,4 +24,15 @@ describe('AppTopBar organism', () => {
     expect(html).toContain('aria-label="Toggle navigation menu"');
     expect(html).toContain('aria-label="Switch to dark theme"');
   });
+
+  it('renders ThemeModeToggle when onThemeModeChange is provided', () => {
+    const html = renderToString(
+      <AppTopBar
+        title="Admin"
+        themeMode="system"
+        onThemeModeChange={vi.fn()}
+      />
+    );
+    expect(html).toContain('aria-label="Theme mode selector"');
+  });
 });

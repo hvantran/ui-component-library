@@ -1,6 +1,8 @@
 import { Menu, Moon, Sun } from 'lucide-react';
 import React from 'react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { cn } from '../../../utils/cn';
+import { ThemeModeToggle } from '../../molecules/ThemeModeToggle';
 
 export interface AppTopBarProps {
   title?: React.ReactNode;
@@ -9,9 +11,12 @@ export interface AppTopBarProps {
   searchSlot?: React.ReactNode;
   actionsSlot?: React.ReactNode;
   userSlot?: React.ReactNode;
+  themeSlot?: React.ReactNode;
   onMenuToggle?: () => void;
   isDarkMode?: boolean;
   onThemeToggle?: () => void;
+  themeMode?: ThemeMode;
+  onThemeModeChange?: (mode: ThemeMode) => void;
   className?: string;
 }
 
@@ -22,9 +27,12 @@ export const AppTopBar: React.FC<AppTopBarProps> = ({
   searchSlot,
   actionsSlot,
   userSlot,
+  themeSlot,
   onMenuToggle,
   isDarkMode = false,
   onThemeToggle,
+  themeMode,
+  onThemeModeChange,
   className,
 }) => {
   return (
@@ -75,7 +83,18 @@ export const AppTopBar: React.FC<AppTopBarProps> = ({
         <div className="flex items-center gap-2 sm:gap-3">
           {actionsSlot && <div className="flex items-center gap-1.5">{actionsSlot}</div>}
 
-          {onThemeToggle && (
+          {themeSlot}
+
+          {onThemeModeChange && (
+            <ThemeModeToggle
+              mode={themeMode}
+              onModeChange={onThemeModeChange}
+              variant="button"
+              size="md"
+            />
+          )}
+
+          {!onThemeModeChange && onThemeToggle && (
             <button
               type="button"
               aria-label={isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'}

@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';
+import { ThemeModeToggle } from '../../molecules/ThemeModeToggle';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { cn } from '../../../utils/cn';
 
 export interface SystemSettingsData {
@@ -40,6 +42,8 @@ export interface ExamIntegrityTeacherSettingsProps {
   isSaving?: boolean;
   pageTitle?: string;
   pageSubtitle?: string;
+  themeMode?: ThemeMode;
+  onThemeModeChange?: (mode: ThemeMode) => void;
   className?: string;
 }
 
@@ -52,6 +56,8 @@ export const ExamIntegrityTeacherSettings: React.FC<ExamIntegrityTeacherSettings
   isSaving = false,
   pageTitle = 'System & Gameplay Settings',
   pageSubtitle = 'Configure student egg shop prices, companion pet growth, incubation timers, and star economy parameters.',
+  themeMode,
+  onThemeModeChange,
   className,
 }) => {
   return (
@@ -96,6 +102,31 @@ export const ExamIntegrityTeacherSettings: React.FC<ExamIntegrityTeacherSettings
       </div>
 
       <form id="settings-form" onSubmit={onSave} className="space-y-6">
+        {/* Appearance & Theme Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2.5 border-b border-gray-100 dark:border-gray-700 pb-3">
+            <Sparkles className="w-5 h-5 text-primary-500" />
+            <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">
+              Appearance & Theme
+            </h2>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Interface Color Scheme
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Choose light, dark, or follow system / device preference.
+              </p>
+            </div>
+            <ThemeModeToggle
+              mode={themeMode}
+              onModeChange={onThemeModeChange}
+              variant="segmented"
+            />
+          </div>
+        </div>
+
         {/* Egg Shop & Hatchery Section */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2.5 border-b border-gray-100 dark:border-gray-700 pb-3">

@@ -11,6 +11,7 @@ import {
   resolveSkillVideoUrl,
   normalizePetElement,
   normalizePetSpeciesType,
+  setDefaultCodexRegistry,
 } from './petUtils';
 
 export const VOID_SINGULARITY_SKILL: PetSkill = {
@@ -1785,6 +1786,8 @@ export const ALL_PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
 ].map(s => ({ ...s, imageUrl: resolvePetImageUrl(s.imageName) || '' })),
   },
 };
+
+setDefaultCodexRegistry(ALL_PET_CODEX_REGISTRY);
 
 export const PET_CODEX_REGISTRY: Record<string, PetCodexEntry> = {
   ...ALL_PET_CODEX_REGISTRY,

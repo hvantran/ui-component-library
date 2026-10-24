@@ -6,6 +6,7 @@ import {
 import {
   ExamIntegrityPetHatchery,
   type IncubatingEgg,
+  type PetCodexEntry,
   type StudentPet,
 } from '../../organisms/ExamIntegrityPetHatchery';
 import type { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
@@ -18,6 +19,7 @@ export interface ExamIntegrityStudentCollectionTemplateProps {
   pageSubtitle?: string;
   incubatingEggs?: IncubatingEgg[];
   pets?: StudentPet[];
+  petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[];
   onEggHatched?: (
     eggId: string,
     hatchedPet?: StudentPet
@@ -43,6 +45,7 @@ export const ExamIntegrityStudentCollectionTemplate: React.FC<
   pageSubtitle,
   incubatingEggs = [],
   pets = [],
+  petLibrary,
   onEggHatched,
   onGrowPet,
   onStrikeCrack,
@@ -77,6 +80,7 @@ export const ExamIntegrityStudentCollectionTemplate: React.FC<
         crackCostInStars={crackCostInStars}
         incubatingEggs={incubatingEggs}
         pets={pets}
+        petLibrary={petLibrary}
         onEggHatched={onEggHatched}
         onGrowPet={onGrowPet}
         onStrikeCrack={onStrikeCrack}

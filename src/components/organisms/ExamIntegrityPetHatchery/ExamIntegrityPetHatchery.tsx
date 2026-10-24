@@ -42,6 +42,7 @@ import {
   type PetCodexEntry,
   type StudentPet,
 } from './ExamIntegrityPetHatchery.types';
+import { ALL_PET_CODEX_REGISTRY } from './mockPets';
 import {
   enrichStudentPet,
   getPetElementMetadata,
@@ -1239,7 +1240,7 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   crackCostInStars = 15,
   incubatingEggs = DEFAULT_INCUBATING_EGGS,
   pets = DEFAULT_STUDENT_PETS,
-  petLibrary,
+  petLibrary = ALL_PET_CODEX_REGISTRY,
   defaultTab = 'incubator',
   onGrowPet,
   onEggHatched,
@@ -1249,7 +1250,11 @@ export const ExamIntegrityPetHatchery: React.FC<ExamIntegrityPetHatcheryProps> =
   initialPreviewPet,
   className,
 }) => {
-  const enrich = (p: StudentPet) => enrichStudentPet(p, petLibrary);
+  const resolvedLibrary =
+    petLibrary && (Array.isArray(petLibrary) ? petLibrary.length > 0 : Object.keys(petLibrary).length > 0)
+      ? petLibrary
+      : ALL_PET_CODEX_REGISTRY;
+  const enrich = (p: StudentPet) => enrichStudentPet(p, resolvedLibrary);
   const [activeTab, setActiveTab] = useState<'incubator' | 'pets'>(
     defaultTab === 'pets' ? 'pets' : 'incubator'
   );

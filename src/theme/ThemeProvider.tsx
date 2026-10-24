@@ -151,7 +151,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    return {
+      theme: 'system',
+      resolvedTheme: 'light',
+      setTheme: () => {},
+      toggleTheme: () => {},
+      setCompanionElement: () => {},
+      setCompanionBackgroundImageUrl: () => {},
+    };
   }
   return context;
 }
