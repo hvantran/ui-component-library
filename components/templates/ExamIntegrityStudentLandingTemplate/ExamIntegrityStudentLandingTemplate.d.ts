@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 export type StudentPortalSection = 'dashboard' | 'my-exams' | 'results' | 'shop' | 'collection';
 export type { ExamIntegrityNavDockMode };
@@ -22,6 +23,10 @@ export interface ExamIntegrityStudentLandingTemplateProps {
     onHelp?: () => void;
     onSearch?: (query: string) => void;
     onNotifications?: () => void;
+    themeMode?: ThemeMode;
+    onThemeModeChange?: (mode: ThemeMode) => void;
+    isDarkMode?: boolean;
+    onThemeToggle?: () => void;
     sidebarSlot?: React.ReactNode;
     bannerSlot?: React.ReactNode;
     children: React.ReactNode;

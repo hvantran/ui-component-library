@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { AppSwitcherItem } from '../AppSwitcher';
 export declare const EXAM_INTEGRITY_APP_BAR_HEIGHT = 64;
 export interface ExamIntegrityTopBarProps {
@@ -11,6 +12,8 @@ export interface ExamIntegrityTopBarProps {
     onHelp?: () => void;
     onLogout?: () => void;
     onMenuToggle?: () => void;
+    themeMode?: ThemeMode;
+    onThemeModeChange?: (mode: ThemeMode) => void;
     appSwitcherItems?: AppSwitcherItem[];
     onNavigateApp?: (app: AppSwitcherItem) => void;
     className?: string;

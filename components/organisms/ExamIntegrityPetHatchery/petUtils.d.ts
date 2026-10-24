@@ -17,5 +17,7 @@ export declare function normalizePetSpeciesType(st?: string): PetSpeciesType;
 export declare function getPetSpeciesTypeMetadata(speciesType?: string): PetSpeciesTypeMetadata;
 export declare const REQUIRED_ELEMENT_COUNT_MAP: Record<PetRarity, number>;
 export declare function getRequiredElementCount(rarity?: PetRarity | string): number;
+export declare function setDefaultCodexRegistry(registry: Record<string, PetCodexEntry>): void;
+export declare function getDefaultCodexRegistry(): Record<string, PetCodexEntry> | undefined;
 export declare function findCodexEntryInLibrary(pet: Partial<StudentPet>, petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[]): PetCodexEntry | undefined;
 export declare function enrichStudentPet(pet: StudentPet, petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[]): StudentPet;

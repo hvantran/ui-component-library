@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityTeacherDashboardSidebar';
 export type ExamIntegrityDashboardSection = 'dashboard' | 'ingestion' | 'review' | 'scoring' | 'question-bank' | 'reports' | 'settings';
 export type { ExamIntegrityNavDockMode };
@@ -19,6 +20,10 @@ export interface ExamIntegrityTeacherDashboardTemplateProps {
     onSearch?: (query: string) => void;
     onNotifications?: () => void;
     onHelp?: () => void;
+    themeMode?: ThemeMode;
+    onThemeModeChange?: (mode: ThemeMode) => void;
+    isDarkMode?: boolean;
+    onThemeToggle?: () => void;
     headerTitle?: string;
     headerSubtitle?: string;
     headerActionsSlot?: React.ReactNode;

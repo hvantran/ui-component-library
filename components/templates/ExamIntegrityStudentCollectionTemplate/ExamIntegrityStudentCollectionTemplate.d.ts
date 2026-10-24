@@ -1,6 +1,6 @@
 import { default as React } from '../../../../node_modules/react';
 import { StudentPortalSection } from '../ExamIntegrityStudentLandingTemplate';
-import { IncubatingEgg, StudentPet } from '../../organisms/ExamIntegrityPetHatchery';
+import { IncubatingEgg, PetCodexEntry, StudentPet } from '../../organisms/ExamIntegrityPetHatchery';
 import { ExamIntegrityNavDockMode } from '../../organisms/ExamIntegrityStudentPortalSidebar';
 export interface ExamIntegrityStudentCollectionTemplateProps {
     studentName?: string;
@@ -10,6 +10,7 @@ export interface ExamIntegrityStudentCollectionTemplateProps {
     pageSubtitle?: string;
     incubatingEggs?: IncubatingEgg[];
     pets?: StudentPet[];
+    petLibrary?: Record<string, PetCodexEntry> | PetCodexEntry[];
     onEggHatched?: (eggId: string, hatchedPet?: StudentPet) => Promise<StudentPet | void> | StudentPet | void;
     onGrowPet?: (petId: string, starsSpent: number) => void;
     onStrikeCrack?: (eggId: string, starsSpent: number) => void;

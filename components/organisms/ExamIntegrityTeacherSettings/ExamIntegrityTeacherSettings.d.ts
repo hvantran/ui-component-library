@@ -1,4 +1,5 @@
 import { default as React } from '../../../../node_modules/react';
+import { ThemeMode } from '../../../theme/ThemeProvider';
 export interface SystemSettingsData {
     egg_shop_price_stars?: number;
     egg_hatch_duration_hours?: number;
@@ -27,6 +28,8 @@ export interface ExamIntegrityTeacherSettingsProps {
     isSaving?: boolean;
     pageTitle?: string;
     pageSubtitle?: string;
+    themeMode?: ThemeMode;
+    onThemeModeChange?: (mode: ThemeMode) => void;
     className?: string;
 }
 export declare const ExamIntegrityTeacherSettings: React.FC<ExamIntegrityTeacherSettingsProps>;
