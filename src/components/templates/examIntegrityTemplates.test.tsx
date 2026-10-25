@@ -244,6 +244,7 @@ describe('Exam Integrity Templates', () => {
     expect(html).toContain('Essay Scoring');
     expect(html).toContain('Biology Midterm');
     expect(html).toContain('Explain photosynthesis.');
+    expect(html).toContain('Mark all incorrect');
     expect(html).toContain('Mark correct');
     expect(html).toContain('Save score');
   });
