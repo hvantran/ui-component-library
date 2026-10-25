@@ -56,6 +56,7 @@ export interface ExamIntegrityTeacherScoringTemplateProps {
         maxPoints: number;
         explanation?: string;
     }) => void;
+    onMarkAllIncorrect?: (sessionId: string) => void;
 }
 export declare const ExamIntegrityTeacherScoringTemplate: React.FC<ExamIntegrityTeacherScoringTemplateProps>;
 export default ExamIntegrityTeacherScoringTemplate;
