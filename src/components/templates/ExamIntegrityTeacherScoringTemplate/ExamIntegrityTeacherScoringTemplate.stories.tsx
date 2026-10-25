@@ -91,6 +91,9 @@ export const Default: Story = {
         onMarkCorrect={({ questionId, maxPoints }) =>
           alert(`Marked correct: Q=${questionId}, maxPts=${maxPoints}`)
         }
+        onMarkAllIncorrect={(sessionId) =>
+          alert(`Marked all answers incorrect for session: ${sessionId}`)
+        }
       />
     );
   },

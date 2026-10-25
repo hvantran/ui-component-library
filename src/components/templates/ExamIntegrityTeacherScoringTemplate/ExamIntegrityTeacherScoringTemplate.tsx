@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../atoms/Button';
 import { Card } from '../../atoms/Card';
+import { ConfirmationDialog } from '../../molecules/ConfirmationDialog';
 import {
   ExamIntegrityTeacherDashboardTemplate,
   type ExamIntegrityDashboardSection,
@@ -62,6 +63,7 @@ export interface ExamIntegrityTeacherScoringTemplateProps {
 
   onSaveScore?: (params: { questionId: string; earnedPoints: number; explanation?: string }) => void;
   onMarkCorrect?: (params: { questionId: string; maxPoints: number; explanation?: string }) => void;
+  onMarkAllIncorrect?: (sessionId: string) => void;
 }
 
 export const ExamIntegrityTeacherScoringTemplate: React.FC<ExamIntegrityTeacherScoringTemplateProps> = ({
@@ -85,8 +87,10 @@ export const ExamIntegrityTeacherScoringTemplate: React.FC<ExamIntegrityTeacherS
   isSavingScore = false,
   onSaveScore,
   onMarkCorrect,
+  onMarkAllIncorrect,
 }) => {
   const [drafts, setDrafts] = useState<Record<string, { earnedPoints: string; explanation: string }>>({});
+  const [isConfirmMarkAllOpen, setIsConfirmMarkAllOpen] = useState(false);
 
   useEffect(() => {
     if (!dashboard) {
@@ -203,11 +207,23 @@ export const ExamIntegrityTeacherScoringTemplate: React.FC<ExamIntegrityTeacherS
                           Student: {selectedSummary.studentId}
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">Current total</div>
-                        <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                          {dashboard.finalScore10.toFixed(1)}
-                          <span className="text-base font-medium text-gray-500 dark:text-gray-400">/10</span>
+                      <div className="flex items-center gap-4">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          disabled={isSavingScore}
+                          onClick={() => setIsConfirmMarkAllOpen(true)}
+                          className="rounded-xl border border-red-300 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-700 dark:bg-red-950/40 dark:text-red-300"
+                        >
+                          Mark all incorrect
+                        </Button>
+                        <div className="text-right">
+                          <div className="text-sm text-gray-500 dark:text-gray-400">Current total</div>
+                          <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                            {dashboard.finalScore10.toFixed(1)}
+                            <span className="text-base font-medium text-gray-500 dark:text-gray-400">/10</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -370,6 +386,33 @@ export const ExamIntegrityTeacherScoringTemplate: React.FC<ExamIntegrityTeacherS
           </div>
         )}
       </div>
+
+      <ConfirmationDialog
+        open={isConfirmMarkAllOpen}
+        title="Mark All Answers Incorrect"
+        content="Are you sure you want to mark all student answers for this exam as incorrect (0 points)? This action will update the student's total score."
+        positiveText="Mark All Incorrect"
+        negativeText="Cancel"
+        positiveVariant="danger"
+        onConfirm={() => {
+          setIsConfirmMarkAllOpen(false);
+          if (dashboard) {
+            setDrafts((current) => {
+              const nextDrafts = { ...current };
+              dashboard.scores.forEach((s) => {
+                nextDrafts[s.questionId] = {
+                  earnedPoints: '0',
+                  explanation: current[s.questionId]?.explanation ?? '',
+                };
+              });
+              return nextDrafts;
+            });
+          }
+          onMarkAllIncorrect?.(selectedSessionId);
+        }}
+        onCancel={() => setIsConfirmMarkAllOpen(false)}
+        onClose={() => setIsConfirmMarkAllOpen(false)}
+      />
     </ExamIntegrityTeacherDashboardTemplate>
   );
 };
